@@ -2,12 +2,12 @@
 
 ## Using Docker to run the code.
 
-# 1. Download Docker (preferably Desktop version) and make sure you can run in your terminal prompt.
+### 1. Download Docker (preferably Desktop version) and make sure you can run it in your terminal prompt.
 ```sh
 docker version
 ```
 
-# 2. Clone the repository and build the Docker Container from `Dockerfile`
+### 2. Clone the repository and build the Docker Container from `Dockerfile`
 ```sh
 # Clone the repository
 git clone https://github.com/LessJakub/DSAClinic.git
@@ -19,10 +19,12 @@ cd DSAClinic/
 docker build -t dsaapp .
 ```
 
-# 3. Run the container `dsaapp` on port `-p` 8080, detached (in background `-d`) with process name (`--name`) DSA.
- docker run -dp 8080:80 --name DSA dsaapp
+### 3. Run the container `dsaapp` on port `-p` 8080, detached (in background `-d`) with process name (`--name`) DSA.
+```sh
+docker run -dp 8080:80 --name DSA dsaapp
+```
 
-# 4. Check Docker logs for any issues. List of currently active urls:
+### 4. Check Docker logs for any issues. List of currently active urls:
 ```sh
 localhost:8080/swagger/index.html
 ```
@@ -31,4 +33,4 @@ localhost:8080/swagger/index.html
 http://localhost:8080/weatherforecast
 ```
 
-## Yes. That's how easy it is to run Docker.
+### Yes. That's how easy it is to run Docker.
