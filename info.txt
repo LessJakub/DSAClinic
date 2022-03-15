@@ -1,0 +1,13 @@
+ASP.NET - Backend, tworzone przez Microsoft, głównie C#
+Angular - Fronend, tworzone przez google, Typescript, html, css
+Node.JS - kompiluje kod Angulara do czegoś zrozumiałego dla przeglądarki, wymagane do Angulara
+nvm - node version manager, pozwala zmieniać używaną wersję node.js. Kompletnie opcjonalne, nie powinniśmy musieć zmieniać wersji node
+
+
+
+Angular installation guide:
+1. Install nvm (node version manager) https://joachim8675309.medium.com/installing-node-js-with-nvm-4dc469c977d9 (opcjonalne)
+2. Install node.js 16.12.0 (Są różnice między wersjami, nowsze mogą nie działać poprawnie)
+3. Sprawdzcie wersje node: node --version
+4. Instlacja Angulara: npm install -g @angular/cli@12
+[To be continued]
