@@ -1,14 +1,16 @@
 # syntax=docker/dockerfile:1
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
-ENV ASPNETCORE_ENVIRONMENT=Development
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
-COPY *.csproj ./
+COPY API/*.csproj API/
+WORKDIR /app/API/
 RUN dotnet restore
 
 # Copy everything else and build
-COPY . ./
+WORKDIR /app
+COPY . .
+# Building .NET part of the application. Switch working directory to /API.
 RUN dotnet publish -c Debug -o out
 
 # Build runtime image
