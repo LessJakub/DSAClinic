@@ -1,22 +1,30 @@
-# syntax=docker/dockerfile:1
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-focal AS base
 WORKDIR /app
+EXPOSE 80
+EXPOSE 443
 
-# Copy csproj and restore as distinct layers
-COPY API/*.csproj API/
-WORKDIR /app/API/
-RUN dotnet restore
+ENV ASPNETCORE_URLS=http://+:80
 
-# Copy everything else and build
-WORKDIR /app
+FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
+WORKDIR /src
+COPY ["my-new-app.csproj", "./"]
+RUN dotnet restore "my-new-app.csproj"
 COPY . .
-# Building .NET part of the application. Switch working directory to /API.
-RUN dotnet publish -c Debug -o out
+WORKDIR "/src/."
+RUN dotnet build "my-new-app.csproj" -c Release -o /app/build
 
-# Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
-ENV ASPNETCORE_ENVIRONMENT=Development
+# Node
+RUN apt-get update && \
+    apt-get install -y wget && \
+    apt-get install -y gnupg2 && \
+    wget -qO- https://deb.nodesource.com/setup_16.x | bash - && \
+    apt-get install -y build-essential nodejs
+# End node
+
+FROM build AS publish
+RUN dotnet publish "my-new-app.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
 WORKDIR /app
-COPY --from=build-env /app/out .
-ENTRYPOINT ["dotnet", "API.dll"]
-CMD ["dotnet", "src/index.js"]
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "my-new-app.dll"]

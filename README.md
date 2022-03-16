@@ -32,7 +32,3 @@ localhost:8080/swagger/index.html
 ```sh
 http://localhost:8080/weatherforecast
 ```
-
-### Yes. That's how easy it is to run Docker.
-
-Just a test string, nothing to see here
