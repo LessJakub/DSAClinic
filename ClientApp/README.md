@@ -1,3 +1,19 @@
+# Commands to build separate Angular container with Docker Compose.
+
+```sh
+# Make sure you are in ClientApp folder which is dedicated for Angular part of the app.
+cd ClientApp
+
+# Run command using Docker Composer with preconfigured multi-container system and ports.
+docker compose up
+
+# App should run on PORT 4201. IMPORTANT! 4200 might run too, but won't hot-reload. 
+
+## Use ONLY port 4201.
+
+## Edit your local ClientApp folder, changes should be reflected in on your Docker-based instance on localhost.
+```
+
 # DSAClinic
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.2.

@@ -1,0 +1,16 @@
+version: "3.4"
+
+services:
+  node:
+    container_name: angularcontainer
+    build: .
+    ports:
+      - 4201:4200
+    read_only: true
+    volumes:
+      - "./:/app"
+      - "/app/node-node_modules"
+      # - "./:/var/www/html"
+      # - /var/www/app/node_modules/
+    # working_dir: /var/www/html
+    command: ng serve --host 0.0.0.0 
