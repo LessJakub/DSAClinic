@@ -3,11 +3,11 @@
 version: '3.4'
 
 services:
-  mynewapp:
-    image: mynewapp
+  dsaclinic:
+    image: dsaclinic
     build:
       context: .
       dockerfile: ./Dockerfile
     ports:
-      - 80:80
+      - 8080:80
       - 443:443

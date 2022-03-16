@@ -7,11 +7,11 @@ ENV ASPNETCORE_URLS=http://+:80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
 WORKDIR /src
-COPY ["my-new-app.csproj", "./"]
-RUN dotnet restore "my-new-app.csproj"
+COPY ["DSAClinic.csproj", "./"]
+RUN dotnet restore "DSAClinic.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "my-new-app.csproj" -c Release -o /app/build
+RUN dotnet build "DSAClinic.csproj" -c Release -o /app/build
 
 # Node
 RUN apt-get update && \
@@ -22,9 +22,10 @@ RUN apt-get update && \
 # End node
 
 FROM build AS publish
-RUN dotnet publish "my-new-app.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "DSAClinic.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
+ENV ASPNETCORE_ENVIRONMENT=Development
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "my-new-app.dll"]
+ENTRYPOINT ["dotnet", "DSAClinic.dll"]

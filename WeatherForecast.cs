@@ -1,4 +1,4 @@
-namespace my_new_app;
+namespace DSAClinic;
 
 public class WeatherForecast
 {
