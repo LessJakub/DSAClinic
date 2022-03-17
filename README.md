@@ -1,34 +1,30 @@
 # DSAClinic
 
-## Using Docker to run the code.
-
-### 1. Download Docker (preferably Desktop version) and make sure you can run it in your terminal prompt.
+## Using .NET to run both Frontend and Backend of the application:
 ```sh
-docker version
+# After cloning the repository and cd'ing into it:
+dotnet run
+
+# Requires .NET 6.0, Angular@12, Node 16.12, Entity Framework and maybe something else.
 ```
 
-### 2. Clone the repository and build the Docker Container from `Dockerfile`
+## Using Docker to run Frontend
 ```sh
-# Clone the repository
-git clone https://github.com/LessJakub/DSAClinic.git
+# Change directory to ClientApp
+cd ClientApp
 
-# Navigate to repository directory
-cd DSAClinic/
+# Run Docker using pre-set environment:
+docker composer up
 
-# Create Docker Container tagged with name `dsaapp` from current directory containing `Dockerfile`.
-docker build -t dsaapp .
+# Your local frontend runs on localhost:80
+# To stop it, use:
+docker composer down
+
+# Hot-reload is supported on both Windows and macOS. While your docker is running, you can change
+# files inside of ClientApp and changes will be reflected almost instantly.
 ```
 
-### 3. Run the container `dsaapp` on port `-p` 8080, detached (in background `-d`) with process name (`--name`) DSA.
+## Using Docker to run Backend .NET
 ```sh
-docker run -dp 8080:80 --name DSA dsaapp
-```
-
-### 4. Check Docker logs for any issues. List of currently active urls:
-```sh
-localhost:8080/swagger/index.html
-```
-
-```sh
-http://localhost:8080/weatherforecast
+# Work in progress
 ```
