@@ -16,11 +16,12 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json /app/package.json
 RUN npm install
 RUN npm install --save-dev @angular-devkit/build-angular
+
+EXPOSE 4200
 RUN npm install -g @angular/cli@12
 
 # add app
 COPY . /app
 
 # start app
-EXPOSE 4200
-CMD [ "ng", "serve", "--host", "0.0.0.0"]
+CMD [ "ng", "serve", "--host", "0.0.0.0", "--poll=2000" ]
