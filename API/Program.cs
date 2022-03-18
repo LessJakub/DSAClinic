@@ -26,7 +26,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// Currently, this NEEDS to be disabled for Docker to work. Otherwise it tries to use HTTPS for connection which is blocked by CORS.
+// app.UseHttpsRedirection();
 
 app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200", "http://localhost:4200", "http://localhost:80", "http://localhost"));
 

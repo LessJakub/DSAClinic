@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class FetchDataComponent {
   public forecasts: WeatherForecast[] = [];
-  apiURL = 'http://localhost:5000/';
+  apiURL = 'http://localhost:8080/';
 
   constructor(http: HttpClient) {
     http.get<WeatherForecast[]>(this.apiURL + 'weatherforecast').subscribe(result => {
