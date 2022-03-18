@@ -26,5 +26,11 @@ docker composer down
 
 ## Using Docker to run Backend .NET
 ```sh
-# Work in progress
+# In the main repository directory (where API, Client, .sln file are) run:
+docker composer up
+
+# Your API will run on 8080 port
+
+# To stop docker:
+docker composer down
 ```
