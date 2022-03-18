@@ -7,7 +7,7 @@ services:
       - CHOKIDAR_USEPOLLING=true
     build: .
     ports:
-      - 80:4200
+      - 4200:4200
     volumes:
       - "./:/app"
       - "/app/node_modules"
