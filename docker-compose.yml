@@ -1,13 +1,33 @@
-# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
+# This Docker Compose files contains both API and Client services which can be run separately if necessary.
 
-version: '3.4'
+version: '3.9'
 
 services:
-  dsaclinic:
-    image: dsaclinic
+  API:
+    image: clinic-api
     build:
-      context: .
+      context: ./API
       dockerfile: ./Dockerfile
     ports:
       - 8080:80
       - 443:443
+
+
+  Client:
+    image: clinic-client
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    build:
+      context: ./Client
+      dockerfile: ./Dockerfile
+    ports:
+      - 4200:4200
+    volumes:
+      - "./Client:/app"
+      - "/Client/app/node_modules"
+      #- "./:/var/www/html"
+      #- /var/www/app/node_modules/
+    # working_dir: /var/www/html
+    command: ng serve --host 0.0.0.0 --poll=2000
+
+

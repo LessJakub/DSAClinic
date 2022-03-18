@@ -1,34 +1,33 @@
-# DSAClinic
+# Clinic for DSA Course
 
-## Using Docker to run the code.
-
-### 1. Download Docker (preferably Desktop version) and make sure you can run it in your terminal prompt.
+## Using .NET to run both Frontend and Backend of the application:
 ```sh
-docker version
+# Running .NET backend
+cd API/
+dotnet run
+
+# Running Angular frontend
+cd Client/
+ng serve
+# Requires .NET 6.0, Angular@12, Node 16.12, Entity Framework and maybe something else.
 ```
 
-### 2. Clone the repository and build the Docker Container from `Dockerfile`
+## Using Docker
+
+From main repository directory (where `docker-compose.yaml` file resides):
 ```sh
-# Clone the repository
-git clone https://github.com/LessJakub/DSAClinic.git
+# Use this command to run both, backend and frontend:
+docker composer up
 
-# Navigate to repository directory
-cd DSAClinic/
+# To selectively run either Client or API, use:
+docker composer up API
+# or / and
+docker composer up Client
 
-# Create Docker Container tagged with name `dsaapp` from current directory containing `Dockerfile`.
-docker build -t dsaapp .
+# Hot-reload is supported on both Windows and macOS. While your docker is running, you can change
+# files inside of Client/ and changes will be reflected almost instantly.
 ```
 
-### 3. Run the container `dsaapp` on port `-p` 8080, detached (in background `-d`) with process name (`--name`) DSA.
-```sh
-docker run -dp 8080:80 --name DSA dsaapp
-```
-
-### 4. Check Docker logs for any issues. List of currently active urls:
-```sh
-localhost:8080/swagger/index.html
-```
-
-```sh
-http://localhost:8080/weatherforecast
-```
+For both configurations (either Native or Docker) ports are as follows:
+- Frontend: 4200
+- Backend: 8080
