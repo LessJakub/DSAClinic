@@ -5,7 +5,13 @@ using System.Threading.Tasks;
 
 namespace API.Entities
 {
-
+    public enum Roles
+    {
+        User,
+        Registerer,
+        Doctor,
+        Admin
+    }
     public class AppUser
     {
         public int Id { get; set; }
@@ -14,5 +20,7 @@ namespace API.Entities
         public byte[] PasswordHash { get; set; }
 
         public byte[] PasswordSalt { get; set; }
+        
+        public Roles Role { get; set; }
     }
 }

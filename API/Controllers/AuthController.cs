@@ -28,14 +28,15 @@ namespace API.Controllers
 
         //Requires login only, a policy should be made to use that.
         //Should be GET
-        [Authorize]
-        [HttpPost("users")]
+        [Authorize(Policy = "AdminOnly")]
+        [HttpGet("users")]
         public ActionResult<IEnumerable<AppUser>> GetUsers()
         {
             return this.context.Users.ToList();
         }
 
 
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO)
         {
@@ -49,7 +50,8 @@ namespace API.Controllers
             {
                 UserName = registerDTO.Username,
                 PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDTO.Password)),
-                PasswordSalt = hmac.Key
+                PasswordSalt = hmac.Key,
+                Role = (Roles)registerDTO.Role
             };
             
             //Add created user to objects tracked by context (NOT TO THE DB)
@@ -64,6 +66,7 @@ namespace API.Controllers
             };
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDTO)
         {

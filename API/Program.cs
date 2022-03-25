@@ -26,6 +26,13 @@ byte[] tokenKey;
 if(builder.Configuration["TokenKey"] != null) tokenKey = Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"]);
 else tokenKey = Encoding.UTF8.GetBytes("super secret dev key");
 
+services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => policy.RequireClaim("Admin", "true"));
+    options.AddPolicy("IsDoctor", policy => policy.RequireClaim("Doctor", "true"));
+    options.AddPolicy("IsRegisterer", policy => policy.RequireClaim("Registerer", "true"));
+});
+
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
@@ -36,6 +43,8 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
         ValidateAudience = false
     };
 });
+
+
 
 services.AddDbContext<DataContext>(options =>
 {
