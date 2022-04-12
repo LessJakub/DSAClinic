@@ -13,7 +13,6 @@ namespace API.Services
 {
     public class TokenService : ITokenService
     {
-
         private readonly SymmetricSecurityKey key;
         public TokenService(IConfiguration config)
         {
