@@ -26,11 +26,7 @@ import { LoginComponent } from './login/login.component';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
-    ])
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
