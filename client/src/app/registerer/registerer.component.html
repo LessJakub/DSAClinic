@@ -1,6 +1,6 @@
-<div class="grow flex">
+<div class="grow flex h-screen min-h-[700px]">
     <!--Side Panel-->
-    <div class="flex flex-col h-screen min-h-[500px] w-72 border-r-2 border-gray-200 bg-white">
+    <div class="flex flex-col h-full w-72 border-r-2 border-gray-200 bg-white">
         <div class="p-3">
             <app-account-controls></app-account-controls>
         </div>
@@ -12,7 +12,27 @@
         </div>
     </div>
     <!--Main Area-->
-    <div class="flex flex-col grow">
+    <div class="flex flex-col grow h-full">
 
+        <!--Top area-->
+        <div class="flex h-4/6">
+
+            <!--Left Top area-->
+            <div class="flex basis-2/5 border-r border-gray-200">
+                <app-patient-data></app-patient-data>
+            </div>
+
+            <!--Right Top area-->
+            <div class="flex basis-3/5">
+                <app-schedule></app-schedule>
+            </div>
+        </div>
+
+        <hr>
+
+        <!--Bottom area-->
+        <div class="flex h-2/6">
+            <app-patient-visits></app-patient-visits>
+        </div>
     </div>
 </div>
