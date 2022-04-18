@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { AccountControlsComponent } from './account-controls/account-controls.component';
 
 
-
 @NgModule({
   declarations: [
     AccountControlsComponent
