@@ -15,23 +15,21 @@
     <div class="flex flex-col grow h-full">
 
         <!--Top area-->
-        <div class="flex h-4/6">
+        <div class="flex basis-4/6">
 
             <!--Left Top area-->
-            <div class="flex basis-2/5 border-r border-gray-200">
+            <div class="flex basis-1/4 border-r border-gray-200">
                 <app-patient-data></app-patient-data>
             </div>
 
             <!--Right Top area-->
-            <div class="flex basis-3/5">
+            <div class="flex basis-3/4 h-full">
                 <app-schedule></app-schedule>
             </div>
         </div>
 
-        <hr>
-
         <!--Bottom area-->
-        <div class="flex h-2/6">
+        <div class="flex basis-2/6 min-h-0 border-t border-gray-200">
             <app-patient-visits></app-patient-visits>
         </div>
     </div>

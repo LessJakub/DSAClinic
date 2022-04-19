@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
   selector: 'app-patient-visits',
   templateUrl: './patient-visits.component.html',
   styleUrls: ['./patient-visits.component.css'],
-  host: {'class' : 'grow flex flex-col p-6 h-full'}
+  host: {'class' : 'grow flex flex-col p-6'}
 })
 export class PatientVisitsComponent implements OnInit {
 
