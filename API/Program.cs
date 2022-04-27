@@ -61,7 +61,9 @@ services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy => policy.RequireClaim("Admin", "true"));
     options.AddPolicy("IsDoctor", policy => policy.RequireClaim("Doctor", "true"));
-    options.AddPolicy("IsRegisterer", policy => policy.RequireClaim("Registerer", "true"));
+    options.AddPolicy("IsRegistrant", policy => policy.RequireClaim("Registrant", "true"));
+    options.AddPolicy("IsLabSupervisor", policy => policy.RequireClaim("LabSupervisor", "true"));
+    options.AddPolicy("IsLabTechnician", policy => policy.RequireClaim("LabTechnician", "true"));
 });
 
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
