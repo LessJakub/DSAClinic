@@ -1,15 +1,29 @@
 import { Component, OnInit } from '@angular/core';
+import { AccountService } from '../services/account.service';
+import { User } from '../models/User';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
+  host: { 'class' : 'flex grow'}
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+    constructor(public service: AccountService) { }
 
-  ngOnInit(): void {
-  }
+    ngOnInit(): void {}
+
+    model: any = {}
+    error: string = null;
+
+    loginAction() {
+        this.service.loginRequest(this.model).subscribe(Response => {
+            console.log("Login action used.");
+        }, error => {
+            this.error = error.error;
+            console.log(error);
+        })
+    }
 
 }
