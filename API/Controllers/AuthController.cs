@@ -45,7 +45,7 @@ namespace API.Controllers
         /// <returns>Authorization information of created user</returns>
         /// <response code="200"> Ok, new user is created. </response>
         /// <response code="400"> Bad request, invalid input. </response>
-        [Authorize(Policy = "AdminOnly")]
+        //[Authorize(Policy = "AdminOnly")]
         [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO)
         {
@@ -63,8 +63,49 @@ namespace API.Controllers
                 Role = (Roles)registerDTO.Role
             };
             
+            IPerson person = null;
+
+            switch (registerDTO.Role)
+            {
+                //User
+                case (int)Roles.User:
+                    break;
+                case (int)Roles.Registrant:
+                    person = new Registrant();
+                    user.Registrant = (Registrant)person;
+                    break;
+                case (int)Roles.Doctor:
+                    person = new Doctor();
+                    user.Doctor = (Doctor)person;
+                    break;
+                case (int)Roles.LabSupervisor:
+                    person = new LabSupervisor();
+                    user.LabSupervisor = (LabSupervisor)person;
+                    break;
+                case (int)Roles.LabTechnician:
+                    person = new LabTechnician();
+                    user.LabTechnician = (LabTechnician)person;
+                    break;
+                case (int)Roles.Admin:
+                    break;
+                default:
+                    return BadRequest($"There is no Role with id: {registerDTO.Role}");
+            }
+            
+
             //Add created user to objects tracked by context (NOT TO THE DB)
             context.Users.Add(user);
+
+            if(person != null)
+            {
+                //Not needed, dto level checks are safer
+                //if(registerDTO.Name == null) return BadRequest($"Name is required for role {registerDTO.Role.ToString()}");
+                //if(registerDTO.Surname == null) return BadRequest($"Surname is required for role {registerDTO.Role.ToString()}");
+                person.Name = registerDTO.Name;
+                person.Surname = registerDTO.Surname;
+
+                //context.Add(person);
+            }
 
             //Actually add user to the DB.
             await context.SaveChangesAsync();

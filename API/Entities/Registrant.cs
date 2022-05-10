@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace API.Entities
 {
     [Table("Registrants")]
-    public class Registrant
+    public class Registrant : IPerson
     {
         [ForeignKey("AppUser")]
         public int Id { get; set; }

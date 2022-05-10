@@ -44,7 +44,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Doctor", b =>
@@ -60,7 +60,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Doctors");
+                    b.ToTable("Doctors", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.ExaminationList", b =>
@@ -81,7 +81,7 @@ namespace API.Migrations
 
                     b.HasIndex("ExaminationTypesId");
 
-                    b.ToTable("ExaminationLists");
+                    b.ToTable("ExaminationLists", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.ExaminationTypes", b =>
@@ -97,7 +97,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ExaminationTypes");
+                    b.ToTable("ExaminationTypes", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.LabExamination", b =>
@@ -148,7 +148,7 @@ namespace API.Migrations
 
                     b.HasIndex("VisitsId");
 
-                    b.ToTable("LabExaminations");
+                    b.ToTable("LabExaminations", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.LabSupervisor", b =>
@@ -164,7 +164,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LabSupervisor");
+                    b.ToTable("LabSupervisor", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.LabTechnician", b =>
@@ -180,7 +180,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LabTechnician");
+                    b.ToTable("LabTechnician", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Patient", b =>
@@ -199,7 +199,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Patients");
+                    b.ToTable("Patients", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.PhysicalExamination", b =>
@@ -225,7 +225,7 @@ namespace API.Migrations
 
                     b.HasIndex("VisitsId");
 
-                    b.ToTable("PhysicalExaminations");
+                    b.ToTable("PhysicalExaminations", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Registrant", b =>
@@ -241,7 +241,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Registrants");
+                    b.ToTable("Registrants", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Visits", b =>
@@ -287,7 +287,7 @@ namespace API.Migrations
 
                     b.HasIndex("RegistrantId");
 
-                    b.ToTable("Visits");
+                    b.ToTable("Visits", (string)null);
                 });
 
             modelBuilder.Entity("API.Entities.Doctor", b =>

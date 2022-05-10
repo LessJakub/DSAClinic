@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Entities
 {
-    public class LabSupervisor
+    public class LabSupervisor : IPerson
     {
         [ForeignKey("AppUser")]
         public int Id { get; set; }
