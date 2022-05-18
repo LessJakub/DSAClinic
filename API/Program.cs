@@ -15,6 +15,8 @@ var services = builder.Services;
 // Add services to the container.
 
 services.AddControllers();
+services.AddControllersWithViews().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 services.AddEndpointsApiExplorer();
 
@@ -61,7 +63,9 @@ services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy => policy.RequireClaim("Admin", "true"));
     options.AddPolicy("IsDoctor", policy => policy.RequireClaim("Doctor", "true"));
-    options.AddPolicy("IsRegisterer", policy => policy.RequireClaim("Registerer", "true"));
+    options.AddPolicy("IsRegistrant", policy => policy.RequireClaim("Registrant", "true"));
+    options.AddPolicy("IsLabSupervisor", policy => policy.RequireClaim("LabSupervisor", "true"));
+    options.AddPolicy("IsLabTechnician", policy => policy.RequireClaim("LabTechnician", "true"));
 });
 
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
@@ -79,7 +83,7 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
 
 services.AddDbContext<DataContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 var app = builder.Build();
 

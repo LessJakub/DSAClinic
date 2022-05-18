@@ -18,7 +18,13 @@ namespace API.DTOs
         [PasswordAnnotation]
         public string Password { get; set; }
 
-        [Range(0,2)]
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        public string Surname { get; set; }
+
+        [Range(0,5)]
         [Required]
         public int Role { get; set; }
     }
