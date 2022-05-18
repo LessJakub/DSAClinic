@@ -12,6 +12,7 @@ const routes: Routes = [
   // { path: 'fetch-data', component: FetchDataComponent },
   { path: 'login', component: LoginComponent },
   { path: 'registerer', loadChildren: () => import('./registerer/registerer.module').then(m => m.RegistererModule) },
+  { path: 'doctor', loadChildren: () => import('./doctor/doctor.module').then(m => m.DoctorModule) },
 ];
 
 @NgModule({

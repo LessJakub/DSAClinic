@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { User } from 'src/app/models/User';
 import { AccountService } from 'src/app/services/account.service';
 
@@ -9,6 +9,7 @@ import { AccountService } from 'src/app/services/account.service';
 })
 export class AccountControlsComponent implements OnInit {
 
+    @Input() column: boolean = false;
     user: User
 
     constructor(private accountService: AccountService) { }
