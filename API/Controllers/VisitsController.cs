@@ -42,7 +42,7 @@ namespace API.Controllers
             var doctorUser = await context.Users.FindAsync(newVisitDTO.DoctorId);
             if(doctorUser == null) return BadRequest($"Doctor with id {newVisitDTO.DoctorId} does not exist");
             var doctor = doctorUser.Doctor;
-            if(doctor == null) return BadRequest($"User with id {registrantId} is not a registrant");
+            if(doctor == null) return BadRequest($"User with id {registrantId} is not a doctor");
 
 
             var patient = await context.Patients.FindAsync(newVisitDTO.PatientId);
@@ -128,11 +128,11 @@ namespace API.Controllers
             List<Visits> tmp = new List<Visits>();
             if (patientId != default) tmp = await context.Visits.Where(e => e.PatientId == patientId).ToListAsync();
             else if(doctorId != default) tmp = await context.Visits.Where(e => e.DoctorId == doctorId).ToListAsync();
-            else if(date != default) tmp = await context.Visits.Where(e => e.FinalizationTime == date).ToListAsync();
+            else if(date != default) tmp = await context.Visits.Where(e => e.VisitTime == date).ToListAsync();
 
-            if (patientId != default) tmp = (List<Visits>)tmp.Where(v => v.PatientId == patientId);
-            if(doctorId != default) tmp = (List<Visits>)tmp.Where(v => v.DoctorId == doctorId);
-            if(date != default) tmp = (List<Visits>)tmp.Where(v => v.FinalizationTime == date);
+            if (patientId != default) tmp = tmp.Where(v => v.PatientId == patientId).ToList();
+            if(doctorId != default) tmp = tmp.Where(v => v.DoctorId == doctorId).ToList();
+            if(date != default) tmp = tmp.Where(v => v.VisitTime == date).ToList();
 
             var listToRet = new List<GeneralVisitDTO>();
             foreach(var e in tmp) listToRet.Add(new GeneralVisitDTO(e));
