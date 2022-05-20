@@ -9,9 +9,9 @@ namespace API.Entities
 
         public string Name { get; set; }
 
-        public virtual ExaminationTypes ExaminationTypes { get; set; }
+        public string Icd { get; set; }
 
-        public int ExaminationTypesId { get; set; }
+        public int Type { get; set; }
 
         public virtual ICollection<LabExamination>LabExaminations { get; set; }
 

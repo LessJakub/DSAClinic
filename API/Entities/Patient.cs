@@ -11,6 +11,8 @@ namespace API.Entities
         
         public string Surname { get; set; }
 
+        public string Pesel { get; set; }
+
         public virtual ICollection<Visits> Visits { get; set; }
     }
 }

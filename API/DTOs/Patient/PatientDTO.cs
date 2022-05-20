@@ -17,10 +17,12 @@ namespace API.DTOs
             this.Id = patient.Id;
             this.Name = patient.Name;
             this.Surname = patient.Surname;
+            this.Pesel = patient.Pesel;
         }
         public int Id { get; set; }
 
         public string Name { get; set; }
         public string Surname { get; set; }
+        public string Pesel { get; set; }
     }
 }

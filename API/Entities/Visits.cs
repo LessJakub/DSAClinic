@@ -11,11 +11,11 @@ namespace API.Entities
         
         public string Diagnosis { get; set; }
 
-        public DateTime RegistrationDay { get; set; }
+        public DateTime RegistrationTime { get; set; }
 
-        public DateTime FinalizationDay { get; set; }
+        public DateTime FinalizationTime { get; set; }
 
-        public TimeSpan Time { get; set; }
+        public TimeSpan VisitTime { get; set; }
 
         public string Status { get; set; }
 

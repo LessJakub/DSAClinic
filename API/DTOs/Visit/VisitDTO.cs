@@ -13,8 +13,9 @@ namespace API.DTOs
             this.Id = visit.Id;
             this.Description = visit.Description;
             this.Diagnosis = visit.Diagnosis;
-            this.RegistrationDay = visit.RegistrationDay;
-            this.Time = visit.Time;
+            this.RegistrationTime = visit.RegistrationTime;
+            this.FinalizationTime = visit.FinalizationTime;
+            this.VisitTime = visit.VisitTime;
             this.Status = visit.Status;
             this.DoctorId = visit.DoctorId;
             this.PatientId = visit.PatientId;
@@ -27,28 +28,19 @@ namespace API.DTOs
         
         public string Diagnosis { get; set; }
 
-        public DateTime RegistrationDay { get; set; }
+        public DateTime RegistrationTime { get; set; }
 
-        public DateTime FinalizationDay { get; set; }
+        public DateTime FinalizationTime { get; set; }
 
-        public TimeSpan Time { get; set; }
+        public TimeSpan VisitTime { get; set; }
 
         public string Status { get; set; }
 
-        //public virtual Doctor Doctor { get; set; }
-
         public int DoctorId { get; set; }
-
-        //public virtual Patient Patient { get; set; }
 
         public int PatientId { get; set; }
 
-        //public virtual Registrant Registrant { get; set; }
-
         public int RegistrantId { get; set; }
 
-        //public virtual ICollection<LabExamination> LabExaminations { get; set; }
-
-        //public virtual ICollection<PhysicalExamination>PhysicalExaminations { get; set; }
     }
 }

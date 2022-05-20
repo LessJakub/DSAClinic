@@ -10,12 +10,13 @@ namespace API.DTOs
     {
         public string Description { get; set; }
 
-        public DateTime RegistrationDay { get; set; }
+        public DateTime RegistrationTime { get; set; }
         
         public int Minutes { get; set; }
         public string Status { get; set; }
 
         public int DoctorId { get; set; }
         public int PatientId { get; set; }
+        public int RegistererId { get; set; }
     }
 }

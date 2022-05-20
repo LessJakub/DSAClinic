@@ -51,8 +51,8 @@ namespace API.Controllers
             
             var visit = new Visits{
                 Description = newVisitDTO.Description,
-                RegistrationDay = DateTime.Now,
-                Time = TimeSpan.FromMinutes(newVisitDTO.Minutes),
+                RegistrationTime = DateTime.Now,
+                VisitTime = TimeSpan.FromMinutes(newVisitDTO.Minutes),
                 Status = newVisitDTO.Status,
                 Doctor = doctor,
                 DoctorId = newVisitDTO.DoctorId,
@@ -128,9 +128,10 @@ namespace API.Controllers
             var visit = await context.Visits.FirstOrDefaultAsync(v => v.Id == id);
             if(visit is null) return BadRequest($"There is no visit with id {id}");
 
+            visit.FinalizationTime = DateTime.Now;
             if(visitDTO.Description is not null) visit.Description = visitDTO.Description;
             if(visitDTO.Diagnosis is not null) visit.Diagnosis = visitDTO.Diagnosis;
-            if(visitDTO.Minutes != 0) visit.Time = TimeSpan.FromMinutes(visitDTO.Minutes);
+            if(visitDTO.Minutes != 0) visit.VisitTime = TimeSpan.FromMinutes(visitDTO.Minutes);
             if(visitDTO.Status is not null) visit.Status = visitDTO.Status;
             if(visitDTO.DoctorId != 0)
             {
