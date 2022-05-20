@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 
-interface radioSelection {
-  name: string,
-  value: string
-}
+import { VisitGeneral } from 'src/app/shared/interfaces/visit-general';
+import { VisitsService } from '../../services/visits.service';
 
 @Component({
   selector: 'app-visits',
   templateUrl: './visits.component.html',
   styleUrls: ['./visits.component.css'],
-  host: {'class': 'grow flex flex-col p-10'}, // ! Styling host container to fill all avialable space
+  host: {'class': 'grow flex flex-col'}, // ! Styling host container to fill all avialable space
 })
 export class VisitsComponent implements OnInit {
 
@@ -18,49 +17,46 @@ export class VisitsComponent implements OnInit {
     filter: new FormControl('all', Validators.required),
     date: new FormControl()
   });
-  list : Visit[];
+  list : VisitGeneral[];
 
-  constructor() { }
+  constructor(private vs: VisitsService,
+              private router: Router,
+              private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.list = [
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'}
-    ]
+
   }
 
   getList(): void{
     if(this.form.valid){
+      if(this.form.get("filter").value == "all"){
+        this.list = this.vs.getDoctorVisitsList(0)
+      }
+      else {
+        this.list = this.vs.getDoctorVisitsList(0).filter((elem) => {return elem.status.toLowerCase() == this.form.get("filter").value});
+      }
+      
       console.log(`Getting elements for date ${this.form.get("date").value} and filter ${this.form.get("filter").value}`);
     }
   }
 
-}
+  selectVisit(visit: VisitGeneral) {
+    this.router.navigate([`visit/${visit.id}`], {relativeTo: this.route.parent});
+  }
 
-interface Visit {
-  date: Date,
-  doctor: String, //doctors needed in common module
-  status: string  //could use some enum
+  prettyDateFromDate(time: Date): string {
+    return time.toLocaleDateString(navigator.language, {
+      year: 'numeric',
+      month:'2-digit',
+      day: '2-digit'
+    });
+  }
+
+  prettyTimeFromDate(time: Date): string {
+    return time.toLocaleTimeString(navigator.language, {
+      hour: '2-digit',
+      minute:'2-digit'
+    });
+  }
+
 }
