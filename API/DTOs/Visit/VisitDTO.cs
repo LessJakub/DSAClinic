@@ -30,9 +30,9 @@ namespace API.DTOs
 
         public DateTime RegistrationTime { get; set; }
 
-        public DateTime FinalizationTime { get; set; }
+        public DateTime? FinalizationTime { get; set; }
 
-        public TimeSpan VisitTime { get; set; }
+        public DateTime VisitTime { get; set; }
 
         public string Status { get; set; }
 

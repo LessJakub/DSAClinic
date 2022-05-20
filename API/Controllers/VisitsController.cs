@@ -52,7 +52,7 @@ namespace API.Controllers
             var visit = new Visits{
                 Description = newVisitDTO.Description,
                 RegistrationTime = DateTime.Now,
-                VisitTime = TimeSpan.FromMinutes(newVisitDTO.Minutes),
+                VisitTime = Convert.ToDateTime(newVisitDTO.VisitTime),
                 Status = newVisitDTO.Status,
                 Doctor = doctor,
                 DoctorId = newVisitDTO.DoctorId,
@@ -82,10 +82,10 @@ namespace API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<List<VisitDTO>>> ReadAll()
+        public async Task<ActionResult<List<GeneralVisitDTO>>> ReadAll()
         {
-            var visits = new List<VisitDTO>();
-            foreach(var visit in await context.Visits.ToListAsync()) visits.Add(new VisitDTO(visit));
+            var visits = new List<GeneralVisitDTO>();
+            foreach(var visit in await context.Visits.ToListAsync()) visits.Add(new GeneralVisitDTO(visit));
 
             return visits;
         }
@@ -113,6 +113,36 @@ namespace API.Controllers
         /// <summary>
         /// 
         /// </summary>
+        /// <remarks></remarks>
+        /// <returns></returns>
+        /// <response code="200">  </response>
+        /// <response code="400">  </response>
+        [AllowAnonymous]
+        [HttpGet("q")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<List<GeneralVisitDTO>>> Search([FromQuery]int patientId, [FromQuery]int doctorId, [FromQuery]string dateString)
+        {
+
+            var date = Convert.ToDateTime(dateString);
+            List<Visits> tmp = new List<Visits>();
+            if (patientId != default) tmp = await context.Visits.Where(e => e.PatientId == patientId).ToListAsync();
+            else if(doctorId != default) tmp = await context.Visits.Where(e => e.DoctorId == doctorId).ToListAsync();
+            else if(date != default) tmp = await context.Visits.Where(e => e.FinalizationTime == date).ToListAsync();
+
+            if (patientId != default) tmp = (List<Visits>)tmp.Where(v => v.PatientId == patientId);
+            if(doctorId != default) tmp = (List<Visits>)tmp.Where(v => v.DoctorId == doctorId);
+            if(date != default) tmp = (List<Visits>)tmp.Where(v => v.FinalizationTime == date);
+
+            var listToRet = new List<GeneralVisitDTO>();
+            foreach(var e in tmp) listToRet.Add(new GeneralVisitDTO(e));
+
+            return listToRet;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="id"></param>
         /// <param name="visitDTO"></param>
         /// <remarks></remarks>
@@ -131,7 +161,7 @@ namespace API.Controllers
             visit.FinalizationTime = DateTime.Now;
             if(visitDTO.Description is not null) visit.Description = visitDTO.Description;
             if(visitDTO.Diagnosis is not null) visit.Diagnosis = visitDTO.Diagnosis;
-            if(visitDTO.Minutes != 0) visit.VisitTime = TimeSpan.FromMinutes(visitDTO.Minutes);
+            //if(visitDTO.Minutes != 0) visit.VisitTime = TimeSpan.FromMinutes(visitDTO.Minutes);
             if(visitDTO.Status is not null) visit.Status = visitDTO.Status;
             if(visitDTO.DoctorId != 0)
             {
