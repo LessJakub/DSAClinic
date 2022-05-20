@@ -13,5 +13,9 @@ namespace API.DTOs
 
         [Required]
         public string Surname { get; set; }
+
+        [Required]
+        [StringLength(11, MinimumLength = 11)]
+        public string Pesel { get; set; }
     }
 }

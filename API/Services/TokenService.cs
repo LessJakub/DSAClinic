@@ -28,6 +28,7 @@ namespace API.Services
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.NameId, user.UserName),
+                new Claim("UserId", user.Id.ToString()),
                 new Claim(user.Role.ToString(), "true") 
             };
 

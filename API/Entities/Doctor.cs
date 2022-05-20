@@ -12,6 +12,8 @@ namespace API.Entities
         
         public string Surname { get; set; }
 
+        public string Npwz { get; set; }
+
         public virtual ICollection<Visits> Visits { get; set; }
 
         public virtual AppUser AppUser { get; set; }

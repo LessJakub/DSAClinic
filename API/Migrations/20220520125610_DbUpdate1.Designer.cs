@@ -4,6 +4,7 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220520125610_DbUpdate1")]
+    partial class DbUpdate1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -258,7 +260,7 @@ namespace API.Migrations
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("FinalizationTime")
+                    b.Property<DateTime>("FinalizationTime")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("PatientId")
@@ -273,8 +275,8 @@ namespace API.Migrations
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("VisitTime")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeSpan>("VisitTime")
+                        .HasColumnType("time");
 
                     b.HasKey("Id");
 
