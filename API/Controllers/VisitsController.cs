@@ -20,11 +20,11 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Creates new visit and adds it to the database.
         /// </summary>
-        /// <param name="newVisitDTO"></param>
-        /// <remarks></remarks>
-        /// <returns></returns>
+        /// <param name="newVisitDTO">DTO containing information of new visit</param>
+        /// <remarks>DateTime should be in format "DD.MM.YYYY HH:MM"</remarks>
+        /// <returns>VisitDTO from created visit</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
         [Authorize]
@@ -33,9 +33,10 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<VisitDTO>> Create(NewVisitDTO newVisitDTO)
         {
+            //Check if requester is registrant, this function returns -1 if not.
             var registrantId = GetRequesterId();
             var registrantUser = await context.Users.FindAsync(registrantId);
-            if(registrantUser == null) return BadRequest($"Regsitrant with id {registrantId} does not exist");
+            if(registrantUser == null) return BadRequest($"User with id {registrantId} does not exist");
             var registrant = registrantUser.Registrant;
             if(registrant == null) return BadRequest($"User with id {registrantId} is not a registrant");
 
@@ -72,10 +73,10 @@ namespace API.Controllers
 
 
         /// <summary>
-        /// 
+        ///  Reads all visits and returns general info about it.
         /// </summary>
-        /// <remarks></remarks>
-        /// <returns></returns>
+        /// <remarks>Returns only partial information.</remarks>
+        /// <returns>List of GeneralVisitDTO.</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
         [AllowAnonymous]
@@ -91,7 +92,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Returns detaild information about visit with given id.
         /// </summary>
         /// <remarks></remarks>
         /// <returns></returns>
@@ -111,10 +112,10 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Searches for visits with specified filters.
         /// </summary>
-        /// <remarks></remarks>
-        /// <returns></returns>
+        /// <remarks>Values can be null. Sorting not yet implemented.</remarks>
+        /// <returns>List of GeneralVisitDTOs</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
         [AllowAnonymous]
@@ -123,17 +124,22 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<List<GeneralVisitDTO>>> Search([FromQuery]int patientId, [FromQuery]int doctorId, [FromQuery]string dateString)
         {
-
+            //Convert date, has to be in proper format
+            //DD.MM.YYYY HH:MM
+            //24.05.2022 19:00
             var date = Convert.ToDateTime(dateString);
+            //Check arguments and create first list
             List<Visits> tmp = new List<Visits>();
             if (patientId != default) tmp = await context.Visits.Where(e => e.PatientId == patientId).ToListAsync();
             else if(doctorId != default) tmp = await context.Visits.Where(e => e.DoctorId == doctorId).ToListAsync();
             else if(date != default) tmp = await context.Visits.Where(e => e.VisitTime == date).ToListAsync();
 
+            //Filter out unnecesary elements.
             if (patientId != default) tmp = tmp.Where(v => v.PatientId == patientId).ToList();
             if(doctorId != default) tmp = tmp.Where(v => v.DoctorId == doctorId).ToList();
             if(date != default) tmp = tmp.Where(v => v.VisitTime == date).ToList();
 
+            //Convert list of detailed info into general information.
             var listToRet = new List<GeneralVisitDTO>();
             foreach(var e in tmp) listToRet.Add(new GeneralVisitDTO(e));
 
@@ -141,11 +147,11 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Updates visit with new given values.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="visitDTO"></param>
-        /// <remarks></remarks>
+        /// <remarks>Values can be null.</remarks>
         /// <returns></returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
@@ -161,7 +167,7 @@ namespace API.Controllers
             visit.FinalizationTime = DateTime.Now;
             if(visitDTO.Description is not null) visit.Description = visitDTO.Description;
             if(visitDTO.Diagnosis is not null) visit.Diagnosis = visitDTO.Diagnosis;
-            //if(visitDTO.Minutes != 0) visit.VisitTime = TimeSpan.FromMinutes(visitDTO.Minutes);
+            if(visitDTO.VisitTime != default) visit.VisitTime = visitDTO.VisitTime;
             if(visitDTO.Status is not null) visit.Status = visitDTO.Status;
             if(visitDTO.DoctorId != 0)
             {
@@ -183,7 +189,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Deletes visit with given id.
         /// </summary>
         /// <param name="id"></param>
         /// <remarks></remarks>

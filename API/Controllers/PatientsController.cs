@@ -21,11 +21,11 @@ namespace API.Controllers
 
 
         /// <summary>
-        /// 
+        /// Creates new Patient and adds it to the database.
         /// </summary>
         /// <param name="newPatientDto"></param>
         /// <remarks></remarks>
-        /// <returns></returns>
+        /// <returns>PatientDTO with detailed information.</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
         [Authorize]
@@ -47,10 +47,10 @@ namespace API.Controllers
 
 
         /// <summary>
-        /// 
+        /// Reads all patients.
         /// </summary>
         /// <remarks></remarks>
-        /// <returns></returns>
+        /// <returns>All patients with detailed information.</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
         [Authorize]
@@ -66,10 +66,10 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Reads patient with specified id.
         /// </summary>
         /// <remarks></remarks>
-        /// <returns></returns>
+        /// <returns>Detailed information about given user.</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
         [Authorize]
@@ -85,12 +85,12 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Updates patient with given id.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="patientDTO"></param>
         /// <remarks></remarks>
-        /// <returns></returns>
+        /// <returns>PatientDTO with detailed information.</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
         [Authorize]
@@ -109,11 +109,11 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Deletes patient with given id.
         /// </summary>
         /// <param name="id"></param>
         /// <remarks></remarks>
-        /// <returns></returns>
+        /// <returns>Task resault.</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
         [Authorize]
