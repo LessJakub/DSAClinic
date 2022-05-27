@@ -34,7 +34,7 @@
             <li *ngFor="let item of list" class="flex justify-between items-baseline py-2">
                 <div class="h-min">{{ prettyDateFromDate(item.date) }}</div>
                 <div class="h-min">{{ prettyTimeFromDate(item.date) }}</div>
-                <div class="h-min">{{ item.patient }}</div>
+                <div class="h-min">{{ item.patient.name }} {{ item.patient.surname }}</div>
                 <div class="h-min">{{ item.status }}</div>
                 <button type="button" (click)="selectVisit(item)" class="font-semibold text-white bg-blue-600 px-3 rounded-lg hover:bg-blue-700 active:bg-blue-800">Begin</button>
             </li>

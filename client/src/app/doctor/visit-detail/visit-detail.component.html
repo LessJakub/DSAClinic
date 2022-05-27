@@ -1,5 +1,26 @@
 <app-navbar [title]="'chosen visit'"></app-navbar>
+
+<div class="grow flex w-full">
+    
+    <!-- Left area -->
+    <div class="flex flex-col h-full grow">
+        
+        <app-patient-data [chosenPatientData]="visit.general.patient"></app-patient-data>
+
+        <div class="flex flex-col basis-3/4">
+            <app-patient-visits></app-patient-visits>
+        </div>
+
+    </div>
+
+    <!-- Right area -->
+    <div class="flex flex-col h-full grow">
+
+    </div>
+</div>
+
+<!-- 
 <p>visit-detail works!</p>
 <div>{{ visit.general.patient }}</div>
 <div>{{ visit.general.diagnosis }}</div>
-<div>{{ visit.description }}</div>
+<div>{{ visit.description }}</div> -->

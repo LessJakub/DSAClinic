@@ -14,10 +14,10 @@ export class VisitsService {
 
   constructor() {
     this.visitsG = [
-      {id: 0, date: new Date(2022, 7, 10, 13), doctor: "John Mullbury", patient: "Tom Gangley", status: "Open", diagnosis: "ded"},
-      {id: 1, date: new Date(2022, 7, 10, 14, 30), doctor: "John Mullbury", patient: "Tom Gangley", status: "Closed", diagnosis: "RIP"},
-      {id: 2, date: new Date(2022, 7, 10, 11), doctor: "John Mullbury", patient: "Tom Gangley", status: "Closed", diagnosis: "F"},
-      {id: 3, date: new Date(2022, 7, 10, 12, 15), doctor: "John Mullbury", patient: "Tom Gangley", status: "Open", diagnosis: "f'up"}
+      {id: 0, date: new Date(2022, 7, 10, 13), doctor: "John Mullbury", patient: {id: 0, name: "Tom", surname: "Gangley", pesel: "012345678910"}, status: "Open", diagnosis: "ded"},
+      {id: 1, date: new Date(2022, 7, 10, 14, 30), doctor: "John Mullbury", patient: {id: 1, name: "Tim", surname: "Gangley", pesel: "112345678910"}, status: "Closed", diagnosis: "RIP"},
+      {id: 2, date: new Date(2022, 7, 10, 11), doctor: "John Mullbury", patient: {id: 2, name: "Thim", surname: "Gangley", pesel: "212345678910"}, status: "Closed", diagnosis: "F"},
+      {id: 3, date: new Date(2022, 7, 10, 12, 15), doctor: "John Mullbury", patient: {id: 3, name: "Ben", surname: "Gangley", pesel: "312345678910"}, status: "Open", diagnosis: "f'up"}
     ]
 
     this.visitsD = [

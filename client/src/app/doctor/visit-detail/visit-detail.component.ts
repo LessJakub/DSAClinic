@@ -8,7 +8,8 @@ import { VisitDetail } from 'src/app/shared/interfaces/visit-detail';
 @Component({
   selector: 'app-visit-detail',
   templateUrl: './visit-detail.component.html',
-  styleUrls: ['./visit-detail.component.css']
+  styleUrls: ['./visit-detail.component.css'],
+  host: {'class': 'grow flex flex-col'}, // ! Styling host container to fill all avialable space
 })
 export class VisitDetailComponent implements OnInit {
 
