@@ -14,6 +14,7 @@ import { VisitDetail } from 'src/app/shared/interfaces/visit-detail';
 export class VisitDetailComponent implements OnInit {
 
   visit: VisitDetail;
+  selectedTab: string = 'phys';
 
   constructor(private vs: VisitsService,
               private route: ActivatedRoute,
@@ -25,6 +26,10 @@ export class VisitDetailComponent implements OnInit {
 
   goBack(): void {
     this.location.back();
+  }
+
+  selectTab(tab: string): void {
+    this.selectedTab = tab;
   }
 
 }
