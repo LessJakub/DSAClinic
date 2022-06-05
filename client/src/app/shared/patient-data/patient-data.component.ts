@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+
+import { PatientData } from '../interfaces/patient-data';
 
 @Component({
   selector: 'app-patient-data',
@@ -10,20 +12,17 @@ export class PatientDataComponent implements OnInit {
 
   constructor() { }
 
-  chosenPatientData: PatientData;
+  @Input() chosenPatientData: PatientData;
 
   ngOnInit(): void {
-    this.chosenPatientData = {
-      name: "Antonio",
-      surname: "Brethwise",
-      pesel: "0040215576"
+    if(!this.chosenPatientData){
+      this.chosenPatientData = {
+        id: 1,
+        name: "Default Name",
+        surname: "Default Surname",
+        pesel: "0040215576"
+      }
     }
   }
 
-}
-
-interface PatientData {
-  name: string,
-  surname: string,
-  pesel: string,
 }

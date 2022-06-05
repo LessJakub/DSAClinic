@@ -29,11 +29,12 @@ export class VisitsComponent implements OnInit {
 
   getList(): void{
     if(this.form.valid){
+      
       if(this.form.get("filter").value == "all"){
-        this.list = this.vs.getDoctorVisitsList(0)
+        this.vs.getDoctorVisitsList(2).subscribe(list => this.list = list);
       }
       else {
-        this.list = this.vs.getDoctorVisitsList(0).filter((elem) => {return elem.status.toLowerCase() == this.form.get("filter").value});
+        this.vs.getDoctorVisitsList(2).subscribe(list => this.list = list.filter((elem) => {elem.status.toLowerCase() === this.form.get("filter").value}));
       }
       
       console.log(`Getting elements for date ${this.form.get("date").value} and filter ${this.form.get("filter").value}`);
@@ -48,7 +49,7 @@ export class VisitsComponent implements OnInit {
     return time.toLocaleDateString(navigator.language, {
       year: 'numeric',
       month:'2-digit',
-      day: '2-digit'
+      day: '2-digit',
     });
   }
 

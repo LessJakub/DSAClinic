@@ -1,8 +1,14 @@
+import { PatientData } from "./patient-data";
+
 export interface VisitGeneral {
+    description: string,
+    diagnosis?: string,
+    doctorId: number,
+    finalizationTime?: Date,
     id: number,
-    date: Date,
-    doctor: string,
-    patient: string,
+    patientId: number,
+    registrantId: number,
+    registrationTime: Date,
     status: string,
-    diagnosis: string
+    visitTime: Date
 }
