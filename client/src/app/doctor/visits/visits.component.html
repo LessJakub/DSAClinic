@@ -32,10 +32,10 @@
     <div class="mt-4 grow w-full overflow-y-auto relative">
         <ul class="absolute top-0 left-0 w-full divide-y">
             <li *ngFor="let item of list" class="flex justify-between items-baseline py-2">
-                <div class="h-min">{{ prettyDateFromDate(item.date) }}</div>
-                <div class="h-min">{{ prettyTimeFromDate(item.date) }}</div>
-                <div class="h-min">{{ item.patient.name }} {{ item.patient.surname }}</div>
+                <div class="h-min">{{ item.patientId }}</div>
                 <div class="h-min">{{ item.status }}</div>
+                <div class="h-min">{{ prettyDateFromDate(item.visitTime) }}</div> <!-- Make this prettier -->
+                <div class="h-min">{{ prettyTimeFromDate(item.visitTime) }}</div>
                 <button type="button" (click)="selectVisit(item)" class="font-semibold text-white bg-blue-600 px-3 rounded-lg hover:bg-blue-700 active:bg-blue-800">Begin</button>
             </li>
         </ul>
