@@ -85,6 +85,35 @@ namespace API.Controllers
         }
 
         /// <summary>
+        /// Reads patient with specified id.
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns>Detailed information about given user.</returns>
+        /// <response code="200">  </response>
+        /// <response code="400">  </response>
+        //[Authorize]
+        [HttpGet("q")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<IEnumerable<PatientDTO>>> ReadWithNameSurname([FromQuery] string name, [FromQuery]string surname)
+        {
+            //var patient = await context.Patients.FirstOrDefaultAsync(p => p.Id == id);
+            //if(patient is null) return BadRequest($"There is no patient with id {id}");
+            
+            List<Patient> tmp = new List<Patient>();
+            if(name is not null) tmp = await context.Patients.Where(p => p.Name == name).ToListAsync();
+            else if(surname is not null) tmp = await context.Patients.Where(p => p.Surname == surname).ToListAsync();
+
+            if(name is not null) tmp = tmp.Where(p => p.Name == name).ToList();
+            if(surname is not null) tmp = tmp.Where(p => p.Surname == surname).ToList();
+            
+            var listToRet = new List<PatientDTO>();
+            foreach(var p in tmp) listToRet.Add(new PatientDTO(p));
+
+            return listToRet;
+        }
+
+        /// <summary>
         /// Updates patient with given id.
         /// </summary>
         /// <param name="id"></param>
