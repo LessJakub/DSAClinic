@@ -85,10 +85,10 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Reads patient with specified id.
+        /// 
         /// </summary>
         /// <remarks></remarks>
-        /// <returns>Detailed information about given user.</returns>
+        /// <returns></returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
         //[Authorize]
