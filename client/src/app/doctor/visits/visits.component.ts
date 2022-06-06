@@ -31,13 +31,15 @@ export class VisitsComponent implements OnInit {
     if(this.form.valid){
       
       if(this.form.get("filter").value == "all"){
-        this.vs.getDoctorVisitsList(2).subscribe(list => this.list = list);
+        this.vs.getDoctorVisitsList(2, new Date(this.form.get("date").value)).subscribe(list => this.list = list);
       }
       else {
-        this.vs.getDoctorVisitsList(2).subscribe(list => this.list = list.filter((elem) => {elem.status.toLowerCase() === this.form.get("filter").value}));
+        this.vs.getDoctorVisitsList(2, new Date(this.form.get("date").value)).subscribe(list => this.list = list.filter((elem) => {elem.status.toLowerCase() === this.form.get("filter").value}));
       }
       
+      console.log(new Date(this.form.get("date").value).toJSON());
       console.log(`Getting elements for date ${this.form.get("date").value} and filter ${this.form.get("filter").value}`);
+      console.log(this.list);
     }
   }
 
@@ -46,6 +48,10 @@ export class VisitsComponent implements OnInit {
   }
 
   prettyDateFromDate(time: Date): string {
+    if(typeof(time) === 'string'){
+      time = new Date(time);
+    }
+
     return time.toLocaleDateString(navigator.language, {
       year: 'numeric',
       month:'2-digit',
@@ -54,6 +60,10 @@ export class VisitsComponent implements OnInit {
   }
 
   prettyTimeFromDate(time: Date): string {
+    if(typeof(time) === 'string'){
+      time = new Date(time);
+    }
+
     return time.toLocaleTimeString(navigator.language, {
       hour: '2-digit',
       minute:'2-digit'

@@ -15,7 +15,7 @@ export class PatientDataComponent implements OnInit {
   @Input() chosenPatientData: PatientData;
 
   ngOnInit(): void {
-    if(!this.chosenPatientData){
+    if(this.chosenPatientData == null){
       this.chosenPatientData = {
         id: 1,
         name: "Default Name",

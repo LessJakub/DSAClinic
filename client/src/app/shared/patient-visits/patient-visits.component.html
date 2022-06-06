@@ -4,7 +4,7 @@
     <ul class="absolute top-0 left-0 w-full divide-y">
         <!-- <li *ngFor="let patient of patients$ | async" > -->
         <li *ngFor="let visit of visits" >
-            <span>{{visit.date.toDateString()}} {{visit.doctor}} {{visit.status}}</span>
+            <span>{{ prettyDateFromDate(visit.date) }} {{ prettyTimeFromDate(visit.date) }} {{visit.doctorName}} {{visit?.diagnosis}}</span>
         </li>
     </ul>
 </div>

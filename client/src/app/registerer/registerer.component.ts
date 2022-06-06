@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { VisitsService } from '../services/visits.service';
+
+import { PatientData } from '../shared/interfaces/patient-data';
+import { VisitGeneral } from '../shared/interfaces/visit-general';
 
 @Component({
   selector: 'app-registerer',
@@ -8,9 +12,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RegistererComponent implements OnInit {
 
-  constructor() { }
+  selectedPatient: PatientData;
+  patientsVisits: VisitGeneral[];
+
+  constructor(private vs: VisitsService) { }
 
   ngOnInit(): void {
+
+  }
+
+  selectPatient(patient: PatientData): void {
+    this.selectedPatient = patient;
+
+    this.vs.getPatientVisitsList(this.selectedPatient.id).subscribe(result => this.patientsVisits = result);
   }
 
 }
