@@ -8,7 +8,7 @@
         <div class="p-3 flex flex-col gap-4 basis-full min-h-0">
             <h3 class="text-2xl font-medium">Patients</h3>
             <button type="button" class="font-semibold text-white bg-blue-600 w-full py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">+ Add Patient</button>
-            <app-patients-list></app-patients-list>
+            <app-patients-list (selectedPatient)="selectPatient($event)"></app-patients-list>
         </div>
     </div>
     <!--Main Area-->
@@ -19,7 +19,7 @@
 
             <!--Left Top area-->
             <div class="flex basis-1/4 border-r border-gray-200">
-                <app-patient-data></app-patient-data>
+                <app-patient-data [chosenPatientData]="selectedPatient"></app-patient-data>
             </div>
 
             <!--Right Top area-->
@@ -30,7 +30,7 @@
 
         <!--Bottom area-->
         <div class="flex basis-2/6 min-h-0 border-t border-gray-200">
-            <app-patient-visits></app-patient-visits>
+            <app-patient-visits [visits]="patientsVisits"></app-patient-visits>
         </div>
     </div>
 </div>

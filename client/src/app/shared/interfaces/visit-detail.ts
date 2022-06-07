@@ -1,10 +1,12 @@
-import { ExamLaboratory } from "./exam-laboratory";
-import { ExamPhysical } from "./exam-physical";
-import { VisitGeneral } from "./visit-general";
-
 export interface VisitDetail {
-    general: VisitGeneral,
+    id: number,
     description?: string,
-    physysicals?: ExamPhysical[]
-    laboboratory?: ExamLaboratory[]
+    diagnosis?: string,
+    registrationTime: Date,
+    finalizationTime?: Date,
+    visitTime: Date,
+    status: string,
+    doctorId: number,
+    patientId: number,
+    registrantId: number
 }

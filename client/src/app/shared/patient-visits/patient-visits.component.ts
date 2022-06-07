@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { VisitGeneral } from '../interfaces/visit-general';
 
 @Component({
   selector: 'app-patient-visits',
@@ -10,41 +11,23 @@ export class PatientVisitsComponent implements OnInit {
 
   constructor() { }
 
-  visits: Visit[];
+  @Input() visits: VisitGeneral[];
 
-  ngOnInit(): void {
-    this.visits = [
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'},
-      {date: new Date('10-07-2022'), doctor: 'John Doe', status: 'Closed'}
-    ]
+  ngOnInit(): void { }
+
+  prettyDateFromDate(time: Date): string {
+    return time.toLocaleDateString(navigator.language, {
+      year: 'numeric',
+      month:'2-digit',
+      day: '2-digit',
+    });
   }
 
-}
+  prettyTimeFromDate(time: Date): string {
+    return time.toLocaleTimeString(navigator.language, {
+      hour: '2-digit',
+      minute:'2-digit'
+    });
+  }
 
-interface Visit {
-  date: Date,
-  doctor: String, //doctors needed in common module
-  status: string  //could use some enum
 }

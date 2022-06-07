@@ -6,11 +6,11 @@
     <div class="flex flex-col h-full grow border-r border-gray-200">
         
         <div class="border-b border-gray-200">
-            <app-patient-data [chosenPatientData]="visit.general.patientId"></app-patient-data>
+            <app-patient-data [chosenPatientData]="patient"></app-patient-data>
         </div>
 
         <div class="grow w-full flex">
-            <app-patient-visits></app-patient-visits>
+            <app-patient-visits [visits]="patientVisits"></app-patient-visits>
         </div>
 
     </div>
@@ -22,10 +22,10 @@
         <!-- Visit details inputs -->
         <div>
             <label for="description">Description:</label>
-            <textarea id="description" rows="7" placeholder="Description" class="w-full resize-none mb-2 bg-gray-200"></textarea>
+            <textarea id="description" rows="7" placeholder="Description" class="w-full resize-none mb-2 bg-gray-200" [value]="visit?.description"></textarea>
 
             <label for="diagnosis">Diagnosis:</label>
-            <textarea id="diagnosis" rows="5" placeholder="Diagnosis" class="w-full resize-none bg-gray-200"></textarea>
+            <textarea id="diagnosis" rows="5" placeholder="Diagnosis" class="w-full resize-none bg-gray-200" [value]="visit?.diagnosis"></textarea>
         </div>
 
         <!-- Examinations -->
