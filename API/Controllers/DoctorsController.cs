@@ -74,8 +74,8 @@ namespace API.Controllers
             visit.FinalizationTime = DateTime.Now;
             if(visitDTO.Description is not null) visit.Description = visitDTO.Description;
             if(visitDTO.Diagnosis is not null) visit.Diagnosis = visitDTO.Diagnosis;
-            if(visitDTO.VisitTime != default) visit.VisitTime = visitDTO.VisitTime;
-            if(visitDTO.Status is not null) visit.Status = visitDTO.Status;
+            if(visitDTO.VisitTime != default) visit.VisitTime = (DateTime)visitDTO.VisitTime;
+            if(visitDTO.Status is not null) visit.Status = (Status)visitDTO.Status;
             if(visitDTO.DoctorId != 0) visit.Doctor = doctor.Doctor;         
             if(visitDTO.PatientId != 0)
             {

@@ -34,7 +34,7 @@ namespace API.DTOs
 
         public DateTime VisitTime { get; set; }
 
-        public string Status { get; set; }
+        public Status Status { get; set; }
 
         public int DoctorId { get; set; }
 

@@ -11,6 +11,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
+
+    
+
     public class VisitsController : BaseApiController
     {
         public DataContext context { get; }
@@ -83,10 +86,14 @@ namespace API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<List<GeneralVisitDTO>>> ReadAll()
+        public async Task<ActionResult<List<GeneralVisitDTO>>> ReadAll(int startIndex = 0, int endIndex = 15)
         {
             var visits = new List<GeneralVisitDTO>();
-            foreach(var visit in await context.Visits.ToListAsync()) visits.Add(new GeneralVisitDTO(visit));
+            foreach(var visit in await context.Visits.
+                Skip(startIndex).
+                Take(endIndex).
+                ToListAsync()) 
+                    visits.Add(new GeneralVisitDTO(visit));
 
             return visits;
         }
@@ -168,8 +175,8 @@ namespace API.Controllers
             visit.FinalizationTime = DateTime.Now;
             if(visitDTO.Description is not null) visit.Description = visitDTO.Description;
             if(visitDTO.Diagnosis is not null) visit.Diagnosis = visitDTO.Diagnosis;
-            if(visitDTO.VisitTime != default) visit.VisitTime = visitDTO.VisitTime;
-            if(visitDTO.Status is not null) visit.Status = visitDTO.Status;
+            if(visitDTO.VisitTime != default) visit.VisitTime = (DateTime)visitDTO.VisitTime;
+            if(visitDTO.Status is not null) visit.Status = (Status)visitDTO.Status;
             if(visitDTO.DoctorId != 0)
             {
                 var doctorUser = await context.Users.FindAsync(visitDTO.DoctorId);

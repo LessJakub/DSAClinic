@@ -2,6 +2,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Entities
 {
+    public enum Status
+    {
+        NEW,
+        IN_PROGRESS,
+        CANCELLED,
+        FINISHED
+    }
+
     [Table("Visits")]
     public class Visits
     {
@@ -17,7 +25,7 @@ namespace API.Entities
 
         public DateTime VisitTime { get; set; }
 
-        public string Status { get; set; }
+        public Status Status { get; set; }
 
         public virtual Doctor Doctor { get; set; }
 
