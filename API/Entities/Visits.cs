@@ -39,7 +39,7 @@ namespace API.Entities
 
         public int RegistrantId { get; set; }
 
-        public virtual ICollection<LabExamination> LabExaminations { get; set; }
+        public virtual ICollection<LabExaminations> LabExaminations { get; set; }
 
         public virtual ICollection<PhysicalExamination>PhysicalExaminations { get; set; }
         

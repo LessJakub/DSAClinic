@@ -19,7 +19,7 @@ namespace API.Data
         public DbSet<Patient> Patients { get; set; }
         public DbSet<ExaminationList> ExaminationLists { get; set; }
         public DbSet<PhysicalExamination> PhysicalExaminations { get; set; }
-        public DbSet<LabExamination> LabExaminations { get; set; }
+        public DbSet<LabExaminations> LabExaminations { get; set; }
         public DbSet<Whitelist> IPWhitelist {get; set;}
     }
 }

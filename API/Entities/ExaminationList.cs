@@ -13,7 +13,7 @@ namespace API.Entities
 
         public int Type { get; set; }
 
-        public virtual ICollection<LabExamination>LabExaminations { get; set; }
+        public virtual ICollection<LabExaminations>LabExaminations { get; set; }
 
         public virtual ICollection<PhysicalExamination>PhysicalExaminations { get; set; }
     }
