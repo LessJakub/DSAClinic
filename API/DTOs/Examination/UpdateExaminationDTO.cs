@@ -5,20 +5,19 @@ using System.Threading.Tasks;
 using API.Entities;
 namespace API.DTOs
 {
-    public class ExaminationDTO
+    public class UpdateExaminationDTO
     {
-        public ExaminationDTO()
+        public UpdateExaminationDTO()
         {
         }
-        public ExaminationDTO(ExaminationList examination)
+        public UpdateExaminationDTO(ExaminationList examination)
         {
             this.Name = examination.Name;
             this.Type = examination.Type;
             this.Icd= examination.Icd;
         }
-
-        public string Name { get; set; }
-        public string Icd { get; set; }
-        public ExaminationType Type { get; set; }
+        public string? Name { get; set; }
+        public string? Icd { get; set; }
+        public ExaminationType? Type { get; set; }
     }
 }
