@@ -12,17 +12,19 @@ namespace API.DTOs
         {
         }
 
-        public GeneralLabTestDTO(Entities.LabExaminations labTest)
+        public GeneralLabTestDTO(LabExamination labTest)
         {
             this.Id = labTest.Id;
             this.Status = labTest.Status;
             this.OrderDate = labTest.OrderDate;
-            this.ExaminationListId = labTest.ExaminationListId;
+            this.ExaminationName=labTest.ExaminationList.Name;
+            this.ExaminationIcd=labTest.ExaminationList.Icd;
         }
         public int Id { get; set; }
         public LabStatus Status { get; set; }
         public DateTime OrderDate { get; set; }
-        public int ExaminationListId { get; set; }
+        public string ExaminationName { get; set; }
+        public string ExaminationIcd { get; set; }
 
     }
 }

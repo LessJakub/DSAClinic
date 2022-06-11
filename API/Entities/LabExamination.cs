@@ -11,7 +11,7 @@ namespace API.Entities
         FINISHED
     }
     [Table("LabExaminations")]
-    public class LabExaminations
+    public class LabExamination
     {
         public int Id { get; set; }
 

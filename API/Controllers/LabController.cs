@@ -108,7 +108,36 @@ namespace API.Controllers
             return new LabTestDTO(test);
         }
 
+        /// <summary>
+        /// Searches for lab examinations with specified filters.
+        /// </summary>
+        /// <remarks>Values can be null. Sorting not yet implemented.</remarks>
+        /// <returns>List of GeneralLabTestDTO</returns>
+        /// <response code="200">  </response>
+        /// <response code="400">  </response>
+        [AllowAnonymous]
+        [HttpGet("q")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<List<GeneralLabTestDTO>>> Search([FromQuery]int patientId, [FromQuery]int doctorId, [FromQuery]int visitId)
+        {
+            //Check arguments and create first list
+            List<LabExamination> tmp = new List<LabExamination>();
+            if (patientId != default) tmp = await context.LabExaminations.Where(e => e.Visits.PatientId == patientId).ToListAsync();
+            else if(doctorId != default) tmp = await context.LabExaminations.Where(e => e.Visits.DoctorId == doctorId).ToListAsync();
+            else if(visitId != default) tmp = await context.LabExaminations.Where(e => e.VisitsId == visitId).ToListAsync();
 
+            //Filter out unnecesary elements.
+            if (patientId != default) tmp = tmp.Where(e => e.Visits.PatientId == patientId).ToList();
+            if(doctorId != default) tmp = tmp.Where(e => e.Visits.DoctorId == doctorId).ToList();
+            if(visitId != default) tmp = tmp.Where(e => e.VisitsId == visitId).ToList();
+
+            //Convert list of detailed info into general information.
+            var listToRet = new List<GeneralLabTestDTO>();
+            foreach(var e in tmp) listToRet.Add(new GeneralLabTestDTO(e));
+
+            return listToRet;
+        }
     /// <summary>
     /// Deletes test with given id.
     /// </summary>

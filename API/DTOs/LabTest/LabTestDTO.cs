@@ -12,7 +12,7 @@ namespace API.DTOs
         {
         }
 
-        public LabTestDTO(Entities.LabExaminations labTest)
+        public LabTestDTO(LabExamination labTest)
         {
             this.Id = labTest.Id;
             this.Status = labTest.Status;

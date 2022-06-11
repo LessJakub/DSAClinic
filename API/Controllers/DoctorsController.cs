@@ -120,7 +120,7 @@ namespace API.Controllers
             var examType = await context.ExaminationLists.FindAsync(newLabTestDto.ExaminationListId);
             if (examType == null) return BadRequest($"Exam type with id {newLabTestDto.ExaminationListId} does not exist");
 
-            var labTest = new LabExaminations{
+            var labTest = new LabExamination{
                 Status = newLabTestDto.Status,
                 OrderDate = DateTime.Now,
                 DoctorNotes = newLabTestDto.DoctorNotes,

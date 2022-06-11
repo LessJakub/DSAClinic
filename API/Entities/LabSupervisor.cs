@@ -11,7 +11,7 @@ namespace API.Entities
         
         public string Surname { get; set; }
 
-        public virtual ICollection<LabExaminations> LabExaminations { get; set; }
+        public virtual ICollection<LabExamination> LabExaminations { get; set; }
 
         public virtual AppUser AppUser { get; set; }
     }
