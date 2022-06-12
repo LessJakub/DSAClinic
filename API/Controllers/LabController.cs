@@ -26,7 +26,7 @@ namespace API.Controllers
     /// <returns>List of GeneralLabTestDTO.</returns>
     /// <response code="200">  </response>
     /// <response code="400">  </response>
-    [AllowAnonymous]
+    [Authorize]
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -42,28 +42,30 @@ namespace API.Controllers
         return tests;
     }
 
-    /// <summary>
-    /// Returns detailed information about laboratory test with given id.
-    /// </summary>
-    /// <remarks></remarks>
-    /// <returns></returns>
-    /// <response code="200">  </response>
-    /// <response code="400">  </response>
-    [AllowAnonymous]
-    [HttpGet("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<LabTestDTO>> Read(int id)
-    {
-        
-        var test = await context.LabExaminations.FirstOrDefaultAsync(v => v.Id == id);
-        if(test is null) return BadRequest($"There is no laboratory test with id {id}");
+        /// <summary>
+        /// Returns detailed information about laboratory test with given id.
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns></returns>
+        /// <response code="200">  </response>
+        /// <response code="400">  </response>
+        [Authorize(Roles="LabTechnician,LabSupervisor")]
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<LabTestDTO>> Read(int id)
+        {
+            
+            var test = await context.LabExaminations.FirstOrDefaultAsync(v => v.Id == id);
+            if(test is null) return BadRequest($"There is no laboratory test with id {id}");
 
-        return new LabTestDTO(test);
-    }
+            return new LabTestDTO(test);
+        }
 
         /// <summary>
         /// Updates laboratory test with new given values.
+        /// Lab technician can update status only to AWAITING_FOR_CONFIRMATION
+        /// Lab supervisor can update status to any available values.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="testDTO"></param>
@@ -71,7 +73,7 @@ namespace API.Controllers
         /// <returns></returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles="LabTechnician,LabSupervisor")]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -89,15 +91,13 @@ namespace API.Controllers
                 test.Status=testDTO.Status;
                 if(testDTO.LabTestStatus is not null) test.LabTestStatus=testDTO.LabTestStatus;
                 if(testDTO.LabNotes is not null) test.LabNotes=testDTO.LabNotes;
-                var labTechnicianUser = await context.Users.FindAsync(testDTO.LabTechnicianId);
-                test.LabTechnician=labTechnicianUser.LabTechnician;
-                test.LabTechnicianId=testDTO.LabTechnicianId;
+                test.LabTechnician=requesterUser.LabTechnician;
+                test.LabTechnicianId=requesterUser.LabTechnician.Id;
             }else if(requesterUser.LabSupervisor is not null){
                 if(test.LabSupervisorId is null) {
                     test.LabSupervisorId=requesterID;
-                var labSupervisorUser = await context.Users.FindAsync(testDTO.LabSupervisorId);
-                test.LabSupervisor=labSupervisorUser.LabSupervisor;
-                test.LabSupervisorId=testDTO.LabSupervisorId;
+                test.LabSupervisor=requesterUser.LabSupervisor;
+                test.LabSupervisorId=requesterUser.LabSupervisor.Id;
                     }
                 test.Status=testDTO.Status;
                 if(testDTO.LabTestStatus is not null) test.LabTestStatus=testDTO.LabTestStatus;
@@ -115,7 +115,7 @@ namespace API.Controllers
         /// <returns>List of GeneralLabTestDTO</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("q")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -146,7 +146,7 @@ namespace API.Controllers
     /// <returns></returns>
     /// <response code="200">  </response>
     /// <response code="400">  </response>
-    [Authorize]
+    [Authorize("LabSupervisor")]
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

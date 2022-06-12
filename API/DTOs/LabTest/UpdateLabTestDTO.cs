@@ -11,7 +11,5 @@ namespace API.DTOs
         public LabStatus Status { get; set; }
         public string? LabTestStatus { get; set; }
         public string? LabNotes { get; set; }    
-        public int? LabSupervisorId { get; set; }
-        public int? LabTechnicianId { get; set; }
     }
 }

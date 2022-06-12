@@ -145,7 +145,7 @@ namespace API.Controllers
         /// <returns></returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet("{id}/visits/lab-tests/{test_id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
