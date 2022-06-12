@@ -30,10 +30,10 @@ namespace API.Controllers
         [HttpGet("{type}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<List<ExaminationDTO>>> ReadAllExaminations(int type)
+        public async Task<ActionResult<List<ExaminationDTO>>> ReadExaminationsByType(ExaminationType type)
         {
             List<ExaminationList> tmp = new List<ExaminationList>();
-            tmp = await context.ExaminationLists.Where(examination => examination.Type == (ExaminationType)type).ToListAsync();
+            tmp = await context.ExaminationLists.Where(examination => examination.Type == type).ToListAsync();
             List<ExaminationDTO> listToRet= new List<ExaminationDTO>();
             foreach(var e in tmp) listToRet.Add(new ExaminationDTO(e));
 
@@ -54,7 +54,7 @@ namespace API.Controllers
         public async Task<ActionResult<ExaminationDTO>> Create(ExaminationDTO newExamination)
         {
             var registrantId = GetRequesterId();
-            if(registrantId==-1) return BadRequest($"You can not create new examination!");
+            if(registrantId == -1) return BadRequest($"You can not create new examination!");
             
             
             var examination = new ExaminationList{
