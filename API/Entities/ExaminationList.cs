@@ -2,6 +2,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Entities
 {  
+    public enum ExaminationType{
+        PHYSICAL,
+        LABORATORY
+    }
+
     [Table("ExaminationLists")]
     public class ExaminationList
     {
@@ -11,7 +16,7 @@ namespace API.Entities
 
         public string Icd { get; set; }
 
-        public int Type { get; set; }
+        public ExaminationType Type { get; set; }
 
         public virtual ICollection<LabExamination>LabExaminations { get; set; }
 
