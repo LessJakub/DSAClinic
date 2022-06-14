@@ -28,7 +28,7 @@ namespace API.Controllers
         /// <returns>PatientDTO with detailed information.</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles="Registrant")]
         [HttpPost]
         public async Task<ActionResult<PatientDTO>> Create(NewPatientDTO newPatientDto)
         {
@@ -91,7 +91,7 @@ namespace API.Controllers
         /// <returns></returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        //[Authorize]
+        [Authorize]
         [HttpGet("q")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -130,7 +130,7 @@ namespace API.Controllers
         /// <returns>PatientDTO with detailed information.</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles="Registrant")]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -153,7 +153,7 @@ namespace API.Controllers
         /// <returns>Task resault.</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
-        [Authorize]
+        [Authorize(Roles="Admin")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

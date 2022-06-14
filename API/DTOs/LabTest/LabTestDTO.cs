@@ -12,7 +12,7 @@ namespace API.DTOs
         {
         }
 
-        public LabTestDTO(Entities.LabExamination labTest)
+        public LabTestDTO(LabExamination labTest)
         {
             this.Id = labTest.Id;
             this.Status = labTest.Status;
@@ -29,7 +29,7 @@ namespace API.DTOs
 
         public int Id { get; set; }
 
-        public string Status { get; set; }
+        public LabStatus Status { get; set; }
 
         public string LabTestStatus { get; set; }
 
@@ -45,8 +45,8 @@ namespace API.DTOs
 
         public int VisitsId { get; set; }
 
-        public int LabSupervisorId { get; set; }
+        public int? LabSupervisorId { get; set; }
 
-        public int LabTechnicianId { get; set; }
+        public int? LabTechnicianId { get; set; }
     }
 }

@@ -45,7 +45,7 @@ namespace API.Controllers
         /// <returns>Authorization information of created user</returns>
         /// <response code="200"> Ok, new user is created. </response>
         /// <response code="400"> Bad request, invalid input. </response>
-        //[Authorize(Policy = "AdminOnly")]
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO)
         {

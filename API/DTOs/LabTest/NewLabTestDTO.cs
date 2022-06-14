@@ -8,7 +8,7 @@ namespace API.DTOs
 {
     public class NewLabTestDTO
     {
-        public string Status { get; set; }
+        public LabStatus Status { get; set; }
 
         public DateTime OrderDate { get; set; }
 
