@@ -15,6 +15,8 @@ export class RegistererComponent implements OnInit {
   selectedPatient: PatientData;
   patientsVisits: VisitGeneral[];
 
+  patientOverlayOn: boolean;
+
   constructor(private vs: VisitsService) { }
 
   ngOnInit(): void {
