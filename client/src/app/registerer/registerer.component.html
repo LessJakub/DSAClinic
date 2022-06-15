@@ -7,7 +7,7 @@
         <hr>
         <div class="p-3 flex flex-col gap-4 basis-full min-h-0">
             <h3 class="text-2xl font-medium">Patients</h3>
-            <button type="button" class="font-semibold text-white bg-blue-600 w-full py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">+ Add Patient</button>
+            <button type="button" (click)="patientOverlayOn = true" class="font-semibold text-white bg-blue-600 w-full py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">+ Add Patient</button>
             <app-patients-list (selectedPatient)="selectPatient($event)"></app-patients-list>
         </div>
     </div>
@@ -33,4 +33,12 @@
             <app-patient-visits [visits]="patientsVisits"></app-patient-visits>
         </div>
     </div>
+</div>
+
+<div *ngIf="patientOverlayOn" (click)="patientOverlayOn = false" class="absolute top-0 left-0 w-full h-full backdrop-blur-sm">
+    
+</div>
+
+<div *ngIf="patientOverlayOn" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-1/2 w-1/2 bg-white">
+    asdasd
 </div>
