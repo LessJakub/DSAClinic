@@ -3,8 +3,18 @@
 <div class="grow relative overflow-y-auto w-full">
     <ul class="absolute top-0 left-0 w-full divide-y">
         <!-- <li *ngFor="let patient of patients$ | async" > -->
-        <li *ngFor="let visit of visits" >
-            <span>{{ prettyDateFromDate(visit.date) }} {{ prettyTimeFromDate(visit.date) }} {{visit.doctorName}} {{visit?.diagnosis}}</span>
-        </li>
+        <il *ngFor="let visit of visits" class="flex w-full items-center py-2">
+            <div class="w-1/5 min-w-fit px-1">{{ prettyDateFromDate(visit.date) }}</div>
+            <div class="w-1/5 min-w-fit px-1">{{ prettyTimeFromDate(visit.date) }}</div>
+            <div class="w-1/5 min-w-fit px-1">{{visit.doctorName}}</div>
+            <div class="w-1/5 min-w-fit px-1">{{visit?.diagnosis}} </div>
+            <div class="w-1/5 min-w-fit px-1"><button type="button" (click)="openDetails(visit.id)" class="float-right font-semibold text-white bg-blue-600 px-3 rounded-lg hover:bg-blue-700 active:bg-blue-800">Details</button></div>
+        </il>
     </ul>
 </div>
+
+<div *ngIf="overlayActive" (click)="overlayActive = false" class="absolute top-0 left-0 w-full h-full backdrop-blur-sm">
+    
+</div>
+
+<div *ngIf="overlayActive" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-1/2 w-1/2 bg-white"> asdasd </div>

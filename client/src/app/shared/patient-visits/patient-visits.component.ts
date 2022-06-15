@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+
 import { VisitGeneral } from '../interfaces/visit-general';
+import { VisitsService } from 'src/app/services/visits.service';
+import { VisitDetail } from '../interfaces/visit-detail';
 
 @Component({
   selector: 'app-patient-visits',
@@ -9,11 +12,21 @@ import { VisitGeneral } from '../interfaces/visit-general';
 })
 export class PatientVisitsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private vs: VisitsService) { }
 
   @Input() visits: VisitGeneral[];
+  @Input() mode: string;
+
+  overlayActive = false;
+  chosenVisit: VisitDetail;
 
   ngOnInit(): void { }
+
+  openDetails(visitID: number): void {
+    this.overlayActive = true;
+
+    this.vs.getVisit(visitID).subscribe(result => this.chosenVisit = result);
+  }
 
   prettyDateFromDate(time: Date): string {
     return time.toLocaleDateString(navigator.language, {

@@ -1,3 +1,5 @@
+import { Status } from "./status";
+
 export interface VisitDetail {
     id: number,
     description?: string,
@@ -5,7 +7,7 @@ export interface VisitDetail {
     registrationTime: Date,
     finalizationTime?: Date,
     visitTime: Date,
-    status: string,
+    status: Status,
     doctorId: number,
     patientId: number,
     registrantId: number

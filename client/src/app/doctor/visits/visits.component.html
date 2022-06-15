@@ -13,15 +13,19 @@
                 <label for="radios" class="mr-2">Filter:</label>
                 <fieldset id="radios" class="space-x-2">
                     <label>
-                        <input type="radio" value="all" formControlName="filter">
+                        <input checked type="radio" [value]=-1 formControlName="filter">
                         <span> All</span>
                     </label>
                     <label>
-                        <input type="radio" value="open" formControlName="filter">
+                        <input type="radio" [value]=0 formControlName="filter">
                         <span> Upcoming</span>
                     </label>
                     <label>
-                        <input type="radio" value="closed" formControlName="filter">
+                        <input type="radio" [value]=2 formControlName="filter">
+                        <span> Cancelled</span>
+                    </label>
+                    <label>
+                        <input type="radio" [value]=3 formControlName="filter">
                         <span> Finished</span>
                     </label>
                 </fieldset>
@@ -35,15 +39,15 @@
         </div>
         <ng-template #listNotNull>
             <div #listNotNull *ngIf="list.length == 0">
-                No Visits for {{ prettyDateFromDate( form.get("date").value ) }}
+                No such visits for {{ prettyDateFromDate( form.get("date").value ) }}
             </div>
         </ng-template>
         <ul class="absolute top-0 left-0 w-full divide-y">
-            <li *ngFor="let item of list" class="flex justify-between items-baseline py-2">
-                <div class="h-min">{{ prettyTimeFromDate(item.date) }}</div>
-                <div class="h-min">{{ item.patientName }}</div>
-                <div class="h-min">{{ item.status }}</div>
-                <button type="button" (click)="selectVisit(item)" class="font-semibold text-white bg-blue-600 px-3 rounded-lg hover:bg-blue-700 active:bg-blue-800">Begin</button>
+            <li *ngFor="let item of list" class="flex items-baseline py-2 w-full">
+                <div class="w-1/4 min-w-fit px-1">{{ prettyTimeFromDate(item.date) }}</div>
+                <div class="w-1/4 min-w-fit px-1">{{ item.patientName }}</div>
+                <div class="w-1/4 min-w-fit px-1">{{ item.status }}</div>
+                <div class="w-1/4 min-w-fit px-1"><button type="button" (click)="selectVisit(item)" class="float-right font-semibold text-white bg-blue-600 px-3 rounded-lg hover:bg-blue-700 active:bg-blue-800">Begin</button></div>
             </li>
         </ul>
     </div>

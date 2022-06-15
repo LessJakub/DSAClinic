@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
+import { Status } from 'src/app/shared/interfaces/status';
 
 import { VisitGeneral } from 'src/app/shared/interfaces/visit-general';
 import { VisitsService } from '../../services/visits.service';
@@ -14,7 +15,7 @@ import { VisitsService } from '../../services/visits.service';
 export class VisitsComponent implements OnInit {
 
   form = new FormGroup({
-    filter: new FormControl('all', Validators.required),
+    filter: new FormControl(-1, Validators.required),
     date: new FormControl()
   });
   list : VisitGeneral[];
@@ -30,16 +31,17 @@ export class VisitsComponent implements OnInit {
   getList(): void{
     if(this.form.valid){
       
-      if(this.form.get("filter").value == "all"){
+      if(this.form.get("filter").value == -1){
         this.vs.getDoctorVisitsList(2, new Date(this.form.get("date").value)).subscribe(list => this.list = list);
       }
       else {
-        this.vs.getDoctorVisitsList(2, new Date(this.form.get("date").value)).subscribe(list => this.list = list.filter((elem) => {elem.status.toLowerCase() === this.form.get("filter").value}));
+        this.vs.getDoctorVisitsList(2, new Date(this.form.get("date").value)).subscribe(list => 
+          this.list = list.filter((elem) => {
+            elem.status == this.form.get("filter").value}
+          ));
       }
       
-      console.log(new Date(this.form.get("date").value).toJSON());
       console.log(`Getting elements for date ${this.form.get("date").value} and filter ${this.form.get("filter").value}`);
-      console.log(this.list);
     }
   }
 
