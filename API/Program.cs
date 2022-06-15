@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.DependencyInjection;
+using API.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +19,7 @@ var services = builder.Services;
 services.AddControllers();
 services.AddControllersWithViews().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 services.AddEndpointsApiExplorer();
 
 services.AddScoped<ITokenService, TokenService>();
@@ -59,15 +61,17 @@ byte[] tokenKey;
 if(builder.Configuration["TokenKey"] != null) tokenKey = Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"]);
 else tokenKey = Encoding.UTF8.GetBytes("super secret dev key");
 
+//services.AddDefaultIdentity<IdentityUser>()
+/*
 services.AddAuthorization(options =>
 {
-    options.AddPolicy("AdminOnly", policy => policy.RequireClaim("Admin", "true"));
-    options.AddPolicy("IsDoctor", policy => policy.RequireClaim("Doctor", "true"));
-    options.AddPolicy("IsRegistrant", policy => policy.RequireClaim("Registrant", "true"));
-    options.AddPolicy("IsLabSupervisor", policy => policy.RequireClaim("LabSupervisor", "true"));
-    options.AddPolicy("IsLabTechnician", policy => policy.RequireClaim("LabTechnician", "true"));
+    options.AddPolicy("Admin", policy => policy.RequireClaim("Admin", "true"));
+    options.AddPolicy("Doctor", policy => policy.RequireClaim("Doctor", "true"));
+    options.AddPolicy("Registrant", policy => policy.RequireClaim("Registrant", "true"));
+    options.AddPolicy("LabSupervisor", policy => policy.RequireClaim("LabSupervisor", "true"));
+    options.AddPolicy("LabTechnician", policy => policy.RequireClaim("LabTechnician", "true"));
 });
-
+*/
 services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
@@ -81,10 +85,13 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
 
 
 
+
 services.AddDbContext<DataContext>(options =>
 {
     options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+//services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<DataContext>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -106,6 +113,8 @@ if (app.Environment.IsDevelopment())
 app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200", "http://localhost:4200", "http://localhost:80", "http://localhost"));
 
 app.UseAuthentication();
+
+//
 
 app.UseAuthorization();
 

@@ -29,7 +29,8 @@ namespace API.Services
             {
                 new Claim(JwtRegisteredClaimNames.NameId, user.UserName),
                 new Claim("UserId", user.Id.ToString()),
-                new Claim(user.Role.ToString(), "true") 
+                new Claim(ClaimTypes.Role, user.Role.ToString()),
+                //new Claim(user.Role.ToString(), "true")
             };
 
 

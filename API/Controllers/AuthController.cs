@@ -30,7 +30,7 @@ namespace API.Controllers
         /// </summary>
         /// <remarks>Test method</remarks>
         /// <returns>List of all users</returns>
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("users")]
         public ActionResult<IEnumerable<AppUser>> GetUsers()
         {
@@ -45,7 +45,7 @@ namespace API.Controllers
         /// <returns>Authorization information of created user</returns>
         /// <response code="200"> Ok, new user is created. </response>
         /// <response code="400"> Bad request, invalid input. </response>
-        [Authorize(Policy = "AdminOnly")]
+        [Authorize(Roles = "Admin")]
         [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO)
         {
@@ -160,7 +160,7 @@ namespace API.Controllers
         /// <response code="200"> Ok, Username or password changed. </response>
         /// <response code="400"> Bad request, invalid input. </response>
         /// <response code="401"> Unauthorized, User has different id or is not admin. </response>
-        [Authorize("AdminOnly")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -202,7 +202,7 @@ namespace API.Controllers
         /// <response code="400"> Bad request, invalid input. </response>
         /// <response code="401"> Unauthorized, User has different id or is not admin. </response>
         /// <response code="204"> User with specified id was not found. </response>
-        [Authorize("AdminOnly")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
