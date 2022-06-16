@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms'; 
 
 import { DoctorRoutingModule } from './doctor-routing.module';
 import { DoctorComponent } from './doctor.component';
@@ -18,6 +19,7 @@ import { VisitDetailComponent } from './visit-detail/visit-detail.component';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     DoctorRoutingModule,
     SharedModule
   ]

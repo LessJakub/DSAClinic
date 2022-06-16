@@ -35,10 +35,10 @@ export class VisitsComponent implements OnInit {
         this.vs.getDoctorVisitsList(2, new Date(this.form.get("date").value)).subscribe(list => this.list = list);
       }
       else {
-        this.vs.getDoctorVisitsList(2, new Date(this.form.get("date").value)).subscribe(list => 
-          this.list = list.filter((elem) => {
-            elem.status == this.form.get("filter").value}
-          ));
+        this.vs.getDoctorVisitsList(2, new Date(this.form.get("date").value)).subscribe(list => this.list = list);
+
+        this.list = this.list.filter((elem) => {
+          return elem.status == 3;});
       }
       
       console.log(`Getting elements for date ${this.form.get("date").value} and filter ${this.form.get("filter").value}`);
