@@ -49,6 +49,15 @@ export class VisitsComponent implements OnInit {
     this.router.navigate([`visit/${visit.id}`], {relativeTo: this.route.parent});
   }
 
+  statusToText(status: Status): string {
+    switch(status) {
+      case Status.CANCELLED: return "Cancelled";
+      case Status.FINISHED: return "Finished";
+      case Status.IN_PROGRESS: return "In Progress";
+      case Status.NEW: return "New";
+    }
+  }
+
   prettyDateFromDate(time: Date): string {
     if(typeof(time) === 'string'){
       time = new Date(time);

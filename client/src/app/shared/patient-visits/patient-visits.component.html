@@ -8,13 +8,62 @@
             <div class="w-1/5 min-w-fit px-1">{{ prettyTimeFromDate(visit.date) }}</div>
             <div class="w-1/5 min-w-fit px-1">{{visit.doctorName}}</div>
             <div class="w-1/5 min-w-fit px-1">{{visit?.diagnosis}} </div>
-            <div class="w-1/5 min-w-fit px-1"><button type="button" (click)="openDetails(visit.id)" class="float-right font-semibold text-white bg-blue-600 px-3 rounded-lg hover:bg-blue-700 active:bg-blue-800">Details</button></div>
+            <div class="w-1/5 min-w-fit px-1"><button type="button" (click)="openDetails(visit)" class="float-right font-semibold text-white bg-blue-600 px-3 rounded-lg hover:bg-blue-700 active:bg-blue-800">Details</button></div>
         </il>
     </ul>
 </div>
 
-<div *ngIf="overlayActive" (click)="overlayActive = false" class="absolute top-0 left-0 w-full h-full backdrop-blur-sm">
-    
-</div>
+<!-- Overlay elements -->
+<div *ngIf="overlayActive" (click)="overlayActive = false" class="absolute top-0 left-0 w-full h-full backdrop-blur-sm z-50"></div>
 
-<div *ngIf="overlayActive" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-1/2 w-1/2 bg-white"> asdasd </div>
+<div *ngIf="overlayActive" class="absolute z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-1/2 w-1/2 min-w-[35rem] min-h-min rounded-md drop-shadow-lg bg-gradient-to-b from-slate-50 via-slate-100 to-blue-300"> 
+    <div class="flex flex-col w-full h-full p-5">
+        <!-- Data tables -->
+        <div class="flex w-full justify-between">
+            <table>
+                <tr>
+                    <td><span class="mr-3">Scheduled for:</span></td>
+                    <td>{{ prettyDateFromDate(chosenVisitDetail.visitTime) }} {{ prettyTimeFromDate(chosenVisitDetail.visitTime) }}</td>
+                </tr>
+                <tr>
+                    <td><span class="mr-3">Registered on:</span></td>
+                    <td>{{ prettyDateFromDate(chosenVisitDetail.registrationTime) }} {{ prettyTimeFromDate(chosenVisitDetail.registrationTime) }}</td>
+                </tr>
+                <tr>
+                    <td><span class="mr-3">Finalized on:</span></td>
+                    <td>{{ chosenVisitDetail.finalizationTime? prettyDateFromDate(chosenVisitDetail.finalizationTime) : "N/A" }} 
+                        {{ chosenVisitDetail.finalizationTime? prettyTimeFromDate(chosenVisitDetail.finalizationTime) : ""}}</td>
+                </tr>
+            </table>
+
+            <table>
+                <tr>
+                    <td><span class="mr-3">Doctor:</span></td>
+                    <td>{{ chosenVisitGeneral.doctorName }}</td>
+                </tr>
+                <tr>
+                    <td><span class="mr-3">Registered by:</span></td>
+                    <td>{{ chosenVisitDetail.registrantId }}</td>
+                </tr>
+                <tr>
+                    <td><span class="mr-3">Status:</span></td>
+                    <td>{{ statusToText(chosenVisitGeneral.status) }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Lower Half -->
+        <div class="w-full grow flex items-end justify-center">
+            <!-- Description and diagnosis -->
+            <div class="basis-2/3">
+                <label for="description">Description:</label>
+                <textarea readonly id="description" rows="5" placeholder="Description" class="w-full resize-none mb-2 bg-gray-200" [value]="chosenVisitDetail?.description"></textarea>
+
+                <label for="diagnosis">Diagnosis:</label>
+                <textarea readonly id="diagnosis" rows="3" placeholder="Diagnosis" class="w-full resize-none bg-gray-200" [value]="chosenVisitDetail?.diagnosis"></textarea>
+            </div>
+
+            <button *ngIf="chosenVisitGeneral?.status == 0 || chosenVisitGeneral?.status == 1" type="button" (click)="cancelVisit(chosenVisitDetail)" class="ml-8 mb-2 font-semibold text-white bg-red-600 px-6 py-2 rounded-lg hover:bg-red-700 active:bg-red-800">Cancel</button>
+        </div>
+    </div>
+</div>

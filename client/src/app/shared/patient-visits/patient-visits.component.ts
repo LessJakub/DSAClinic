@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { VisitGeneral } from '../interfaces/visit-general';
 import { VisitsService } from 'src/app/services/visits.service';
 import { VisitDetail } from '../interfaces/visit-detail';
+import { Status } from '../interfaces/status';
 
 @Component({
   selector: 'app-patient-visits',
@@ -18,14 +19,29 @@ export class PatientVisitsComponent implements OnInit {
   @Input() mode: string;
 
   overlayActive = false;
-  chosenVisit: VisitDetail;
+  chosenVisitDetail: VisitDetail;
+  chosenVisitGeneral: VisitGeneral;
 
   ngOnInit(): void { }
 
-  openDetails(visitID: number): void {
+  openDetails(visit: VisitGeneral): void {
     this.overlayActive = true;
 
-    this.vs.getVisit(visitID).subscribe(result => this.chosenVisit = result);
+    this.vs.getVisit(visit.id).subscribe(result => this.chosenVisitDetail = result);
+    this.chosenVisitGeneral = visit;
+  }
+
+  cancelVisit(visit: VisitDetail): void {
+    this.vs.cancelVisit(visit);
+  }
+
+  statusToText(status: Status): string {
+    switch(status) {
+      case Status.CANCELLED: return "Cancelled";
+      case Status.FINISHED: return "Finished";
+      case Status.IN_PROGRESS: return "In Progress";
+      case Status.NEW: return "New";
+    }
   }
 
   prettyDateFromDate(time: Date): string {
