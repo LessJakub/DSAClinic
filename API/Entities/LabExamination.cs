@@ -17,15 +17,15 @@ namespace API.Entities
 
         public LabStatus Status { get; set; }
 
-        public string LabTestStatus { get; set; }
+        public string? LabTestStatus { get; set; }
 
         public DateTime OrderDate { get; set; }
 
-        public DateTime ExecutionDate { get; set; }
+        public DateTime? ExecutionDate { get; set; }
 
-        public string DoctorNotes { get; set; }
+        public string? DoctorNotes { get; set; }
 
-        public string LabNotes { get; set; }    
+        public string? LabNotes { get; set; }    
 
         public virtual ExaminationList ExaminationList { get; set; }
 
