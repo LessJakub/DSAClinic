@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+import { Status } from '../shared/interfaces/status';
 
 import { VisitDetail } from '../shared/interfaces/visit-detail';
 import { VisitGeneral } from '../shared/interfaces/visit-general';
@@ -80,7 +81,52 @@ export class VisitsService {
     let token: string;
     this.as.currentUser$.subscribe(user => token = user.token);
 
-    return this.http.get<VisitDetail>(this.visitDetailURL + visitId.toString(), {headers: new HttpHeaders({'Content-Type': 'text/plain', 'Authorization': "Bearer " + token})});
+    let response = this.http.get<VisitDetail>(this.visitDetailURL + visitId.toString(), {headers: new HttpHeaders({'Content-Type': 'text/plain', 'Authorization': "Bearer " + token})});
+    //a ridicioulus way to get the dates to work as dates... copies all fields apart from dates, where it makes new Date objects
+    response = response.pipe(map(
+      (visit) => ({
+        id: visit.id,
+        description: visit.description,
+        diagnosis: visit.diagnosis,
+        registrationTime: new Date(visit.registrationTime),
+        finalizationTime: visit.finalizationTime? new Date(visit.finalizationTime) : null,
+        visitTime: new Date(visit.visitTime),
+        status: visit.status,
+        doctorId: visit.doctorId,
+        patientId: visit.patientId,
+        registrantId: visit.registrantId
+      } as VisitDetail))
+    )
+
+    return response;
+  }
+
+  cancelVisit(visit: VisitDetail) {
+    let token: string;
+    this.as.currentUser$.subscribe(user => token = user.token);
+
+    let body = {
+      description: visit.description,
+      diagnosis: visit.diagnosis,
+      finalizationTime: visit.finalizationTime,
+      visitTime: visit.visitTime,
+      status: Status.CANCELLED,
+      doctorId: visit.doctorId,
+      patientId: visit.patientId
+    };
+
+    this.http.put<any>(
+      this.visitDetailURL + visit.id.toString(),
+      body,
+      {headers: new HttpHeaders({'Content-Type': 'text/plain', 'Authorization': "Bearer " + token})}
+    ).subscribe({
+        next: data => {
+          console.log('Visit cancelled');
+        },
+        error: error => {
+            console.error('There was an error!', error);
+        }
+    });
   }
 
   updateVisit(visit: VisitDetail) {

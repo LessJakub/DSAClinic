@@ -39,7 +39,7 @@
             <ng-container [ngSwitch]="selectedTab">
                 <!-- phys tab contents -->
                 <div *ngSwitchCase="'phys'" class="grow w-full flex flex-col">
-                    <div class="grow w-full relative">
+                    <div class="grow w-full relative z-0">
 
                         <div class="absolute top-0 left-0 w-full">
                             <div *ngFor="let elem of physicalExams">
@@ -69,15 +69,9 @@
             <button type="button" (click)="goBack()" class="font-semibold text-white bg-gray-500 px-6 py-2 rounded-lg hover:bg-gray-700 active:bg-gray-800">Back</button>
             <div class="flex space-x-6 ml-16">
                 <button type="submit" class="font-semibold text-white bg-blue-600 px-6 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">Finish</button>
-                <button type="button" class="font-semibold text-white bg-red-600 px-6 py-2 rounded-lg hover:bg-red-700 active:bg-red-800">Cancel</button>
+                <button type="button" (click)="cancelVisit()" class="font-semibold text-white bg-red-600 px-6 py-2 rounded-lg hover:bg-red-700 active:bg-red-800">Cancel</button>
             </div>
         </div>
 
     </div>
 </div>
-
-<!-- 
-<p>visit-detail works!</p>
-<div>{{ visit.general.patient }}</div>
-<div>{{ visit.general.diagnosis }}</div>
-<div>{{ visit.description }}</div> -->

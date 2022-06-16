@@ -56,4 +56,8 @@ export class VisitDetailComponent implements OnInit {
     this.selectedTab = tab;
   }
 
+  cancelVisit(): void {
+    this.vs.cancelVisit(this.visit);
+  }
+
 }
