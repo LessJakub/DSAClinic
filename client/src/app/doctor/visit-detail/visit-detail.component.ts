@@ -60,4 +60,8 @@ export class VisitDetailComponent implements OnInit {
     this.vs.cancelVisit(this.visit);
   }
 
+  finalizeVisit(): void {
+    this.vs.finishVisit(this.visit);
+  }
+
 }

@@ -13,19 +13,19 @@
                 <label for="radios" class="mr-2">Filter:</label>
                 <fieldset id="radios" class="space-x-2">
                     <label>
-                        <input checked type="radio" [value]=-1 formControlName="filter">
+                        <input checked type="radio" [value]="-1" formControlName="filter">
                         <span> All</span>
                     </label>
                     <label>
-                        <input type="radio" [value]=0 formControlName="filter">
+                        <input type="radio" [value]="0" formControlName="filter">
                         <span> Upcoming</span>
                     </label>
                     <label>
-                        <input type="radio" [value]=2 formControlName="filter">
+                        <input type="radio" [value]="2" formControlName="filter">
                         <span> Cancelled</span>
                     </label>
                     <label>
-                        <input type="radio" [value]=3 formControlName="filter">
+                        <input type="radio" [value]="3" formControlName="filter">
                         <span> Finished</span>
                     </label>
                 </fieldset>

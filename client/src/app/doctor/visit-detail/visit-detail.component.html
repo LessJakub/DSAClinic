@@ -22,10 +22,10 @@
         <!-- Visit details inputs -->
         <div>
             <label for="description">Description:</label>
-            <textarea id="description" rows="7" placeholder="Description" class="w-full resize-none mb-2 bg-gray-200" [value]="visit?.description"></textarea>
+            <textarea id="description" rows="7" placeholder="Description" class="w-full resize-none mb-2 bg-gray-200" [(ngModel)]="visit.description"></textarea>
 
             <label for="diagnosis">Diagnosis:</label>
-            <textarea id="diagnosis" rows="5" placeholder="Diagnosis" class="w-full resize-none bg-gray-200" [value]="visit?.diagnosis"></textarea>
+            <textarea id="diagnosis" rows="5" placeholder="Diagnosis" class="w-full resize-none bg-gray-200" [(ngModel)]="visit.diagnosis"></textarea>
         </div>
 
         <!-- Examinations -->
@@ -68,7 +68,7 @@
         <div class="flex justify-between">
             <button type="button" (click)="goBack()" class="font-semibold text-white bg-gray-500 px-6 py-2 rounded-lg hover:bg-gray-700 active:bg-gray-800">Back</button>
             <div class="flex space-x-6 ml-16">
-                <button type="submit" class="font-semibold text-white bg-blue-600 px-6 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">Finish</button>
+                <button type="submit" (click)="finalizeVisit()" class="font-semibold text-white bg-blue-600 px-6 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">Finish</button>
                 <button type="button" (click)="cancelVisit()" class="font-semibold text-white bg-red-600 px-6 py-2 rounded-lg hover:bg-red-700 active:bg-red-800">Cancel</button>
             </div>
         </div>

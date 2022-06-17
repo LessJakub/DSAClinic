@@ -105,26 +105,58 @@ export class VisitsService {
     let token: string;
     this.as.currentUser$.subscribe(user => token = user.token);
 
-    let body = {
-      description: visit.description,
-      diagnosis: visit.diagnosis,
-      finalizationTime: visit.finalizationTime,
-      visitTime: visit.visitTime,
-      status: Status.CANCELLED,
-      doctorId: visit.doctorId,
-      patientId: visit.patientId
+    const body = {
+      'description': visit.description,
+      'diagnosis': visit.diagnosis,
+      'finalizationTime': visit.finalizationTime? visit.finalizationTime.toJSON() : null,
+      'visitTime': visit.visitTime.toJSON(),
+      'status': Status.CANCELLED,
+      'doctorId': visit.doctorId,
+      'patientId': visit.patientId
     };
+
+    console.log(body);
 
     this.http.put<any>(
       this.visitDetailURL + visit.id.toString(),
       body,
-      {headers: new HttpHeaders({'Content-Type': 'text/plain', 'Authorization': "Bearer " + token})}
+      {headers: new HttpHeaders({'Content-Type': 'application/json-patch+json', 'Authorization': "Bearer " + token})}
     ).subscribe({
         next: data => {
           console.log('Visit cancelled');
         },
         error: error => {
             console.error('There was an error!', error);
+        }
+    });
+  }
+
+  finishVisit(visit: VisitDetail): void {
+    let token: string;
+    this.as.currentUser$.subscribe(user => token = user.token);
+
+    const body = {
+      'description': visit.description,
+      'diagnosis': visit.diagnosis,
+      'finalizationTime': new Date().toJSON(),
+      'visitTime': visit.visitTime.toJSON(),
+      'status': Status.FINISHED,
+      'doctorId': visit.doctorId,
+      'patientId': visit.patientId
+    };
+
+    console.log(body);
+
+    this.http.put<any>(
+      this.visitDetailURL + visit.id.toString(),
+      body,
+      {headers: new HttpHeaders({'Content-Type': 'application/json-patch+json', 'Authorization': "Bearer " + token})}
+    ).subscribe({
+        next: data => {
+          console.log('Visit finalized');
+        },
+        error: error => {
+            console.error('There was an error finalizing the visit!', error);
         }
     });
   }
