@@ -18,7 +18,7 @@ namespace API.DTOs
             this.Status = labTest.Status;
             this.LabTestStatus = labTest.LabTestStatus;
             this.OrderDate = labTest.OrderDate;
-            this.ExecutionDate = (DateTime)labTest.ExecutionDate;
+            this.ExecutionDate = labTest.ExecutionDate;
             this.DoctorNotes = labTest.DoctorNotes;
             this.LabNotes = labTest.DoctorNotes;
             this.ExaminationListId = labTest.ExaminationListId;
@@ -33,9 +33,9 @@ namespace API.DTOs
 
         public string LabTestStatus { get; set; }
 
-        public DateTime OrderDate { get; set; }
+        public DateTime? OrderDate { get; set; }
 
-        public DateTime ExecutionDate { get; set; }
+        public DateTime? ExecutionDate { get; set; }
 
         public string DoctorNotes { get; set; }
 

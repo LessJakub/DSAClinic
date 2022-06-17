@@ -63,6 +63,44 @@ namespace API.Controllers
         }
 
         /// <summary>
+        /// Returns detailed information of Lab Examinations with LabStatus == status
+        /// </summary>
+        /// <remarks>Sorted by ascending order date (from oldest to newest)
+        ///public enum LabStatus
+        ///{
+        ///     NEW_TEST,
+        ///     IN_PROGRESS,
+        ///     AWAITING_FOR_CONFIRMATION,
+        ///     CANCELLED,
+        ///     FINISHED
+        ///}
+        ///</remarks>
+        /// <returns></returns>
+        /// <response code="200">  </response>
+        /// <response code="400">  </response>
+        [Authorize(Roles="LabTechnician,LabSupervisor")]
+        [HttpGet("status")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<List<LabTestDTO>>> ReadWithStatusSorted(LabStatus status, int startIndex = 0, int endIndex = 20)
+        {
+            
+            var examinations = await context.LabExaminations.
+                            Where(e => e.Status == status).
+                            OrderBy(e => e.OrderDate).
+                            Skip(startIndex).
+                            Take(endIndex).
+                            ToListAsync();
+
+            var listToRet = new List<LabTestDTO>();
+            foreach(var e in examinations)
+            {
+                listToRet.Add(new LabTestDTO(e));
+            }
+            return listToRet;
+        }
+
+        /// <summary>
         /// Updates laboratory test with new given values.
         /// Lab technician can update status only to AWAITING_FOR_CONFIRMATION
         /// Lab supervisor can update status to any available values.
