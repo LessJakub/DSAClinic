@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
 using API.DTOs;
+using API.DTOs.Examination;
 using API.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -51,7 +52,7 @@ namespace API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ExaminationDTO>> Create(ExaminationDTO newExamination)
+        public async Task<ActionResult<ExaminationDTO>> Create(NewExaminationDTO newExamination)
         {
             var registrantId = GetRequesterId();
             if(registrantId == -1) return BadRequest($"You can not create new examination!");
