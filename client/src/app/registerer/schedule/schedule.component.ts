@@ -1,6 +1,7 @@
-import { Time } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { timestamp } from 'rxjs/operators';
+import { SchedulingService } from 'src/app/services/scheduling.service';
+
+import { Doctor } from 'src/app/shared/interfaces/doctor';
 
 @Component({
   selector: 'app-schedule',
@@ -10,7 +11,7 @@ import { timestamp } from 'rxjs/operators';
 })
 export class ScheduleComponent implements OnInit {
 
-  constructor() { }
+  constructor(private ss: SchedulingService) { }
   
   chosenDate: Date;
 
@@ -18,48 +19,14 @@ export class ScheduleComponent implements OnInit {
   doctors: Doctor[];
   chosenDoctor: Doctor;
 
-  scheduledVisits: VisitSchedule[];
+  //scheduledVisits: VisitSchedule[];
 
   timeSlots: Date[];
 
   ngOnInit(): void {
     this.dropdownVisibility = false;
-
+    this.ss.getAllDoctors().subscribe(docs => this.doctors = docs);
     this.timeSlots = this.prepareTimeSlots(new Date(0, 0, 0, 8), new Date(0, 0, 0, 16), new Date(0, 0, 0, 0, 15));
-
-    this.doctors = [
-      {name: "Ben", surname: "Clinton"},
-      {name: "John", surname: "Doe"},
-      {name: "Bart", surname: "Simpson"},
-      {name: "Ben", surname: "Clinton"},
-      {name: "John", surname: "Doe"},
-      {name: "Bart", surname: "Simpson"},
-      {name: "Ben", surname: "Clinton"},
-      {name: "John", surname: "Doe"},
-      {name: "Bart", surname: "Simpson"},
-      {name: "Ben", surname: "Clinton"},
-      {name: "John", surname: "Doe"},
-      {name: "Bart", surname: "Simpson"}
-    ]
-
-    this.scheduledVisits = [
-      {id: 0, time: new Date(2022, 4, 10, 10, 30)},
-      {id: 1, time: new Date(2022, 4, 10, 11, 0)},
-      {id: 2, time: new Date(2022, 4, 10, 12, 0)},
-      {id: 3, time: new Date(2022, 4, 11, 8, 0)},
-      {id: 4, time: new Date(2022, 4, 11, 9, 30)},
-      {id: 5, time: new Date(2022, 4, 11, 10, 0)},
-      {id: 6, time: new Date(2022, 4, 11, 10, 30)},
-      {id: 7, time: new Date(2022, 4, 11, 11, 30)},
-      {id: 8, time: new Date(2022, 4, 12, 8, 30)},
-      {id: 9, time: new Date(2022, 4, 12, 10, 30)},
-      {id: 10, time: new Date(2022, 4, 12, 11, 0)},
-      {id: 11, time: new Date(2022, 4, 12, 12, 30)},
-      {id: 12, time: new Date(2022, 4, 12, 13, 30)},
-      {id: 13, time: new Date(2022, 4, 13, 10, 30)},
-      {id: 14, time: new Date(2022, 4, 13, 8, 0)},
-      {id: 15, time: new Date(2022, 4, 13, 13, 0)}
-    ]
   }
 
   setDate(stringDate: string): void {
@@ -70,7 +37,7 @@ export class ScheduleComponent implements OnInit {
   setDoctor(doctor: Doctor): void {
     this.dropdownVisibility = false;
     this.chosenDoctor = doctor;
-    console.log(`Chose: ${this.chosenDoctor.name} ${this.chosenDoctor.surname}`);
+    //console.log(`Chose: ${this.chosenDoctor.name} ${this.chosenDoctor.surname}`);
     this.getSchedule();
   }
 
@@ -98,14 +65,4 @@ export class ScheduleComponent implements OnInit {
       minute:'2-digit'
     });
   }
-}
-
-interface Doctor {
-  name: string,
-  surname: string
-}
-
-interface VisitSchedule { // fetch open visits for a doctor for chosen day +- 4 days
-  id: number,
-  time: Date
 }
