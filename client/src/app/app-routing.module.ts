@@ -14,6 +14,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'registerer', loadChildren: () => import('./registerer/registerer.module').then(m => m.RegistererModule) },
   { path: 'doctor', loadChildren: () => import('./doctor/doctor.module').then(m => m.DoctorModule) },
+  { path: 'lab', loadChildren: () => import('./lab/lab.module').then(m => m.LabModule) },
   { path: '**', component: Page404Component}
 ];
 
