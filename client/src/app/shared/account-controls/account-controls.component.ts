@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { User } from 'src/app/models/User';
 import { AccountService } from 'src/app/services/account.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-account-controls',
@@ -10,14 +11,18 @@ import { AccountService } from 'src/app/services/account.service';
 export class AccountControlsComponent implements OnInit {
 
     @Input() column: boolean = false;
-    user: User
+    user: User;
+    private afterLogoutURL: string = 'login';
 
-    constructor(private accountService: AccountService) { }
+    constructor(private accountService: AccountService,
+                private router: Router) { }
 
     ngOnInit(): void {}
 
     logoutUser() {
         this.accountService.logoutUser();
+
+        this.router.navigateByUrl(this.afterLogoutURL);
     }
 
     getUserName(): String {
