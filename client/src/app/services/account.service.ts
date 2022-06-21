@@ -4,6 +4,9 @@ import { BaseRouteReuseStrategy } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { User } from '../models/User';
 import { map } from 'rxjs/operators';
+import jwt_decode, { JwtPayload } from "jwt-decode";
+
+type customJwtPayload = JwtPayload & { nameid: string, UserId: string, role: string};
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +30,8 @@ export class AccountService {
 
     currentUser$ = this.currentUserSource.asObservable();
 
+    private role: string;
+
     loginRequest(model: any) {
         return this.http.post(this.loginUrl, model).pipe (
             map((Response: User) => {
@@ -35,6 +40,8 @@ export class AccountService {
                 if (user) {
                     localStorage.setItem("user", JSON.stringify(user));
                     this.currentUserSource.next(user);
+
+                    this.role = jwt_decode<customJwtPayload>(user.token).role;
                 }
                 console.log(user);
             })
@@ -44,5 +51,11 @@ export class AccountService {
     logoutUser() {
         localStorage.removeItem("user");
         this.currentUserSource.next(null);
+
+        this.role = null;
+    }
+
+    getUserRole(): string {
+        return this.role;
     }
 }
