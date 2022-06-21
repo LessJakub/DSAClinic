@@ -1,8 +1,13 @@
 export interface ExamLaboratory {
-    type: string,
-    name: string,
-    status: string,
-    doctorsNotes: string,
-    labNotes: string,
-    // is that all we need?
+    id: number,
+    status: number,
+    labTestStatus?: number,
+    orderDate: Date,
+    executionDate?: Date,
+    doctorNotes?: string,
+    labNotes?: string,
+    examinationListId: number,
+    visitsId: number,
+    labSupervisorId?: number,
+    labTechnicianId?: number
 }

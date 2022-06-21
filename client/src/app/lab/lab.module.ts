@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { LabRoutingModule } from './lab-routing.module';
 import { LabComponent } from './lab.component';
@@ -17,7 +18,9 @@ import { TechnicianComponent } from './technician/technician.component';
   imports: [
     CommonModule,
     LabRoutingModule,
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule,
+    FormsModule
   ]
 })
 export class LabModule { }

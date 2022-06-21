@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
-import { Status } from 'src/app/shared/interfaces/status';
 
+import { Status } from 'src/app/shared/interfaces/status';
 import { VisitGeneral } from 'src/app/shared/interfaces/visit-general';
 import { VisitsService } from '../../services/visits.service';
 
