@@ -41,6 +41,29 @@ namespace API.Controllers
             return visits;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns></returns>
+        /// <response code="200">  </response>
+        /// <response code="400">  </response>
+        [Authorize(Roles = "Registrant")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<List<GeneralDoctorDTO>>> GetGeneralDoctors()
+        {
+            var listToRet = new List<GeneralDoctorDTO>();
+
+            foreach(var d in await context.Users.Where(u => u.Role == Roles.Doctor).Select(u => u.Doctor).ToListAsync())
+            {
+                listToRet.Add(new GeneralDoctorDTO(d));
+            }
+
+            return listToRet;
+        }
+
 
         /// <summary>
         /// Updates particular visit with given id by a doctor 
