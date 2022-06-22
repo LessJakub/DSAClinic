@@ -101,6 +101,27 @@ namespace API.Controllers
         }
 
         /// <summary>
+        /// Returns detailed information of Lab Examinations with LabStatus == status
+        /// </summary>
+        /// <remarks> Not sorted.
+        ///</remarks>
+        /// <returns></returns>
+        /// <response code="200">  </response>
+        /// <response code="400">  </response>
+        [Authorize(Roles="LabTechnician,LabSupervisor")]
+        [HttpGet("examination-list")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<ExaminationDTO>> ReadExaminationList(int id)
+        {
+            
+            var examinationList = await context.ExaminationLists.FirstOrDefaultAsync(e => e.Id == id);
+            if(examinationList is null) return NoContent();
+
+            return new ExaminationDTO(examinationList);
+        }
+
+        /// <summary>
         /// Updates laboratory test with new given values.
         /// Lab technician can update status only to AWAITING_FOR_CONFIRMATION
         /// Lab supervisor can update status to any available values.
