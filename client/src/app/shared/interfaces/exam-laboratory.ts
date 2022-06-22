@@ -11,3 +11,12 @@ export interface ExamLaboratory {
     labSupervisorId?: number,
     labTechnicianId?: number
 }
+
+//status            V
+//orderDate         V
+//execDate          V
+//doctorName        X
+//doctorNotes FULL  V
+//labNotes EDITABLE V
+//labSup name       X
+//lab Tech name     X

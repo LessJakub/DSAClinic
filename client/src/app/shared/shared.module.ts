@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { AccountControlsComponent } from './account-controls/account-controls.component';
 import { PatientDataComponent } from './patient-data/patient-data.component';
 import { PatientVisitsComponent } from './patient-visits/patient-visits.component';
@@ -18,14 +19,16 @@ import { LabDetailsComponent } from './lab-details/lab-details.component';
     LabDetailsComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
   exports: [
     AccountControlsComponent,
     PatientDataComponent,
     PatientVisitsComponent,
     NavbarComponent,
-    Page404Component
+    Page404Component,
+    LabDetailsComponent
   ]
 })
 export class SharedModule { }

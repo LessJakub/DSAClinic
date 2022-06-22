@@ -14,6 +14,7 @@ export class ExaminationService {
 
   private baseURL: string = "http://" + location.hostname;
   private queryAllLabExamsURL: string = this.baseURL + ":8080/v1/Lab/status";
+  private updateLabExamURL: string = this.baseURL + ":8080/v1/Lab/";
 
   constructor(private http: HttpClient,
               private as: AccountService) { }
@@ -29,6 +30,30 @@ export class ExaminationService {
       { headers: new HttpHeaders({'Content-Type': 'text/plain', 'Authorization': "Bearer " + token}),
         params: queryParams
       });
+  }
+
+  postLabExam(id: number, labNotes: string, status: number): void {
+    let token: string;
+    this.as.currentUser$.subscribe(user => token = user.token);
+
+    const body = {
+      'status': status,
+      'labTestStatus': 0,
+      'labNotes': labNotes? labNotes : null,
+    };
+
+    this.http.put<any>(
+      this.updateLabExamURL + id.toString(),
+      body,
+      {headers: new HttpHeaders({'Content-Type': 'application/json-patch+json', 'Authorization': "Bearer " + token})}
+    ).subscribe({
+        next: data => {
+          console.log('Lab Examination updated');
+        },
+        error: error => {
+            console.error('There was an error!', error);
+        }
+    });
   }
 
   // getVisitPhysicals(visitId: number) : ExamPhysical[] {

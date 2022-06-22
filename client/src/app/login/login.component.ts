@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
     model: any = {};
     error: string = null;
 
-    private redirects = {'Doctor': 'doctor/doctor_name', 'Registrant': 'registerer', 'LabTechnician': 'laboratory/technician', 'LabSupervisor': 'laboratory/supervisor'};
+    private redirects = {'Doctor': 'doctor/doctor_name', 'Registrant': 'registerer', 'LabTechnician': 'lab/technician', 'LabSupervisor': 'lab/supervisor'};
 
     loginAction() {
         this.service.loginRequest(this.model).subscribe(Response => {

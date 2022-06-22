@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { Status } from 'src/app/shared/interfaces/status';
-import { ExamLaboratory } from 'src/app/shared/interfaces/exam-laboratory';
 import { ExaminationService } from 'src/app/services/examination.service';
-import { LabDetailsComponent } from 'src/app/shared/lab-details/lab-details.component';
+import { ExamLaboratory } from 'src/app/shared/interfaces/exam-laboratory';
+//import { LabDetailsComponent } from 'src/app/shared/lab-details/lab-details.component';
 
 @Component({
   selector: 'app-technician',
@@ -17,39 +16,34 @@ export class TechnicianComponent implements OnInit {
   constructor(private es: ExaminationService) { }
 
   examinations: ExamLaboratory[];
+  overlayActive = false;
+  selectedExamination: ExamLaboratory;
 
   form = new FormGroup({
-    filter: new FormControl(-1, Validators.required)
+    filter: new FormControl(0, Validators.required),
   })
 
   ngOnInit(): void {
-
+    this.form.controls['filter'].setValue(0, {onlySelf: true});
+    this.form.controls['filter'].updateValueAndValidity();
   }
 
   getList(): void{
     if(this.form.valid){
-      if(this.form.get("filter").value == -1){
-        //this.es.getLabExams() ???
-      }
-      else {
-        this.es.getLabExams(this.form.get("filter").value).subscribe(list => this.examinations = list);
-      }
+      this.es.getLabExams(this.form.get("filter").value).subscribe(list => this.examinations = list);
       
       console.log(`Getting elements for date ${this.form.get("date").value} and filter ${this.form.get("filter").value}`);
     }
   }
 
-  selectExamination(visit: ExamLaboratory) {
-    //open popup for an examination
+  selectExamination(exam: ExamLaboratory) {
+    this.selectedExamination = exam;
+    this.overlayActive = true;
   }
 
-  statusToText(status: Status): string {
-    switch(status) {
-      case Status.CANCELLED: return "Cancelled";
-      case Status.FINISHED: return "Finished";
-      case Status.IN_PROGRESS: return "In Progress";
-      case Status.NEW: return "New";
-    }
+  labStatusToText(status: number): string {
+    const statuses = ['New', 'In Progress', 'Awaiting Confirmation', 'Cancelled', 'Finished'];
+    return statuses[status];
   }
 
   prettyDateFromDate(time: Date): string {
