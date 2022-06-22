@@ -1,28 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 
 import { Status } from 'src/app/shared/interfaces/status';
-import { VisitGeneral } from 'src/app/shared/interfaces/visit-general';
-import { VisitsService } from '../../services/visits.service';
+import { ExamLaboratory } from 'src/app/shared/interfaces/exam-laboratory';
+import { ExaminationService } from 'src/app/services/examination.service';
+import { LabDetailsComponent } from 'src/app/shared/lab-details/lab-details.component';
 
 @Component({
-  selector: 'app-visits',
-  templateUrl: './visits.component.html',
-  styleUrls: ['./visits.component.css'],
+  selector: 'app-technician',
+  templateUrl: './technician.component.html',
+  styleUrls: ['./technician.component.css'],
   host: {'class': 'grow flex flex-col'}, // ! Styling host container to fill all avialable space
 })
-export class VisitsComponent implements OnInit {
+export class TechnicianComponent implements OnInit {
+
+  constructor(private es: ExaminationService) { }
+
+  examinations: ExamLaboratory[];
 
   form = new FormGroup({
-    filter: new FormControl(-1, Validators.required),
-    date: new FormControl()
-  });
-  list : VisitGeneral[];
-
-  constructor(private vs: VisitsService,
-              private router: Router,
-              private route: ActivatedRoute) { }
+    filter: new FormControl(-1, Validators.required)
+  })
 
   ngOnInit(): void {
 
@@ -30,23 +28,19 @@ export class VisitsComponent implements OnInit {
 
   getList(): void{
     if(this.form.valid){
-      
       if(this.form.get("filter").value == -1){
-        this.vs.getDoctorVisitsList(2, new Date(this.form.get("date").value)).subscribe(list => this.list = list);
+        //this.es.getLabExams() ???
       }
       else {
-        this.vs.getDoctorVisitsList(2, new Date(this.form.get("date").value)).subscribe(list => this.list = list);
-
-        this.list = this.list.filter((elem) => {
-          return elem.status == 3;});
+        this.es.getLabExams(this.form.get("filter").value).subscribe(list => this.examinations = list);
       }
       
       console.log(`Getting elements for date ${this.form.get("date").value} and filter ${this.form.get("filter").value}`);
     }
   }
 
-  selectVisit(visit: VisitGeneral) {
-    this.router.navigate([`visit/${visit.id}`], {relativeTo: this.route.parent});
+  selectExamination(visit: ExamLaboratory) {
+    //open popup for an examination
   }
 
   statusToText(status: Status): string {
