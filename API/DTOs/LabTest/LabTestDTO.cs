@@ -20,7 +20,7 @@ namespace API.DTOs
             this.OrderDate = labTest.OrderDate;
             this.ExecutionDate = labTest.ExecutionDate;
             this.DoctorNotes = labTest.DoctorNotes;
-            this.LabNotes = labTest.DoctorNotes;
+            this.LabNotes = labTest.LabNotes;
             this.ExaminationListId = labTest.ExaminationListId;
             this.VisitsId = labTest.VisitsId;
             this.LabSupervisorId = labTest.LabSupervisorId;
