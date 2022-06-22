@@ -26,6 +26,8 @@ namespace API.DTOs
             this.LabSupervisorId = labTest.LabSupervisorId;
             this.LabTechnicianId = labTest.LabTechnicianId;
 
+            if(labTest.ExaminationList is not null) this.Examination = new ExaminationDTO(labTest.ExaminationList);
+
             if(labTest.LabSupervisor is not null) LabSupervisorName = $"{labTest.LabSupervisor.Name} {labTest.LabSupervisor.Surname}";
             if(labTest.LabTechnician is not null) LabTechnicianName = $"{labTest.LabTechnician.Name} {labTest.LabTechnician.Surname}";
         }
@@ -55,5 +57,7 @@ namespace API.DTOs
         public string? LabSupervisorName { get; set; } = null;
 
         public string? LabTechnicianName { get; set; } = null;
+
+        public ExaminationDTO? Examination { get; set; } = null;
     }
 }
