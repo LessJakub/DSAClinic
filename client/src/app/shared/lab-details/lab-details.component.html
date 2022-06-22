@@ -1,1 +1,56 @@
-<p>lab-details works!</p>
+<!-- Overlay elements -->
+<div (click)="closeOverlay()" class="absolute top-0 left-0 w-full h-full backdrop-blur-sm z-50"></div>
+
+<div class="absolute z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-1/2 w-1/2 min-w-[35rem] min-h-min rounded-md drop-shadow-lg bg-gradient-to-b from-slate-50 via-slate-100 to-blue-300"> 
+    <div class="flex flex-col w-full h-full p-5">
+        <!-- Data tables -->
+        <div class="flex w-full justify-between">
+            <table>
+                <tr>
+                    <td><span class="mr-3">Requested on:</span></td>
+                    <td>{{ prettyDateFromDate(exam.orderDate) }} {{ prettyTimeFromDate(exam.orderDate) }}</td>
+                </tr>
+                <tr>
+                    <td><span class="mr-3">Requested by:</span></td>
+                    <!-- <td>{{ //exam.doctor }}</td> -->
+                </tr>
+                <tr>
+                    <td><span class="mr-3">Finalized on:</span></td>
+                    <td>{{ exam.executionDate? prettyDateFromDate(exam.executionDate) : "N/A" }} 
+                        {{ exam.executionDate? prettyTimeFromDate(exam.executionDate) : ""}}</td>
+                </tr>
+            </table>
+
+            <table>
+                <tr>
+                    <td><span class="mr-3">Status:</span></td>
+                    <td>{{ labStatusToText(exam.status) }}</td>
+                </tr>
+                <tr>
+                    <td><span class="mr-3">Technician:</span></td>
+                    <!-- <td>{{ //exam.tech }}</td> -->
+                </tr>
+                <tr>
+                    <td><span class="mr-3">Supervisor:</span></td>
+                    <!-- <td>{{ //exam.sup }}</td> -->
+                </tr>
+            </table>
+        </div>
+
+        <!-- Lower Half -->
+        <div class="w-full grow flex items-end justify-center">
+            <!-- Description and diagnosis -->
+            <div class="basis-2/3">
+                <label for="description">Doctor's Notes:</label>
+                <textarea readonly id="description" rows="5" placeholder="Description" class="w-full resize-none mb-2 bg-gray-200" [value]="exam.doctorNotes"></textarea>
+
+                <label for="diagnosis">Laboratory Staff Notes:</label>
+                <textarea ng-readonly="!editable && exam.status < 3" id="diagnosis" rows="5" placeholder="Diagnosis" class="w-full resize-none bg-gray-200" [(ngModel)]="labNotes"></textarea>
+            </div>
+
+            <button *ngIf="editable && exam.status == 2" type="button" (click)="saveChanges(4)" class="ml-8 mb-2 font-semibold text-white bg-blue-600 px-6 py-2rounded-lg hover:bg-blue-700 active:bg-blue-800">Finalize</button>
+            <button *ngIf="editable && exam.status < 2" type="button" (click)="saveChanges(2)" class="ml-8 mb-2 font-semibold text-white bg-blue-600 px-6 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">Submit</button>
+            <button *ngIf="editable && exam.status == 2" type="button" (click)="saveChanges(3)" class="ml-8 mb-2 font-semibold text-white bg-red-600 px-6 py-2 rounded-lg hover:bg-red-700 active:bg-red-800">Cancel</button>
+        </div>
+    </div>
+</div>
