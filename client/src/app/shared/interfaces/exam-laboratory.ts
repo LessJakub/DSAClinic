@@ -1,3 +1,5 @@
+import { ExamType } from "./exam-type";
+
 export interface ExamLaboratory {
     id: number,
     status: number,
@@ -9,7 +11,10 @@ export interface ExamLaboratory {
     examinationListId: number,
     visitsId: number,
     labSupervisorId?: number,
-    labTechnicianId?: number
+    labTechnicianId?: number,
+    labSupervisorName: string,
+    labTechnicianName: string,
+    examination: ExamType
 }
 
 //status            V

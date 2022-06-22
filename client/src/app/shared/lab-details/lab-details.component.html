@@ -11,13 +11,13 @@
                     <td>{{ prettyDateFromDate(exam.orderDate) }} {{ prettyTimeFromDate(exam.orderDate) }}</td>
                 </tr>
                 <tr>
-                    <td><span class="mr-3">Requested by:</span></td>
-                    <!-- <td>{{ //exam.doctor }}</td> -->
-                </tr>
-                <tr>
                     <td><span class="mr-3">Finalized on:</span></td>
                     <td>{{ exam.executionDate? prettyDateFromDate(exam.executionDate) : "N/A" }} 
                         {{ exam.executionDate? prettyTimeFromDate(exam.executionDate) : ""}}</td>
+                </tr>
+                <tr>
+                    <td><span class="mr-3">Type:</span></td>
+                    <td>{{ exam.examination.name }}</td>
                 </tr>
             </table>
 
@@ -28,11 +28,11 @@
                 </tr>
                 <tr>
                     <td><span class="mr-3">Technician:</span></td>
-                    <!-- <td>{{ //exam.tech }}</td> -->
+                    <td>{{ exam.labTechnicianName }}</td>
                 </tr>
                 <tr>
                     <td><span class="mr-3">Supervisor:</span></td>
-                    <!-- <td>{{ //exam.sup }}</td> -->
+                    <td>{{ exam.labSupervisorName }}</td>
                 </tr>
             </table>
         </div>
@@ -45,7 +45,7 @@
                 <textarea readonly id="description" rows="5" placeholder="Description" class="w-full resize-none mb-2 bg-gray-200" [value]="exam.doctorNotes"></textarea>
 
                 <label for="diagnosis">Laboratory Staff Notes:</label>
-                <textarea ng-readonly="!editable && exam.status < 3" id="diagnosis" rows="5" placeholder="Diagnosis" class="w-full resize-none bg-gray-200" [(ngModel)]="labNotes"></textarea>
+                <textarea [readonly]="!this.editable || this.exam.status > 2" id="diagnosis" rows="5" placeholder="Diagnosis" class="w-full resize-none bg-gray-200" [(ngModel)]="labNotes"></textarea>
             </div>
 
             <button *ngIf="editable && exam.status == 2" type="button" (click)="saveChanges(4)" class="ml-8 mb-2 font-semibold text-white bg-blue-600 px-6 py-2rounded-lg hover:bg-blue-700 active:bg-blue-800">Finalize</button>
