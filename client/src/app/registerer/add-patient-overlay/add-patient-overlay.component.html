@@ -1,0 +1,16 @@
+<div *ngIf="active" (click)="closeOverlay()" class="absolute top-0 left-0 w-full h-full backdrop-blur-sm">
+    <!-- Blurred backdrop -->
+</div>
+
+<div id="window" *ngIf="active" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-1/2 w-1/2 bg-white">
+    <div class="container">
+        <h1 class="text-2xl font-medium">Add Patient</h1><br>  
+
+        <form [formGroup]="form">
+            <input required formControlName="name" id ="name" class="bg-gray-200" type="text" size="30" placeholder="Name"><br><br>
+            <input required formControlName="surname" id="surname" class="bg-gray-200" type="text" size="30" placeholder="Surname"><br><br>
+            <input required formControlName="pesel" id="pesel" class="bg-gray-200" type="text" size="30" placeholder="PESEL"><br><br>
+            <button class="button" type="button" size="30" (click)="submitData()">Add</button>
+        </form>     
+    </div>
+</div>

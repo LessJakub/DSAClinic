@@ -1,0 +1,88 @@
+#window{
+    /* Adding Patient Overlay */
+    /* Auto layout */
+
+    display: flex;              
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+
+    width: 653px;
+    height: 414px;
+
+    /* Backgroun-Opaque */
+    background: linear-gradient(180deg, #F9FAFB 8.85%, #FFFFFF 63.54%, #BED8FD 100%);
+    border-radius: 28px;
+}
+
+.container{
+    margin-top: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h1{
+    text-align: center;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 150%;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+form{
+    text-align: center;
+}
+
+input{
+    color: black;
+    padding: 10px; /*Ajusting the size of the inputs on the top and bottom*/
+}
+
+/*Aim on each input*/
+#name{
+        /* Inside auto layout */
+        flex: none;
+        order: 0;
+        flex-grow: 0;
+}
+
+#surname{
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+#pesel{
+    /* Inside auto layout */
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+}
+
+
+.button{
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 150%;
+
+    background: #1C64F2;
+    text-align: center;
+    border-radius: 10px; /*Creation of angles on the borders*/
+    padding: 9px 122px; /*Ajusting the size-> 5px: bottom and top ; 117px: left and right*/
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 1;
+}
+

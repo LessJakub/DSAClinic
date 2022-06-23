@@ -26,7 +26,7 @@ export class VisitsService {
     queryParams = queryParams.append("dateString", date.toJSON());
 
     let token: string;
-    this.as.currentUser$.subscribe(user => token = user.token);
+    this.as.currentUser$.subscribe(user => token = user?.token);
 
     let response = this.http.get<VisitGeneral[]>(
       this.visitsQueryURL,
@@ -54,7 +54,7 @@ export class VisitsService {
     queryParams = queryParams.append("patientId", patientId);
 
     let token: string;
-    this.as.currentUser$.subscribe(user => token = user.token);
+    this.as.currentUser$.subscribe(user => token = user?.token);
 
     let response = this.http.get<VisitGeneral[]>(
       this.visitsQueryURL,
@@ -79,7 +79,7 @@ export class VisitsService {
 
   getVisit(visitId: number) : Observable<VisitDetail> {
     let token: string;
-    this.as.currentUser$.subscribe(user => token = user.token);
+    this.as.currentUser$.subscribe(user => token = user?.token);
 
     let response = this.http.get<VisitDetail>(this.visitDetailURL + visitId.toString(), {headers: new HttpHeaders({'Content-Type': 'text/plain', 'Authorization': "Bearer " + token})});
     //a ridicioulus way to get the dates to work as dates... copies all fields apart from dates, where it makes new Date objects
@@ -103,7 +103,7 @@ export class VisitsService {
 
   cancelVisit(visit: VisitDetail) {
     let token: string;
-    this.as.currentUser$.subscribe(user => token = user.token);
+    this.as.currentUser$.subscribe(user => token = user?.token);
 
     const body = {
       'description': visit.description,
@@ -133,7 +133,7 @@ export class VisitsService {
 
   finishVisit(visit: VisitDetail): void {
     let token: string;
-    this.as.currentUser$.subscribe(user => token = user.token);
+    this.as.currentUser$.subscribe(user => token = user?.token);
 
     const body = {
       'description': visit.description,

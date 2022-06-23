@@ -24,7 +24,7 @@ export class ExaminationService {
     queryParams = queryParams.append("status", filter);
     
     let token: string;
-    this.as.currentUser$.subscribe(user => token = user.token);
+    this.as.currentUser$.subscribe(user => token = user?.token);
 
     return this.http.get<ExamLaboratory[]>(this.queryAllLabExamsURL,
       { headers: new HttpHeaders({'Content-Type': 'text/plain', 'Authorization': "Bearer " + token}),
@@ -34,7 +34,7 @@ export class ExaminationService {
 
   postLabExam(id: number, labNotes: string, status: number): void {
     let token: string;
-    this.as.currentUser$.subscribe(user => token = user.token);
+    this.as.currentUser$.subscribe(user => token = user?.token);
 
     const body = {
       'status': status,

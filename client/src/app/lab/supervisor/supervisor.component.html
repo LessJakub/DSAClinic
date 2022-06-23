@@ -1,4 +1,4 @@
-<app-navbar [title]="'planned visits'"></app-navbar>
+<app-navbar [title]="'laboratory examinations'"></app-navbar>
 
 <div class="p-10 grow flex flex-col">
 
@@ -27,7 +27,7 @@
     <!-- The list -->
     <div class="mt-4 grow w-full overflow-y-auto relative">
         <div *ngIf="examinations && examinations.length == 0">
-            No such examinations for {{ labStatusToText( form.get("filter").value ) }}
+            No such examinations for {{ labStatusToText( form.get("filter")?.value ) }}
         </div>
         <ul class="absolute top-0 left-0 w-full divide-y">
             <li *ngFor="let item of examinations" class="flex items-baseline py-2 w-full">

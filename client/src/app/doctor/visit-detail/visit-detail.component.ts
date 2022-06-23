@@ -36,12 +36,12 @@ export class VisitDetailComponent implements OnInit {
   ngOnInit(): void {
     // Get the details of the selected visit
     let visitId = Number(this.route.snapshot.paramMap.get('id'));
-    this.vs.getVisit(visitId).subscribe((visit) => {
+    this.vs.getVisit(visitId).subscribe((visit) =>{
       this.visit = visit;
       // Get the details of the patient whose visit this is
-      this.ps.getPatientDetails(visit.patientId).subscribe(patient => this.patient = patient);
+      this.ps.getPatientDetails(visit?.patientId).subscribe(patient => this.patient = patient);
       // Get this patients visit list
-      this.vs.getPatientVisitsList(visit.patientId).subscribe(visits => this.patientVisits = visits);
+      this.vs.getPatientVisitsList(visit?.patientId).subscribe(visits => this.patientVisits = visits);
     });
     // Get this visits examinations
     //this.physicalExams = this.es.getVisitPhysicals(this.visit.id);
