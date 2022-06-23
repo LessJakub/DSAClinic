@@ -34,7 +34,9 @@ namespace API.Controllers
         {
             var patient = new Patient{
                 Name = newPatientDto.Name,
-                Surname = newPatientDto.Surname
+                Surname = newPatientDto.Surname,
+                Pesel = newPatientDto.Pesel
+                
             };
             
 

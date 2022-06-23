@@ -182,7 +182,34 @@ namespace API.Controllers
 
             return new LabTestDTO(labTest);
         }
-        
+        /// <summary>
+        /// Cancel a lab test with given test_id.
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns></returns>
+        /// <response code="200">  </response>
+        /// <response code="400">  </response>
+        [Authorize]
+        [HttpPut("/visits/lab-tests/{test_id}/cancel")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<LabTestDTO>> CancelLabTest(int test_id)
+        {
+            var requesterId = GetRequesterId();
+            var requesterUser = await context.Users.FindAsync(requesterId);
+            if(requesterUser == null) return BadRequest($"User with id {requesterId} does not exist");
+            var doctorUser = requesterUser.Doctor;
+            if(doctorUser == null) return BadRequest($"User with id {requesterId} is not a doctor");
+
+            var labTest = await context.LabExaminations.FirstOrDefaultAsync(test => test.Id == test_id);
+            if(labTest is null) return BadRequest($"There is no lab test with id {test_id}");
+            if(labTest.Visits.DoctorId!=requesterId) return BadRequest($"Doctor with {requesterId} is not authorized to cancel this laboratory examination");
+            if(labTest.Status==LabStatus.FINISHED || labTest.Status==LabStatus.CANCELLED) return BadRequest($"You can't cancell this test because it is either finished or already cancelled");
+
+            labTest.Status=LabStatus.CANCELLED;
+            await context.SaveChangesAsync();
+            return new LabTestDTO(labTest);
+        }
         
         /// <summary>
         /// Creates new physical test and adds it to database.
