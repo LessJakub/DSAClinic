@@ -129,23 +129,25 @@ namespace API.Controllers
         [HttpGet("q")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<List<GeneralVisitDTO>>> Search([FromQuery]int patientId, [FromQuery]int doctorId, [FromQuery]string dateString)
+        public async Task<ActionResult<List<GeneralVisitDTO>>> Search([FromQuery]int patientId, [FromQuery]int doctorId, [FromQuery]string dateString, [FromQuery]Status? status)
         {
             //Convert date, has to be in proper format
             //DD.MM.YYYY HH:MM
             //24.05.2022 19:00
             var date = Convert.ToDateTime(dateString);
-            Console.Write($"DateTime: {date}");
+
             //Check arguments and create first list
             List<Visits> tmp = new List<Visits>();
             if (patientId != default) tmp = await context.Visits.Where(e => e.PatientId == patientId).ToListAsync();
             else if(doctorId != default) tmp = await context.Visits.Where(e => e.DoctorId == doctorId).ToListAsync();
             else if(date != default) tmp = await context.Visits.Where(e => e.VisitTime.Date == date.Date).ToListAsync();
+            else if(status is not null) tmp = await context.Visits.Where(e => e.Status == status).ToListAsync();
 
             //Filter out unnecesary elements.
             if (patientId != default) tmp = tmp.Where(v => v.PatientId == patientId).ToList();
             if(doctorId != default) tmp = tmp.Where(v => v.DoctorId == doctorId).ToList();
             if(date != default) tmp = tmp.Where(v => v.VisitTime.Date == date.Date).ToList();
+            if(status is not null) tmp = tmp.Where(e => e.Status == status).ToList();
 
             //Convert list of detailed info into general information.
             var listToRet = new List<GeneralVisitDTO>();
