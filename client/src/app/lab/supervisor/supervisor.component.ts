@@ -23,7 +23,7 @@ export class SupervisorComponent implements OnInit {
   })
 
   ngOnInit(): void {
-    this.form.controls['filter'].setValue(0, {onlySelf: true});
+    this.form.controls['filter'].setValue(2, {onlySelf: true});
     this.form.controls['filter'].updateValueAndValidity();
   }
 
