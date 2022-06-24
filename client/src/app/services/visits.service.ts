@@ -20,10 +20,13 @@ export class VisitsService {
   constructor(private http: HttpClient,
               private as: AccountService) { }
 
-  getDoctorVisitsList(doctorId: number, date: Date): Observable<VisitGeneral[]> {
+  getDoctorVisitsList(doctorId: number, date: Date, status: number): Observable<VisitGeneral[]> {
     let queryParams = new HttpParams();
     queryParams = queryParams.append("doctorId", doctorId);
     queryParams = queryParams.append("dateString", date.toJSON());
+    if(status != -1){
+      queryParams = queryParams.append("status", status);
+    }
 
     let token: string;
     this.as.currentUser$.subscribe(user => token = user?.token);
