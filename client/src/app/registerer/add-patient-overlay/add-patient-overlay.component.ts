@@ -19,7 +19,7 @@ export class AddPatientOverlayComponent implements OnInit {
   form = new FormGroup({
     name: new FormControl('', Validators.required),
     surname: new FormControl('', Validators.required),
-    pesel: new FormControl('', Validators.required)
+    pesel: new FormControl('', [Validators.pattern('^[0-9]{11}$'), Validators.required])
   })
 
   ngOnInit(): void {
@@ -31,13 +31,15 @@ export class AddPatientOverlayComponent implements OnInit {
   }
 
   submitData(): void {
-    const newPatient: PatientData = {
-      id: null,
-      name: this.form.controls['name']?.value,
-      surname: this.form.controls['surname']?.value,
-      pesel: this.form.controls['pesel']?.value};
-    this.ps.addPatient(newPatient);
-    this.closeOverlay();
+    if(this.form.valid){
+      const newPatient: PatientData = {
+        id: null,
+        name: this.form.controls['name']?.value,
+        surname: this.form.controls['surname']?.value,
+        pesel: this.form.controls['pesel']?.value};
+      this.ps.addPatient(newPatient);
+      this.closeOverlay();
+    }
   }
 
 }
