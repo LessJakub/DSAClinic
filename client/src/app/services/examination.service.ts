@@ -16,6 +16,12 @@ export class ExaminationService {
   private queryAllLabExamsURL: string = this.baseURL + ":8080/v1/Lab/status";
   private updateLabExamURL: string = this.baseURL + ":8080/v1/Lab/";
 
+  //Doctor's visit detail endpoints
+  private getVisitLabExamsURL: string = this.baseURL + ":8080/v1/Visits/lab-examinations/";
+  private getVisitPhysExamsURL: string = this.baseURL + ":8080/v1/Visits/physical-examinations/";
+  private createVisitPhysExamURL: string = this.baseURL + "/v1/Doctors/{id}/visits/phy-tests"; //POST
+  private createVisitLabExamURL: string = this.baseURL + "/v1/Doctors/{id}/visits/lab-tests"; //POST
+
   constructor(private http: HttpClient,
               private as: AccountService) { }
 
@@ -56,13 +62,25 @@ export class ExaminationService {
     });
   }
 
-  // getVisitPhysicals(visitId: number) : ExamPhysical[] {
-  //   return this.examsPhys;
-  // }
+  getVisitPhysicals(visitId: number) : Observable<ExamPhysical[]> {
+    let token: string;
+    this.as.currentUser$.subscribe(user => token = user?.token);
 
-  // getVisitLaboratory(visitId: number) : ExamLaboratory[] {
-  //   return this.examsLab;
-  // }
+    return this.http.get<ExamPhysical[]>(this.getVisitPhysExamsURL + visitId.toString(),
+      { 
+        headers: new HttpHeaders({'Content-Type': 'text/plain', 'Authorization': "Bearer " + token})
+      });
+  }
+
+  getVisitLaboratory(visitId: number) : Observable<ExamLaboratory[]> {
+    let token: string;
+    this.as.currentUser$.subscribe(user => token = user?.token);
+
+    return this.http.get<ExamLaboratory[]>(this.getVisitLabExamsURL + visitId.toString(),
+      { 
+        headers: new HttpHeaders({'Content-Type': 'text/plain', 'Authorization': "Bearer " + token})
+      });
+  }
 
   // addVisitPhysical(visitId: number, exam: ExamPhysical) : ExamPhysical[] {
   //   this.examsPhys.push(exam);
