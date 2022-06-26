@@ -221,5 +221,45 @@ namespace API.Controllers
 
             return Ok();
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns></returns>
+        /// <response code="200">  </response>
+        /// <response code="400">  </response>
+        [Authorize(Roles ="Doctor")]
+        [HttpGet("physical-examinations/{visitId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<List<PhysicalExaminationDTO>>> ReadPhyExaminationsByVisitId(int visitId)
+        {
+            var tmp = await context.PhysicalExaminations.Where(examintation => examintation.VisitsId == visitId).ToListAsync();
+            List<PhysicalExaminationDTO> listToRet= new List<PhysicalExaminationDTO>();
+            foreach(var e in tmp) listToRet.Add(new PhysicalExaminationDTO(e));
+
+            return listToRet;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns></returns>
+        /// <response code="200">  </response>
+        /// <response code="400">  </response>
+        [Authorize(Roles ="Doctor")]
+        [HttpGet("lab-examinations/{visitId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<List<LabTestDTO>>> ReadLabExaminationByVisitId(int visitId)
+        {
+            var tmp = await context.LabExaminations.Where(examintation => examintation.VisitsId == visitId).ToListAsync();
+            List<LabTestDTO> listToRet= new List<LabTestDTO>();
+            foreach(var e in tmp) listToRet.Add(new LabTestDTO(e));
+
+            return listToRet;
+        }
     }
 }
