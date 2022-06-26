@@ -26,7 +26,26 @@ export class RegistererComponent implements OnInit {
   selectPatient(patient: PatientData): void {
     this.selectedPatient = patient;
 
-    this.vs.getPatientVisitsList(this.selectedPatient.id).subscribe(result => this.patientsVisits = result);
+    this.vs.getPatientVisitsList(this.selectedPatient.id).subscribe(result => 
+      {
+        this.patientsVisits = result;
+        this.patientsVisits.forEach((visit, index, arr) => {
+          arr[index].date = this.localizeDate(visit.date);
+        })
+        //console.log(this.patientsVisits[0]?.date.getTimezoneOffset());
+      });
+  }
+
+  localizeDate(date: Date): Date {
+    if (date == null) {
+      return null;
+    }
+    let local = new Date(date);
+    local.setHours(local.getHours() + local.getTimezoneOffset() / -60);
+
+    //console.log(`Before: ${date} after: ${local}`);
+
+    return local;
   }
 
 }

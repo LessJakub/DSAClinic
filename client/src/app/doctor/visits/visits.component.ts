@@ -30,7 +30,13 @@ export class VisitsComponent implements OnInit {
 
   getList(): void{
     if(this.form.valid){
-      this.vs.getDoctorVisitsList(2, new Date(this.form.get("date")?.value), this.form.get("filter")?.value).subscribe(list => this.list = list);
+      this.vs.getDoctorVisitsList(2, new Date(this.form.get("date")?.value), this.form.get("filter")?.value).subscribe(list => {
+        this.list = list;
+        this.list.forEach((visit, index, arr) => 
+        {
+          arr[index].date = this.localizeDate(visit.date);
+        })
+      });
       
       console.log(`Getting elements for date ${this.form.get("date")?.value} and filter ${this.form.get("filter")?.value}`);
     }
@@ -70,6 +76,18 @@ export class VisitsComponent implements OnInit {
       hour: '2-digit',
       minute:'2-digit'
     });
+  }
+
+  localizeDate(date: Date): Date {
+    if (date == null) {
+      return null;
+    }
+    let local = new Date(date);
+    local.setHours(local.getHours() + local.getTimezoneOffset() / -60);
+
+    //console.log(`Before: ${date} after: ${local}`);
+
+    return local;
   }
 
 }

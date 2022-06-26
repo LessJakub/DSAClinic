@@ -38,10 +38,18 @@ export class VisitDetailComponent implements OnInit {
     let visitId = Number(this.route.snapshot.paramMap.get('id'));
     this.vs.getVisit(visitId).subscribe((visit) =>{
       this.visit = visit;
+      this.visit.finalizationTime = this.localizeDate(this.visit.finalizationTime);
+      this.visit.registrationTime = this.localizeDate(this.visit.registrationTime);
+      this.visit.visitTime = this.localizeDate(this.visit.visitTime);
       // Get the details of the patient whose visit this is
       this.ps.getPatientDetails(visit?.patientId).subscribe(patient => this.patient = patient);
       // Get this patients visit list
-      this.vs.getPatientVisitsList(visit?.patientId).subscribe(visits => this.patientVisits = visits);
+      this.vs.getPatientVisitsList(visit?.patientId).subscribe(visits => {
+        this.patientVisits = visits;
+        this.patientVisits.forEach((visit, index, arr) => {
+          arr[index].date = this.localizeDate(visit.date);
+        })
+      });
     });
     // Get this visits examinations
     //this.physicalExams = this.es.getVisitPhysicals(this.visit.id);
@@ -62,6 +70,18 @@ export class VisitDetailComponent implements OnInit {
 
   finalizeVisit(): void {
     this.vs.finishVisit(this.visit);
+  }
+
+  localizeDate(date: Date): Date {
+    if (date == null) {
+      return null;
+    }
+    let local = new Date(date);
+    local.setHours(local.getHours() + local.getTimezoneOffset() / -60);
+
+    //console.log(`Before: ${date} after: ${local}`);
+
+    return local;
   }
 
 }
