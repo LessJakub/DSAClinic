@@ -8,13 +8,15 @@ import { DoctorRoutingModule } from './doctor-routing.module';
 import { DoctorComponent } from './doctor.component';
 import { VisitsComponent } from './visits/visits.component';
 import { VisitDetailComponent } from './visit-detail/visit-detail.component';
+import { PhysDetailsComponent } from './phys-details/phys-details.component';
 
 
 @NgModule({
   declarations: [
     DoctorComponent,
     VisitsComponent,
-    VisitDetailComponent
+    VisitDetailComponent,
+    PhysDetailsComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,30 @@
+<!-- Overlay elements -->
+<div (click)="closeOverlay()" class="absolute top-0 left-0 w-full h-full backdrop-blur-sm z-50"></div>
+
+<div class="absolute z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-1/2 w-1/2 min-w-[35rem] min-h-min rounded-md drop-shadow-lg bg-gradient-to-b from-slate-50 via-slate-100 to-blue-300"> 
+    <div class="flex flex-col w-full h-full p-5">
+        <!-- Data tables -->
+        <div class="flex w-full justify-between">
+            <table>
+                <tr>
+                    <td><span class="mr-3">Type:</span></td>
+                    <td>{{ exam.examinationListDTO.name }}</td>
+                </tr>
+                <tr>
+                    <td><span class="mr-3">ICD:</span></td>
+                    <td>{{ exam.examinationListDTO.icd }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Lower Half -->
+        <div class="w-full grow flex items-end justify-center">
+            <!-- Description and diagnosis -->
+            <div class="basis-2/3">
+                <label for="description">Result:</label>
+                <textarea readonly id="description" rows="7" placeholder="Description" class="w-full resize-none mb-2 bg-gray-200" [value]="exam.results"></textarea>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -87,7 +87,7 @@ export class ExaminationService {
     this.as.currentUser$.subscribe(user => token = user?.token);
 
     const body = {
-      "results": exam.result,
+      "results": exam.results,
       "visitsId": visitId,
       "examinationListId": 0 // CHANGE THIS
     };

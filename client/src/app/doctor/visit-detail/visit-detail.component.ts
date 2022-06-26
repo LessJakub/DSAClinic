@@ -27,6 +27,13 @@ export class VisitDetailComponent implements OnInit {
   physicalExams: ExamPhysical[];
   laboratoryExams: ExamLaboratory[];
 
+  labOverlayActive: boolean;
+  selectedLabExamination: ExamLaboratory;
+  physOverlayActive: boolean;
+  selectedPhysExamination: ExamPhysical;
+  addLabOverlayActive: boolean;
+  addPhysOverlayActive: boolean;
+
   constructor(private vs: VisitsService,
               private es: ExaminationService,
               private ps: PatientsService,
@@ -50,10 +57,30 @@ export class VisitDetailComponent implements OnInit {
           arr[index].date = this.localizeDate(visit.date);
         })
       });
+
+      // Get visits examinations
+      this.es.getVisitPhysicals(this.visit.id).subscribe(physicals => {
+        this.physicalExams = physicals;
+      });
+
+      this.es.getVisitLaboratory(this.visit.id).subscribe(lab => {
+        this.laboratoryExams = lab;
+        this.laboratoryExams.forEach((exam, index, arr) => {
+          arr[index].executionDate = arr[index].executionDate? this.localizeDate(exam.executionDate) : null;
+          arr[index].orderDate = this.localizeDate(exam.orderDate);
+        })
+      });
     });
-    // Get this visits examinations
-    //this.physicalExams = this.es.getVisitPhysicals(this.visit.id);
-    //this.laboratoryExams = this.es.getVisitLaboratory(this.visit.id);
+  }
+
+  openPhysDetails(exam: ExamPhysical): void {
+    this.selectedPhysExamination = exam;
+    this.physOverlayActive = true;
+  }
+
+  openLabDetails(exam: ExamLaboratory) : void {
+    this.selectedLabExamination = exam;
+    this.labOverlayActive = true;
   }
 
   goBack(): void {

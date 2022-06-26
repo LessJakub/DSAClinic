@@ -42,8 +42,10 @@
                     <div class="grow w-full relative z-0">
 
                         <div class="absolute top-0 left-0 w-full">
-                            <div *ngFor="let elem of physicalExams">
-                                {{ elem.type }} {{ elem.result }}
+                            <div *ngFor="let elem of physicalExams" class="my-3 divide-y">
+                                <span class="w-32 mr-10">{{ elem.examinationListDTO.name }}</span>
+                                <span>{{ elem.results }}</span>
+                                <button type="button" (click)="openPhysDetails(elem)" class="float-right font-semibold text-white bg-blue-600 px-3 rounded-lg hover:bg-blue-700 active:bg-blue-800">Details</button>
                             </div>
                         </div>
 
@@ -54,8 +56,10 @@
                     <div class="grow w-full overflow-y-auto relative">
 
                         <div class="absolute top-0 left-0 w-full">
-                            <div *ngFor="let elem of laboratoryExams">
-                                {{ elem.type }} {{ elem.doctorsNotes }}
+                            <div *ngFor="let elem of laboratoryExams" class="my-3 divide-y w-full">
+                                <span class="w-32 mr-10">{{ elem.examination.name }}</span>
+                                <span>{{ elem.doctorNotes }}</span>
+                                <button type="button" (click)="openLabDetails(elem)" class="float-right font-semibold text-white bg-blue-600 px-3 rounded-lg hover:bg-blue-700 active:bg-blue-800">Details</button>
                             </div>
                         </div>
 
@@ -75,3 +79,6 @@
 
     </div>
 </div>
+
+<app-lab-details *ngIf="labOverlayActive" [(active)]="labOverlayActive" [exam]="selectedLabExamination" [editable]="false"></app-lab-details>
+<app-phys-details *ngIf="physOverlayActive" [(active)]="physOverlayActive" [exam]="selectedPhysExamination"></app-phys-details>
