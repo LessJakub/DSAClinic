@@ -14,6 +14,7 @@ namespace API.DTOs
             Results = physicalExamination.Results;
             VisitId = physicalExamination.VisitsId;
             ExaminationListId = physicalExamination.ExaminationListId;
+            if(physicalExamination.ExaminationLists is not null) ExaminationListDTO = new ExaminationDTO(physicalExamination.ExaminationLists);
         }
 
         public int Id { get; set; }
@@ -21,5 +22,7 @@ namespace API.DTOs
         public string Results { get; set; }
         public int VisitId { get; set; }
         public int ExaminationListId { get; set; }
+
+        public ExaminationDTO? ExaminationListDTO { get; set; } = null;
     }
 }
