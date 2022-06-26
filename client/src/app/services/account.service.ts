@@ -31,6 +31,7 @@ export class AccountService {
     currentUser$ = this.currentUserSource.asObservable();
 
     private role: string;
+    private id: number;
 
     loginRequest(model: any) {
         return this.http.post(this.loginUrl, model).pipe (
@@ -42,6 +43,7 @@ export class AccountService {
                     this.currentUserSource.next(user);
 
                     this.role = jwt_decode<customJwtPayload>(user.token).role;
+                    this.id = parseInt(jwt_decode<customJwtPayload>(user.token).UserId);
                 }
                 console.log(user);
             })
@@ -53,9 +55,14 @@ export class AccountService {
         this.currentUserSource.next(null);
 
         this.role = null;
+        this.id = null;
     }
 
     getUserRole(): string {
         return this.role;
+    }
+
+    getUserID(): number {
+        return this.id;
     }
 }

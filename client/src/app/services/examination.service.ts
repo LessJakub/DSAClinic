@@ -19,8 +19,8 @@ export class ExaminationService {
   //Doctor's visit detail endpoints
   private getVisitLabExamsURL: string = this.baseURL + ":8080/v1/Visits/lab-examinations/";
   private getVisitPhysExamsURL: string = this.baseURL + ":8080/v1/Visits/physical-examinations/";
-  private createVisitPhysExamURL: string = this.baseURL + "/v1/Doctors/{id}/visits/phy-tests"; //POST
-  private createVisitLabExamURL: string = this.baseURL + "/v1/Doctors/{id}/visits/lab-tests"; //POST
+  private createVisitPhysExamURL: string = this.baseURL + "/v1/Doctors/{id}/visits/phy-tests/"; //POST
+  private createVisitLabExamURL: string = this.baseURL + "/v1/Doctors/{id}/visits/lab-tests/"; //POST
 
   constructor(private http: HttpClient,
               private as: AccountService) { }
@@ -82,13 +82,57 @@ export class ExaminationService {
       });
   }
 
-  // addVisitPhysical(visitId: number, exam: ExamPhysical) : ExamPhysical[] {
-  //   this.examsPhys.push(exam);
-  //   return this.examsPhys;
-  // }
+  addVisitPhysical(visitId: number, exam: ExamPhysical) : void {
+    let token: string;
+    this.as.currentUser$.subscribe(user => token = user?.token);
 
-  // addVisitLaboratory(visitId: number, exam: ExamLaboratory) : ExamLaboratory[] {
-  //   this.examsLab.push(exam);
-  //   return this.examsLab;
-  // }
+    const body = {
+      "results": exam.result,
+      "visitsId": visitId,
+      "examinationListId": 0 // CHANGE THIS
+    };
+
+    const address = this.createVisitPhysExamURL.replace("{id}", this.as.getUserID().toString());
+
+    this.http.post<any>(
+      address + visitId.toString(),
+      body,
+      {headers: new HttpHeaders({'Content-Type': 'application/json-patch+json', 'Authorization': "Bearer " + token})}
+    ).subscribe({
+        next: data => {
+          console.log('Lab Examination updated');
+        },
+        error: error => {
+            console.error('There was an error!', error);
+        }
+    });
+  }
+
+  addVisitLaboratory(visitId: number, exam: ExamLaboratory) : void {
+    let token: string;
+    this.as.currentUser$.subscribe(user => token = user?.token);
+
+    const body = {
+      "status": 0,
+      "orderDate": exam.orderDate,
+      "doctorNotes": exam.doctorNotes? exam.doctorNotes : null,
+      "examinationListId": 0, // CHANGE THIS
+      "visitsId": visitId
+    };
+
+    const address = this.createVisitLabExamURL.replace("{id}", this.as.getUserID().toString());
+
+    this.http.post<any>(
+      address + visitId.toString(),
+      body,
+      {headers: new HttpHeaders({'Content-Type': 'application/json-patch+json', 'Authorization': "Bearer " + token})}
+    ).subscribe({
+        next: data => {
+          console.log('Lab Examination updated');
+        },
+        error: error => {
+            console.error('There was an error!', error);
+        }
+    });
+  }
 }
