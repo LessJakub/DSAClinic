@@ -39,7 +39,7 @@
         </div>
         <ng-template #listNotNull>
             <div #listNotNull *ngIf="list.length == 0">
-                No such visits for {{ prettyDateFromDate( form.get("date").value ) }}
+                No such visits for {{ prettyDateFromDate( form.get("date")?.value ) }}
             </div>
         </ng-template>
         <ul class="absolute top-0 left-0 w-full divide-y">

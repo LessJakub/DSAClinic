@@ -27,7 +27,12 @@ export class PatientVisitsComponent implements OnInit {
   openDetails(visit: VisitGeneral): void {
     this.overlayActive = true;
 
-    this.vs.getVisit(visit.id).subscribe(result => this.chosenVisitDetail = result);
+    this.vs.getVisit(visit.id).subscribe(result => {
+      this.chosenVisitDetail = result;
+      this.chosenVisitDetail.finalizationTime = this.localizeDate(this.chosenVisitDetail.finalizationTime);
+      this.chosenVisitDetail.registrationTime = this.localizeDate(this.chosenVisitDetail.registrationTime);
+      this.chosenVisitDetail.visitTime = this.localizeDate(this.chosenVisitDetail.visitTime);
+    });
     this.chosenVisitGeneral = visit;
   }
 
@@ -57,6 +62,18 @@ export class PatientVisitsComponent implements OnInit {
       hour: '2-digit',
       minute:'2-digit'
     });
+  }
+
+  localizeDate(date: Date): Date {
+    if (date == null) {
+      return null;
+    }
+    let local = new Date(date);
+    local.setHours(local.getHours() + local.getTimezoneOffset() / -60);
+
+    //console.log(`Before: ${date} after: ${local}`);
+
+    return local;
   }
 
 }

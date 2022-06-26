@@ -20,7 +20,7 @@ export class SchedulingService {
   getAllDoctors() : Observable<Doctor[]> {
     
     let token: string;
-    this.as.currentUser$.subscribe(user => token = user.token);
+    this.as.currentUser$.subscribe(user => token = user?.token);
 
     return this.http.get<Doctor[]>(this.queryDoctorsURL,
       { headers: new HttpHeaders({'Content-Type': 'text/plain', 'Authorization': "Bearer " + token}) }

@@ -6,7 +6,7 @@
         <p class="inline mr-4">Doctor:</p>
         <div class="inline relative">
             <button type="button" (click)="dropdownVisibility = !dropdownVisibility"  class="bg-gray-200 p-1 w-52 text-left">{{chosenDoctor? chosenDoctor.name + ' ' + chosenDoctor.surname : 'Choose Doctor'}}</button>
-            <ul *ngIf="dropdownVisibility" class="absolute origin-top-left left-0 z-10 bg-white p-1 divide-y w-52 max-h-44 overflow-y-auto">
+            <ul *ngIf="dropdownVisibility" class="absolute origin-top-left left-0 z-20 bg-white p-1 divide-y w-52 max-h-44 overflow-y-auto">
                 <li *ngFor="let doc of doctors"><button class="hover:bg-gray-200 w-full text-left" (click)="setDoctor(doc)">{{doc.name}} {{doc.surname}}</button></li>
             </ul>
         </div>
@@ -24,18 +24,35 @@
 <div class="relative grow w-full overflow-auto">
     <div class="absolute origin-top-left top-0 left-0 flex flex-col">
         <table class="table-auto">
-            <thead class="sticky top-0 bg-gray-200">
-                <th>Date</th>
-                <th *ngFor="let timeSlot of timeSlots">{{prettyTimeFromDate(timeSlot)}}</th>
+            <thead class="sticky top-0 bg-gray-200 z-10">
+                <th>
+                    <div class="w-28">Date</div>
+                </th>
+                <th *ngFor="let timeSlot of timeSlots">
+                    <div class="w-24">{{prettyTimeFromDate(timeSlot)}}</div>
+                </th>
             </thead>
             <tbody>
-                <tr *ngFor="let _ of [].constructor(9); let i = index" class="h-[100px]">
-                    <td>{{i}}</td>
-                    <td *ngFor="let _ of [].constructor(32); let n = index"><div class="w-24 border border-gray-200">{{n}}</div></td>
+                <tr *ngFor="let dateSlot of dateSlots; let i = index">
+                    <td class="bg-gray-200 sticky left-0"><div class="font-medium flex items-center justify-center">{{prettyDateFromDate(dateSlot)}}</div></td>
+                    <td *ngFor="let slot of scheduledVisits[i]; let n = index">
+                        <button *ngIf="slot == null; else NA" type="button" (click)="selectSlot({x: i, y: n})" [ngClass]="(this.chosenSlotID.x == i && this.chosenSlotID.y == n)? 'bg-sky-500' : 'bg-sky-300'" class="h-16 w-full border border-gray-200  hover:bg-sky-700">
+                            Free
+                        </button>
+                        <ng-template #NA>
+                            <div class="h-16 flex items-center justify-center border border-gray-200 bg-gray-300">
+                                Booked
+                            </div>
+                        </ng-template>
+                    </td>
                 </tr>
+                <!-- <tr *ngFor="let _ of [].constructor(7); let i = index" class="h-[100px]">asdasdasd
+                    <td>{{i}}</td>
+                    <td *ngFor="let _ of [].constructor(16); let n = index"><div class="w-24 border border-gray-200">{{n}}</div></td>
+                </tr> -->
             </tbody>
         </table>
     </div>
 </div>
 
-<button type="submit" class="font-semibold text-white bg-blue-600 w-48 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">Register visit</button>
+<button type="button" (click)="registerVisit()" class="font-semibold text-white bg-blue-600 w-48 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">Register visit</button>
