@@ -78,9 +78,17 @@ export class VisitDetailComponent implements OnInit {
     this.physOverlayActive = true;
   }
 
+  addPhysOverlay(): void {
+    this.addPhysOverlayActive = true;
+  }
+  
   openLabDetails(exam: ExamLaboratory) : void {
     this.selectedLabExamination = exam;
     this.labOverlayActive = true;
+  }
+  
+  addLabOverlay(): void {
+    this.addLabOverlayActive = true;
   }
 
   goBack(): void {

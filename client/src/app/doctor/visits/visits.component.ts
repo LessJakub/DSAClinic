@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
+import jwt_decode, { JwtPayload } from "jwt-decode";
+import { AccountService } from 'src/app/services/account.service';
 
 import { Status } from 'src/app/shared/interfaces/status';
 import { VisitGeneral } from 'src/app/shared/interfaces/visit-general';
 import { VisitsService } from '../../services/visits.service';
+
+type customJwtPayload = JwtPayload & { nameid: string, UserId: number, role: string};
 
 @Component({
   selector: 'app-visits',
@@ -19,18 +23,20 @@ export class VisitsComponent implements OnInit {
     date: new FormControl()
   });
   list : VisitGeneral[];
+  doctorID: number;
 
   constructor(private vs: VisitsService,
+              private as: AccountService,
               private router: Router,
               private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-
+    this.as.currentUser$.subscribe(user => this.doctorID = Number(jwt_decode<customJwtPayload>(user?.token).UserId))
   }
 
   getList(): void{
     if(this.form.valid){
-      this.vs.getDoctorVisitsList(2, new Date(this.form.get("date")?.value), this.form.get("filter")?.value).subscribe(list => {
+      this.vs.getDoctorVisitsList(this.doctorID, new Date(this.form.get("date")?.value), this.form.get("filter")?.value).subscribe(list => {
         this.list = list;
         this.list.forEach((visit, index, arr) => 
         {

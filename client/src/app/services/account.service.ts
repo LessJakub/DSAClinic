@@ -6,7 +6,7 @@ import { User } from '../models/User';
 import { map } from 'rxjs/operators';
 import jwt_decode, { JwtPayload } from "jwt-decode";
 
-type customJwtPayload = JwtPayload & { nameid: string, UserId: string, role: string};
+type customJwtPayload = JwtPayload & { nameid: string, UserId: number, role: string};
 
 @Injectable({
   providedIn: 'root'
@@ -43,9 +43,10 @@ export class AccountService {
                     this.currentUserSource.next(user);
 
                     this.role = jwt_decode<customJwtPayload>(user.token).role;
-                    this.id = parseInt(jwt_decode<customJwtPayload>(user.token).UserId);
+                    //console.log(jwt_decode<customJwtPayload>(user.token));
+                    this.id = Number(jwt_decode<customJwtPayload>(user.token).UserId);
                 }
-                console.log(user);
+                //console.log(user);
             })
         )
     }
@@ -60,9 +61,5 @@ export class AccountService {
 
     getUserRole(): string {
         return this.role;
-    }
-
-    getUserID(): number {
-        return this.id;
     }
 }

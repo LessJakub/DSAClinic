@@ -42,6 +42,7 @@
                     <div class="grow w-full relative z-0">
 
                         <div class="absolute top-0 left-0 w-full">
+                            <button type="submit" (click)="addPhysOverlay()" class="font-semibold text-white bg-blue-600 px-6 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">+ Add physical examination</button>
                             <div *ngFor="let elem of physicalExams" class="my-3 divide-y">
                                 <span class="w-32 mr-10">{{ elem.examinationListDTO.name }}</span>
                                 <span>{{ elem.results }}</span>
@@ -54,8 +55,8 @@
                 <!-- lab tab contents -->
                 <div *ngSwitchCase="'lab'" class="grow w-full flex flex-col">
                     <div class="grow w-full overflow-y-auto relative">
-
                         <div class="absolute top-0 left-0 w-full">
+                        <button type="button" (click)="addLabOverlay()" class="font-semibold text-white bg-blue-600 px-6 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">+ Add laboratory examination</button>
                             <div *ngFor="let elem of laboratoryExams" class="my-3 divide-y w-full">
                                 <span class="w-32 mr-10">{{ elem.examination.name }}</span>
                                 <span>{{ elem.doctorNotes }}</span>
@@ -82,3 +83,5 @@
 
 <app-lab-details *ngIf="labOverlayActive" [(active)]="labOverlayActive" [exam]="selectedLabExamination" [editable]="false"></app-lab-details>
 <app-phys-details *ngIf="physOverlayActive" [(active)]="physOverlayActive" [exam]="selectedPhysExamination"></app-phys-details>
+<app-lab-create *ngIf="addLabOverlayActive" [(active)]="addLabOverlayActive" [visitID]="visit.id"></app-lab-create>
+<app-phys-create *ngIf="addPhysOverlayActive" [(active)]="addPhysOverlayActive" [visitID]="visit.id"></app-phys-create>
