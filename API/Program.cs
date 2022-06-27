@@ -55,6 +55,8 @@ services.AddSwaggerGen(options =>
                 });
             });
 
+
+
 services.AddCors();
 
 byte[] tokenKey;
@@ -91,6 +93,8 @@ services.AddDbContext<DataContext>(options =>
     options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+services.AddCoreAdmin();
+
 //services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<DataContext>();
 var app = builder.Build();
 
@@ -106,18 +110,28 @@ if (app.Environment.IsDevelopment())
                     });
 }
 
+//app.UseCoreAdminCustomUrl("admin");
 // Currently, this NEEDS to be disabled for Docker to work. Otherwise it tries to use HTTPS for connection which is blocked by CORS.
 // app.UseHttpsRedirection();
 
 //Order of next calls is important! UseCors, UseAuthentication, UseAuthorization.
-app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200", "http://localhost:4200", "http://localhost:80", "http://localhost"));
+//app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200", "http://localhost:4200", "http://localhost:80", "http://localhost"));
+app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
 app.UseAuthentication();
 
-//
+app.UseRouting();
 
 app.UseAuthorization();
 
+app.UseStaticFiles();
+
 app.MapControllers();
+
+app.UseCoreAdminCustomTitle("Admin");
+app.UseCoreAdminCustomUrl("admin");
+app.UseCoreAdminCustomAuth((serviceProvider) => Task.FromResult(true));
+
+app.MapDefaultControllerRoute();
 
 app.Run();
