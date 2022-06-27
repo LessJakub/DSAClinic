@@ -104,18 +104,8 @@ namespace API.Controllers
             
             List<Patient> tmp = new List<Patient>();
             if(name is not null) tmp = await context.Patients.
-                                            Where(p => p.Name.ToLower().Contains(name.ToLower())).
+                                            Where(p => p.Name.ToLower().Contains(name.ToLower()) || p.Surname.ToLower().Contains(name.ToLower())).
                                             ToListAsync();
-            else if(surname is not null) tmp = await context.Patients.
-                                            Where(p => p.Surname.ToLower().Contains(surname.ToLower())).
-                                            ToListAsync();
-
-            if(name is not null) tmp = tmp.
-                            Where(p => p.Name.ToLower().Contains(name.ToLower())).
-                            ToList();
-            if(surname is not null) tmp = tmp.
-                            Where(p => p.Surname.ToLower().Contains(surname.ToLower())).
-                            ToList();
             
             var listToRet = new List<PatientDTO>();
             foreach(var p in tmp) listToRet.Add(new PatientDTO(p));

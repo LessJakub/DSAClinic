@@ -20,6 +20,7 @@ namespace API.DTOs
             this.DoctorId = visit.DoctorId;
             this.PatientId = visit.PatientId;
             this.RegistrantId = visit.RegistrantId;
+            if(visit.Registrant is not null) this.RegistrantName = visit.Registrant.Name;
         }
 
         public int Id { get; set; }
@@ -41,6 +42,8 @@ namespace API.DTOs
         public int PatientId { get; set; }
 
         public int RegistrantId { get; set; }
+
+        public string? RegistrantName { get; set; } = null;
 
     }
 }

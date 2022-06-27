@@ -22,14 +22,11 @@ namespace API.Controllers
         /// <summary>
         /// Returns all visits and their details from a doctor with given id.
         /// </summary>
+        /// <param name="id">id of the doctor</param>
         /// <remarks></remarks>
         /// <returns></returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
         [Authorize]
         [HttpGet("{id}/visits")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<List<VisitDTO>>> ReadAllVisits(int id)
         {
             var doctor = await context.Users.FindAsync(id);
@@ -42,16 +39,12 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Get list of general information about doctors
         /// </summary>
         /// <remarks></remarks>
-        /// <returns></returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
+        /// <returns>GeneralDoctorDTO with ID, name and surname</returns>
         [Authorize(Roles = "Registrant")]
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<List<GeneralDoctorDTO>>> GetGeneralDoctors()
         {
             var listToRet = new List<GeneralDoctorDTO>();
@@ -73,12 +66,8 @@ namespace API.Controllers
         /// <param name="visitDTO">DTO containing information about the visit</param>
         /// <remarks>Values can be null.</remarks>
         /// <returns></returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
         [Authorize(Roles="Doctor")]
         [HttpPut("{id}/visits/{visit_id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<VisitDTO>> Update(int id, int visit_id, UpdateVisitDTO visitDTO)
         {
             //Check if requester is doctor, this function returns -1 if not.
@@ -119,12 +108,8 @@ namespace API.Controllers
         /// <param name="id">Id of the doctor</param>
         /// <param name="newLabTestDto">DTO containing information of new lab test</param>
         /// <returns>LabTestDTO from created labTest</returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
         [Authorize(Roles="Doctor")]
         [HttpPost("{id}/visits/lab-tests")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<LabTestDTO>> OrderLabTest(int id, NewLabTestDTO newLabTestDto)
         {
             //Check if requester is doctor, this function returns -1 if not.
