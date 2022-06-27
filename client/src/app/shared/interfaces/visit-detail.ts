@@ -10,5 +10,6 @@ export interface VisitDetail {
     status: Status,
     doctorId: number,
     patientId: number,
-    registrantId: number
+    registrantId: number,
+    registrantName: string
 }

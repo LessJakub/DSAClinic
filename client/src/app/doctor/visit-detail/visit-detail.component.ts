@@ -101,10 +101,12 @@ export class VisitDetailComponent implements OnInit {
 
   cancelVisit(): void {
     this.vs.cancelVisit(this.visit);
+    this.goBack();
   }
 
   finalizeVisit(): void {
     this.vs.finishVisit(this.visit);
+    this.goBack();
   }
 
   localizeDate(date: Date): Date {

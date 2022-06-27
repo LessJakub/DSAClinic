@@ -44,12 +44,8 @@ export class VisitsService {
       map(
         (visits: VisitGeneral[]) => visits.map(
           (visit) => ({
-            id: visit.id,
-            doctorName: visit.doctorName,
-            patientName: visit.patientName,
-            date: new Date(visit.date),
-            status: visit.status,
-            diagnosis: visit.diagnosis
+            ...visit,
+            date: new Date(visit.date)
           } as VisitGeneral))
       ),
       // sort ascending
