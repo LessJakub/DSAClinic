@@ -42,7 +42,8 @@ export class VisitsComponent implements OnInit {
         {
           arr[index].date = this.localizeDate(visit.date);
         })
-      });
+      },
+      error => console.error(error));
       
       console.log(`Getting elements for date ${this.form.get("date")?.value} and filter ${this.form.get("filter")?.value}`);
     }

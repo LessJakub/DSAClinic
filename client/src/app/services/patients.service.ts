@@ -22,11 +22,7 @@ export class PatientsService {
 
   getAllPatients(query: string) : Observable<PatientData[]> {
     let queryParams = new HttpParams();
-    let cred: string[] = query.split(" ");
-    queryParams = queryParams.append("name", cred[0]);
-    if(cred.length > 1){
-      queryParams = queryParams.append("surname", cred[1]);
-    }
+    queryParams = queryParams.append("name", query);
     
     let token: string;
     this.as.currentUser$.subscribe(user => token = user?.token);
