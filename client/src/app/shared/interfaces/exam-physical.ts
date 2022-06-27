@@ -1,6 +1,9 @@
+import { ExamType } from "./exam-type";
+
 export interface ExamPhysical {
-    type: string,
-    name: string,
-    result: string
-    //is that all we need?
+    "id": number,
+    "results": string,
+    "visitId": number,
+    "examinationListId": number,
+    "examinationListDTO": ExamType
 }

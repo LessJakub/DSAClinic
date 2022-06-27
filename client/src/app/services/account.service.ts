@@ -6,7 +6,7 @@ import { User } from '../models/User';
 import { map } from 'rxjs/operators';
 import jwt_decode, { JwtPayload } from "jwt-decode";
 
-type customJwtPayload = JwtPayload & { nameid: string, UserId: string, role: string};
+type customJwtPayload = JwtPayload & { nameid: string, UserId: number, role: string};
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +31,7 @@ export class AccountService {
     currentUser$ = this.currentUserSource.asObservable();
 
     private role: string;
+    private id: number;
 
     loginRequest(model: any) {
         return this.http.post(this.loginUrl, model).pipe (
@@ -42,8 +43,10 @@ export class AccountService {
                     this.currentUserSource.next(user);
 
                     this.role = jwt_decode<customJwtPayload>(user.token).role;
+                    //console.log(jwt_decode<customJwtPayload>(user.token));
+                    this.id = Number(jwt_decode<customJwtPayload>(user.token).UserId);
                 }
-                console.log(user);
+                //console.log(user);
             })
         )
     }
@@ -53,6 +56,7 @@ export class AccountService {
         this.currentUserSource.next(null);
 
         this.role = null;
+        this.id = null;
     }
 
     getUserRole(): string {

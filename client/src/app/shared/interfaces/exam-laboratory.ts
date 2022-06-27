@@ -16,12 +16,3 @@ export interface ExamLaboratory {
     labTechnicianName: string,
     examination: ExamType
 }
-
-//status            V
-//orderDate         V
-//execDate          V
-//doctorName        X
-//doctorNotes FULL  V
-//labNotes EDITABLE V
-//labSup name       X
-//lab Tech name     X
