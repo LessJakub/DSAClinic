@@ -22,7 +22,9 @@ export class PatientVisitsComponent implements OnInit {
   chosenVisitDetail: VisitDetail;
   chosenVisitGeneral: VisitGeneral;
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.visits.sort((a, b) => b.date.valueOf() - a.date.valueOf());
+   }
 
   openDetails(visit: VisitGeneral): void {
     this.overlayActive = true;
