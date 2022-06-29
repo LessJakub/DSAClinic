@@ -42,7 +42,9 @@
                     <div class="grow w-full relative z-0">
 
                         <div class="absolute top-0 left-0 w-full">
-                            <button *ngIf="isModifiable" type="submit" (click)="addPhysOverlay()" class="font-semibold text-white bg-blue-600 px-6 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">+ Add physical examination</button>
+                            <div class="w-full flex justify-center">
+                                <button *ngIf="isModifiable" type="submit" (click)="addPhysOverlay()" class="font-semibold text-white bg-blue-600 my-2 px-6 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">+ Add physical examination</button>
+                            </div>
                             <div *ngFor="let elem of physicalExams" class="my-3 divide-y">
                                 <span class="w-32 mr-10">{{ elem.examinationListDTO.name }}</span>
                                 <span>{{ elem.results }}</span>
@@ -56,7 +58,9 @@
                 <div *ngSwitchCase="'lab'" class="grow w-full flex flex-col">
                     <div class="grow w-full overflow-y-auto relative">
                         <div class="absolute top-0 left-0 w-full">
-                        <button type="button" (click)="addLabOverlay()" class="font-semibold text-white bg-blue-600 px-6 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">+ Add laboratory examination</button>
+                            <div class="w-full flex justify-center">
+                                <button type="button" (click)="addLabOverlay()" class="font-semibold text-white bg-blue-600 my-2 px-6 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">+ Add laboratory examination</button>
+                            </div>
                             <div *ngFor="let elem of laboratoryExams" class="my-3 divide-y w-full">
                                 <span class="w-32 mr-10">{{ elem.examination.name }}</span>
                                 <span>{{ elem.doctorNotes }}</span>

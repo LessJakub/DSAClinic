@@ -6,21 +6,22 @@
         <div class="text-lg font-medium">Add Physical Examination</div>
 
         <!-- Lower Half -->
-        <div class="w-full grow flex items-end justify-center">
+        <div class="w-full grow flex flex-col items-center justify-center">
             <!-- Description and diagnosis -->
-            <div class="basis-2/3">
+            <div class="w-full mt-20">
                 <form [formGroup]="form">
-                    <div>
-                        <label for="type">Type:</label>
+                    <div class="mb-5">
+                        <label for="type">Type: </label>
                         <input id="type" type="number" formControlName="type">
                     </div>
                     
                     <div>
-                    <label for="description">Result:</label>
-                    <textarea id="description" rows="7" placeholder="Description" class="w-full resize-none mb-2 bg-gray-200" formControlName="desc"></textarea>
+                        <label for="description">Result:</label>
+                        <textarea id="description" rows="7" placeholder="Examination result" class="w-full resize-none mb-2 bg-gray-200" formControlName="desc"></textarea>
                     </div>
                 </form>
             </div>
+            <div class="grow"></div>
             <button type="button" (click)="sendExamination()" class="ml-8 mb-2 font-semibold text-white bg-blue-600 px-6 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">Submit</button>
         </div>
     </div>
