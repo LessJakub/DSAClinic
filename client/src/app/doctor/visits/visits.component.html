@@ -47,7 +47,7 @@
                 <div class="w-1/4 min-w-fit px-1">{{ prettyTimeFromDate(item.date) }}</div>
                 <div class="w-1/4 min-w-fit px-1">{{ item.patientName }}</div>
                 <div class="w-1/4 min-w-fit px-1">{{ statusToText(item.status) }}</div>
-                <div class="w-1/4 min-w-fit px-1"><button type="button" (click)="selectVisit(item)" class="float-right font-semibold text-white bg-blue-600 px-3 rounded-lg hover:bg-blue-700 active:bg-blue-800">Begin</button></div>
+                <div class="w-1/4 min-w-fit px-1"><button type="button" (click)="selectVisit(item)" class="float-right font-semibold text-white bg-blue-600 px-3 rounded-lg hover:bg-blue-700 active:bg-blue-800">{{ item.status == 0? 'Begin' : 'Details'}}</button></div>
             </li>
         </ul>
     </div>

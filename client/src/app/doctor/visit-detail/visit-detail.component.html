@@ -22,10 +22,10 @@
         <!-- Visit details inputs -->
         <div>
             <label for="description">Description:</label>
-            <textarea id="description" rows="7" placeholder="Description" class="w-full resize-none mb-2 bg-gray-200" [(ngModel)]="visit.description"></textarea>
+            <textarea [readonly]="!isModifiable" id="description" rows="7" placeholder="Description" class="w-full resize-none mb-2 bg-gray-200" [(ngModel)]="visit.description"></textarea>
 
             <label for="diagnosis">Diagnosis:</label>
-            <textarea id="diagnosis" rows="5" placeholder="Diagnosis" class="w-full resize-none bg-gray-200" [(ngModel)]="visit.diagnosis"></textarea>
+            <textarea [readonly]="!isModifiable" id="diagnosis" rows="5" placeholder="Diagnosis" class="w-full resize-none bg-gray-200" [(ngModel)]="visit.diagnosis"></textarea>
         </div>
 
         <!-- Examinations -->
@@ -42,7 +42,7 @@
                     <div class="grow w-full relative z-0">
 
                         <div class="absolute top-0 left-0 w-full">
-                            <button type="submit" (click)="addPhysOverlay()" class="font-semibold text-white bg-blue-600 px-6 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">+ Add physical examination</button>
+                            <button *ngIf="isModifiable" type="submit" (click)="addPhysOverlay()" class="font-semibold text-white bg-blue-600 px-6 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">+ Add physical examination</button>
                             <div *ngFor="let elem of physicalExams" class="my-3 divide-y">
                                 <span class="w-32 mr-10">{{ elem.examinationListDTO.name }}</span>
                                 <span>{{ elem.results }}</span>
@@ -73,8 +73,8 @@
         <div class="flex justify-between">
             <button type="button" (click)="goBack()" class="font-semibold text-white bg-gray-500 px-6 py-2 rounded-lg hover:bg-gray-700 active:bg-gray-800">Back</button>
             <div class="flex space-x-6 ml-16">
-                <button type="submit" (click)="finalizeVisit()" class="font-semibold text-white bg-blue-600 px-6 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">Finish</button>
-                <button type="button" (click)="cancelVisit()" class="font-semibold text-white bg-red-600 px-6 py-2 rounded-lg hover:bg-red-700 active:bg-red-800">Cancel</button>
+                <button *ngIf="isModifiable" type="submit" (click)="finalizeVisit()" class="font-semibold text-white bg-blue-600 px-6 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">Finish</button>
+                <button *ngIf="isModifiable" type="button" (click)="cancelVisit()" class="font-semibold text-white bg-red-600 px-6 py-2 rounded-lg hover:bg-red-700 active:bg-red-800">Cancel</button>
             </div>
         </div>
 

@@ -20,6 +20,7 @@ import { VisitGeneral } from 'src/app/shared/interfaces/visit-general';
 export class VisitDetailComponent implements OnInit {
 
   visit: VisitDetail;
+  isModifiable: boolean;
   patient: PatientData;
   patientVisits: VisitGeneral[];
   selectedTab: string = 'phys';
@@ -45,6 +46,7 @@ export class VisitDetailComponent implements OnInit {
     let visitId = Number(this.route.snapshot.paramMap.get('id'));
     this.vs.getVisit(visitId).subscribe((visit) =>{
       this.visit = visit;
+      this.isModifiable = this.visit.status == 0;
       this.visit.finalizationTime = this.localizeDate(this.visit.finalizationTime);
       this.visit.registrationTime = this.localizeDate(this.visit.registrationTime);
       this.visit.visitTime = this.localizeDate(this.visit.visitTime);
