@@ -188,10 +188,12 @@ export class VisitsService {
       {headers: new HttpHeaders({'Content-Type': 'application/json-patch+json', 'Authorization': "Bearer " + token})}
     ).subscribe({
         next: data => {
-          console.log('Visit finalized');
+          console.log('Visit registered');
+          window.alert('Visit registered');
         },
         error: error => {
             console.error('There was an error finalizing the visit!', error);
+            window.alert('Error: Visit registration failed');
         }
       });
   }
