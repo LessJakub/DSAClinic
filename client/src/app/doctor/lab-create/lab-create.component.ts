@@ -13,12 +13,13 @@ export class LabCreateComponent implements OnInit {
 
   @Input()  active!: boolean;
   @Output() activeChange = new EventEmitter<boolean>();
+  @Output() stateChanged = new EventEmitter<boolean>();
 
   @Input() visitID!: number;
 
   form = new FormGroup({
     type: new FormControl(0, Validators.required),
-    notes: new FormControl('', Validators.required)
+    notes: new FormControl(null, Validators.required)
   });
 
   ngOnInit(): void {
@@ -26,8 +27,12 @@ export class LabCreateComponent implements OnInit {
 
   sendExamination(): void {
     if(this.form.valid) {
-      this.es.addVisitLaboratory(this.visitID, this.form.controls['notes'].value, this.form.controls['type'].value);
-      this.closeOverlay();
+      this.es.addVisitLaboratory(this.visitID, this.form.controls['notes'].value, this.form.controls['type'].value).subscribe(result => {
+        if(result) {
+          this.stateChanged.emit(true);
+          this.closeOverlay();
+        }
+      });
     }
   }
 

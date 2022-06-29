@@ -24,7 +24,7 @@
 
             <!--Right Top area-->
             <div class="flex basis-3/4 h-full">
-                <app-schedule [chosenPatient]="selectedPatient"></app-schedule>
+                <app-schedule [chosenPatient]="selectedPatient" (stateChanged)="selectPatient(selectedPatient)"></app-schedule>
             </div>
         </div>
 

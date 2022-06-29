@@ -23,7 +23,7 @@ export class PatientVisitsComponent implements OnInit {
   chosenVisitGeneral: VisitGeneral;
 
   ngOnInit(): void {
-    this.visits.sort((a, b) => b.date.valueOf() - a.date.valueOf());
+    this.visits?.sort((a, b) => b.date.valueOf() - a.date.valueOf());
    }
 
   openDetails(visit: VisitGeneral): void {

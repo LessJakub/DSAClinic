@@ -87,5 +87,5 @@
 
 <app-lab-details *ngIf="labOverlayActive" [(active)]="labOverlayActive" [exam]="selectedLabExamination" [editable]="false"></app-lab-details>
 <app-phys-details *ngIf="physOverlayActive" [(active)]="physOverlayActive" [exam]="selectedPhysExamination"></app-phys-details>
-<app-lab-create *ngIf="addLabOverlayActive" [(active)]="addLabOverlayActive" [visitID]="visit.id"></app-lab-create>
-<app-phys-create *ngIf="addPhysOverlayActive" [(active)]="addPhysOverlayActive" [visitID]="visit.id"></app-phys-create>
+<app-lab-create *ngIf="addLabOverlayActive" [(active)]="addLabOverlayActive" [visitID]="visit.id" (stateChanged)="getExaminations()"></app-lab-create>
+<app-phys-create *ngIf="addPhysOverlayActive" [(active)]="addPhysOverlayActive" [visitID]="visit.id" (stateChanged)="getExaminations()"></app-phys-create>

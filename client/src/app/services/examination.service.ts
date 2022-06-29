@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import jwt_decode, { JwtPayload } from "jwt-decode";
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { ExamLaboratory } from '../shared/interfaces/exam-laboratory';
 import { ExamPhysical } from '../shared/interfaces/exam-physical';
@@ -85,7 +85,7 @@ export class ExaminationService {
       });
   }
 
-  addVisitPhysical(visitId: number, result: string, type: number) : void {
+  addVisitPhysical(visitId: number, result: string, type: number) : Observable<boolean> {
     let token: string;
     this.as.currentUser$.subscribe(user => token = user?.token);
 
@@ -100,6 +100,8 @@ export class ExaminationService {
     //console.log(body);
     const address = this.createVisitPhysExamURL.replace("{id}", id);
 
+    var subject = new Subject<boolean>();
+
     this.http.post<any>(
       address,
       body,
@@ -107,14 +109,17 @@ export class ExaminationService {
     ).subscribe({
         next: data => {
           console.log('Lab Examination updated');
+          subject.next(true);
         },
         error: error => {
-            console.error('There was an error!', error);
+          console.error('There was an error!', error);
+          subject.next(false);
         }
     });
+    return subject.asObservable();
   }
 
-  addVisitLaboratory(visitId: number, notes: string, type: number) : void {
+  addVisitLaboratory(visitId: number, notes: string, type: number) : Observable<boolean> {
     let token: string;
     this.as.currentUser$.subscribe(user => token = user?.token);
 
@@ -134,6 +139,8 @@ export class ExaminationService {
     //console.log(id);
     const address = this.createVisitLabExamURL.replace("{id}", id);
 
+    var subject = new Subject<boolean>();
+    
     this.http.post<any>(
       address,
       body,
@@ -141,10 +148,13 @@ export class ExaminationService {
     ).subscribe({
         next: data => {
           console.log('Lab Examination updated');
+          subject.next(true);
         },
         error: error => {
-            console.error('There was an error!', error);
+          console.error('There was an error!', error);
+          subject.next(false);
         }
     });
+    return subject.asObservable();
   }
 }

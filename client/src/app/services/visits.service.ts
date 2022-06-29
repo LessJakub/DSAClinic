@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { defaultThrottleConfig } from 'rxjs/internal/operators/throttle';
-import { map, tap } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Status } from '../shared/interfaces/status';
 
 import { VisitDetail } from '../shared/interfaces/visit-detail';
@@ -168,7 +168,7 @@ export class VisitsService {
     });
   }
 
-  addVisit(date: Date, doctorID: number, patientID: number): void {
+  addVisit(date: Date, doctorID: number, patientID: number): Observable<boolean> {
 
     let token: string;
     this.as.currentUser$.subscribe(user => token = user?.token);
@@ -183,18 +183,24 @@ export class VisitsService {
         "patientId": patientID
     }
 
+    var subject = new Subject<boolean>();
+
     this.http.post<any>(this.addVisitURL,
       body,
       {headers: new HttpHeaders({'Content-Type': 'application/json-patch+json', 'Authorization': "Bearer " + token})}
     ).subscribe({
         next: data => {
           console.log('Visit registered');
-          window.alert('Visit registered');
+          subject.next(true);
+          //window.alert('Visit registered');
         },
         error: error => {
-            console.error('There was an error finalizing the visit!', error);
-            window.alert('Error: Visit registration failed');
+          console.error('There was an error finalizing the visit!', error);
+          subject.next(false);
+          window.alert('Error: Visit registration failed');
         }
-      });
+      }
+    );
+    return subject.asObservable();
   }
 }

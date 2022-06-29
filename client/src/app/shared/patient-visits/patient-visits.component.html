@@ -24,11 +24,11 @@
             <table>
                 <tr>
                     <td><span class="mr-3">Scheduled for:</span></td>
-                    <td>{{ prettyDateFromDate(chosenVisitDetail.visitTime) }} {{ prettyTimeFromDate(chosenVisitDetail.visitTime) }}</td>
+                    <td>{{ prettyDateFromDate(chosenVisitDetail?.visitTime) }} {{ prettyTimeFromDate(chosenVisitDetail?.visitTime) }}</td>
                 </tr>
                 <tr>
                     <td><span class="mr-3">Registered on:</span></td>
-                    <td>{{ prettyDateFromDate(chosenVisitDetail.registrationTime) }} {{ prettyTimeFromDate(chosenVisitDetail.registrationTime) }}</td>
+                    <td>{{ prettyDateFromDate(chosenVisitDetail?.registrationTime) }} {{ prettyTimeFromDate(chosenVisitDetail?.registrationTime) }}</td>
                 </tr>
                 <tr>
                     <td><span class="mr-3">Finalized on:</span></td>

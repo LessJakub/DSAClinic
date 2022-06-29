@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 import { SchedulingService } from 'src/app/services/scheduling.service';
 import { VisitsService } from 'src/app/services/visits.service';
@@ -19,6 +19,8 @@ export class ScheduleComponent implements OnInit {
               private vs: VisitsService) { }
 
   @Input() chosenPatient: PatientData;
+  @Output() stateChanged = new EventEmitter<boolean>();
+
   
   openingTime = new Date(0, 0, 0, 8);
   closingTime = new Date(0, 0, 0, 16);
@@ -59,7 +61,12 @@ export class ScheduleComponent implements OnInit {
 
   registerVisit(): void {
     if(this.chosenSlot != null && this.chosenPatient) {
-      this.vs.addVisit(this.chosenSlot, this.chosenDoctor.id, this.chosenPatient.id);
+      this.vs.addVisit(this.chosenSlot, this.chosenDoctor.id, this.chosenPatient.id).subscribe( result => {
+        if(result) {
+          this.getSchedule();
+          this.stateChanged.emit(true);
+        }
+      });
 
       this.chosenSlotID = {x: -1, y: -1};
       this.chosenSlot = null;

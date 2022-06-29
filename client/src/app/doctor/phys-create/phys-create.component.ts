@@ -14,12 +14,13 @@ export class PhysCreateComponent implements OnInit {
 
   @Input()  active!: boolean;
   @Output() activeChange = new EventEmitter<boolean>();
+  @Output() stateChanged = new EventEmitter<boolean>();
 
   @Input() visitID!: number;
 
   form = new FormGroup({
     type: new FormControl(0, Validators.required),
-    desc: new FormControl('', Validators.required)
+    desc: new FormControl(null, Validators.required)
   });
 
   ngOnInit(): void {
@@ -27,8 +28,12 @@ export class PhysCreateComponent implements OnInit {
 
   sendExamination(): void {
     if(this.form.valid) {
-      this.es.addVisitPhysical(this.visitID, this.form.controls['desc'].value, this.form.controls['type'].value);
-      this.closeOverlay();
+      this.es.addVisitPhysical(this.visitID, this.form.controls['desc'].value, this.form.controls['type'].value).subscribe(result => {
+        if(result) {
+          this.stateChanged.emit(true);
+          this.closeOverlay();
+        }
+      });
     }
   }
 

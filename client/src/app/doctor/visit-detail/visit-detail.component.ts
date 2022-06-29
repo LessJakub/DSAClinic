@@ -61,17 +61,21 @@ export class VisitDetailComponent implements OnInit {
       });
 
       // Get visits examinations
-      this.es.getVisitPhysicals(this.visit.id).subscribe(physicals => {
-        this.physicalExams = physicals;
-      });
+      this.getExaminations();
+    });
+  }
 
-      this.es.getVisitLaboratory(this.visit.id).subscribe(lab => {
-        this.laboratoryExams = lab;
-        this.laboratoryExams.forEach((exam, index, arr) => {
-          arr[index].executionDate = arr[index].executionDate? this.localizeDate(exam.executionDate) : null;
-          arr[index].orderDate = this.localizeDate(exam.orderDate);
-        })
-      });
+  getExaminations(): void {
+    this.es.getVisitPhysicals(this.visit.id).subscribe(physicals => {
+      this.physicalExams = physicals;
+    });
+
+    this.es.getVisitLaboratory(this.visit.id).subscribe(lab => {
+      this.laboratoryExams = lab;
+      this.laboratoryExams.forEach((exam, index, arr) => {
+        arr[index].executionDate = arr[index].executionDate? this.localizeDate(exam.executionDate) : null;
+        arr[index].orderDate = this.localizeDate(exam.orderDate);
+      })
     });
   }
 
