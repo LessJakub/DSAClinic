@@ -29,7 +29,9 @@ export class SupervisorComponent implements OnInit {
 
   getList(): void{
     if(this.form.valid){
-      this.es.getLabExams(this.form.get("filter")?.value).subscribe(list => this.examinations = list);
+      this.es.getLabExams(this.form.get("filter")?.value).subscribe(list => {
+        this.examinations = list.reverse();
+      });
       
       console.log(`Getting elements for date ${this.form.get("date")?.value} and filter ${this.form.get("filter")?.value}`);
     }

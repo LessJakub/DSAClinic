@@ -101,7 +101,8 @@ export class ScheduleComponent implements OnInit {
           });
 
           for(let n = 0; n < this.timeSlots.length; n++){
-            if(this.scheduledVisits[i][n] && this.prettyTimeFromDate(this.scheduledVisits[i][n].date) == this.prettyTimeFromDate(this.timeSlots[n])){
+            if(this.scheduledVisits[i][n] && 
+              this.prettyTimeFromDate(this.scheduledVisits[i][n].date) == this.prettyTimeFromDate(this.timeSlots[n])){
               // the element is in the correct slot
             }
             else {

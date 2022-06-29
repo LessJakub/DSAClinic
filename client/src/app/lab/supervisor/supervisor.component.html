@@ -34,7 +34,7 @@
                 <div class="w-1/4 min-w-fit px-1">{{ prettyTimeFromDate(item.orderDate) }}</div>
                 <div class="w-1/4 min-w-fit px-1">{{ item.doctorNotes? item.doctorNotes : 'No notes' }}</div>
                 <div class="w-1/4 min-w-fit px-1">{{ item.examination.name }}</div>
-                <div class="w-1/4 min-w-fit px-1"><button type="button" (click)="selectExamination(item)" class="float-right font-semibold text-white bg-blue-600 px-3 rounded-lg hover:bg-blue-700 active:bg-blue-800">Begin</button></div>
+                <div class="w-1/4 min-w-fit px-1"><button type="button" (click)="selectExamination(item)" class="float-right font-semibold text-white bg-blue-600 px-3 rounded-lg hover:bg-blue-700 active:bg-blue-800">{{ item.status == 0? "Begin" : "Details" }}</button></div>
             </li>
         </ul>
     </div>
