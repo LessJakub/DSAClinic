@@ -88,7 +88,9 @@ export class ScheduleComponent implements OnInit {
       this.dateSlots = [];
       
       // Get the chosen date and +- 3 days
-      this.dateSlots.push(new Date(new Date().setDate(this.chosenDate.getDate() - 3)));
+      let date = new Date(this.chosenDate);
+      date.setDate(date.getDate() - 3);
+      this.dateSlots.push(date);
       
       for(let i = 0; i < 7; i++){
 
@@ -109,7 +111,9 @@ export class ScheduleComponent implements OnInit {
           }
           //console.log(this.scheduledVisits);
         });
-        this.dateSlots.push(new Date(new Date().setDate(this.dateSlots[i].getDate() + 1)));
+        date = new Date(this.dateSlots[i]);
+        date.setDate(date.getDate() + 1);
+        this.dateSlots.push(date);
       }
       // i dont want to rethink the flow of this loop, so just remove the last unnecessary date
       this.dateSlots.pop();
