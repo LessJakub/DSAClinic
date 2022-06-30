@@ -1,15 +1,10 @@
-/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-a {
-    color: #0366d6;
-  }
-  
-code {
-    color: #e01a76;
-}
+body {
+    min-height: 100vh;
+    display: flex;
 
-.btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    background-color: aquamarine;
 }

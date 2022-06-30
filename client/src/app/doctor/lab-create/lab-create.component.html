@@ -1,0 +1,28 @@
+<!-- Overlay elements -->
+<div (click)="closeOverlay()" class="absolute top-0 left-0 w-full h-full backdrop-blur-sm z-50"></div>
+
+<div class="absolute z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-1/2 w-1/2 min-w-[35rem] min-h-min rounded-md drop-shadow-lg bg-gradient-to-b from-slate-50 via-slate-100 to-blue-300"> 
+    <div class="flex flex-col w-full h-full p-5">
+        <div class="text-lg font-medium">Add Laboratory Examination</div>
+
+        <!-- Lower Half -->
+        <div class="w-full grow flex flex-col items-center justify-center">
+            <!-- Description and diagnosis -->
+            <div class="w-full mt-20">
+                <form [formGroup]="form">
+                    <div class="mb-5">
+                        <label for="type">Type: </label>
+                        <input id="type" type="number" formControlName="type">
+                    </div>
+                    
+                    <div>
+                        <label for="notes">Doctor's notes:</label>
+                        <textarea id="notes" rows="7" placeholder="Notes for the laboratory" class="w-full resize-none mb-2 bg-gray-200" formControlName="notes"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="grow"></div>
+            <button type="button" (click)="sendExamination()" class="ml-8 mb-2 font-semibold text-white bg-blue-600 px-6 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">Submit</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+<app-navbar [title]="'planned visits'"></app-navbar>
+
+<div class="p-10 grow flex flex-col">
+
+    <!--The inputs-->
+    <div class="w-full">
+            <form [formGroup]="form" class="flex items-baseline" (change)="getList()">
+                <label class="mr-10 space-x-2">
+                    <span>Date:</span>
+                    <input required type="date" min="01-01-2021" placeholder=today class="bg-gray-200 p-1" formControlName="date">
+                </label>
+
+                <label for="radios" class="mr-2">Filter:</label>
+                <fieldset id="radios" class="space-x-2">
+                    <label>
+                        <input checked type="radio" [value]="-1" formControlName="filter">
+                        <span> All</span>
+                    </label>
+                    <label>
+                        <input type="radio" [value]="0" formControlName="filter">
+                        <span> Upcoming</span>
+                    </label>
+                    <label>
+                        <input type="radio" [value]="2" formControlName="filter">
+                        <span> Cancelled</span>
+                    </label>
+                    <label>
+                        <input type="radio" [value]="3" formControlName="filter">
+                        <span> Finished</span>
+                    </label>
+                </fieldset>
+            </form>
+    </div>
+
+    <!-- The list -->
+    <div class="mt-4 grow w-full overflow-y-auto relative">
+        <div *ngIf="!list; else listNotNull">
+            Select Date
+        </div>
+        <ng-template #listNotNull>
+            <div #listNotNull *ngIf="list.length == 0">
+                No such visits for {{ us.prettyDateFromDate( form.get("date")?.value ) }}
+            </div>
+        </ng-template>
+        <ul class="absolute top-0 left-0 w-full divide-y">
+            <li *ngFor="let item of list" class="flex items-baseline py-2 w-full">
+                <div class="w-1/4 min-w-fit px-1">{{ us.prettyTimeFromDate(item.date) }}</div>
+                <div class="w-1/4 min-w-fit px-1">{{ item.patientName }}</div>
+                <div class="w-1/4 min-w-fit px-1">{{ us.statusToText(item.status) }}</div>
+                <div class="w-1/4 min-w-fit px-1"><button type="button" (click)="selectVisit(item)" class="float-right font-semibold text-white bg-blue-600 px-3 rounded-lg hover:bg-blue-700 active:bg-blue-800">{{ item.status == 0? 'Begin' : 'Details'}}</button></div>
+            </li>
+        </ul>
+    </div>
+
+</div>

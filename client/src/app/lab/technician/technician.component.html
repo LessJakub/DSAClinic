@@ -1,0 +1,45 @@
+<app-navbar [title]="'laboratory examinations'"></app-navbar>
+
+<div class="p-10 grow flex flex-col">
+
+    <!--The inputs-->
+    <div class="w-full">
+            <form [formGroup]="form" class="flex items-baseline" (change)="getList()">
+
+                <label for="radios" class="mr-2">Filter:</label>
+                <fieldset id="radios" class="space-x-2">
+                    <label>
+                        <input type="radio" [value]="0" formControlName="filter">
+                        <span> New</span>
+                    </label>
+                    <!-- Technician doesn't need to see awaiting finalization -->
+                    <label>
+                        <input type="radio" [value]="3" formControlName="filter">
+                        <span> Cancelled</span>
+                    </label>
+                    <label>
+                        <input type="radio" [value]="4" formControlName="filter">
+                        <span> Finished</span>
+                    </label>
+                </fieldset>
+            </form>
+    </div>
+
+    <!-- The list -->
+    <div class="mt-4 grow w-full overflow-y-auto relative">
+        <div *ngIf="examinations && examinations.length == 0">
+            No such examinations for {{ us.labStatusToText( form.get("filter")?.value ) }}
+        </div>
+        <ul class="absolute top-0 left-0 w-full divide-y">
+            <li *ngFor="let item of examinations" class="flex items-baseline py-2 w-full">
+                <div class="w-1/4 min-w-fit px-1">{{ us.prettyTimeFromDate(item.orderDate) }}</div>
+                <div class="w-1/4 min-w-fit px-1">{{ item.doctorNotes? item.doctorNotes : 'No notes' }}</div>
+                <div class="w-1/4 min-w-fit px-1">{{ item.examination.name }}</div>
+                <div class="w-1/4 min-w-fit px-1"><button type="button" (click)="selectExamination(item)" class="float-right font-semibold text-white bg-blue-600 px-3 rounded-lg hover:bg-blue-700 active:bg-blue-800">Begin</button></div>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+<app-lab-details *ngIf="overlayActive" [(active)]="overlayActive" [exam]="selectedExamination" [editable]="true"></app-lab-details>

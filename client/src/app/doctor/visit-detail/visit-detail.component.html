@@ -1,0 +1,91 @@
+<app-navbar [title]="'chosen visit'"></app-navbar>
+
+<div class="grow flex w-full">
+    
+    <!-- Left area -->
+    <div class="flex flex-col h-full grow border-r border-gray-200">
+        
+        <div class="border-b border-gray-200">
+            <app-patient-data [chosenPatientData]="patient"></app-patient-data>
+        </div>
+
+        <div class="grow w-full flex">
+            <app-patient-visits [visits]="patientVisits"></app-patient-visits>
+        </div>
+
+    </div>
+
+    <!-- Right area -->
+    <div class="flex flex-col h-full grow p-6 space-y-4">
+
+        <h3 class="text-2xl font-medium">Visit Details</h3>
+        <!-- Visit details inputs -->
+        <div>
+            <label for="description">Description:</label>
+            <textarea [readonly]="!isModifiable" id="description" rows="7" placeholder="Description" class="w-full resize-none mb-2 bg-gray-200" [(ngModel)]="visit.description"></textarea>
+
+            <label for="diagnosis">Diagnosis:</label>
+            <textarea [readonly]="!isModifiable" id="diagnosis" rows="5" placeholder="Diagnosis" class="w-full resize-none bg-gray-200" [(ngModel)]="visit.diagnosis"></textarea>
+        </div>
+
+        <!-- Examinations -->
+        <div class="grow flex flex-col">
+            <!-- Tab selection -->
+            <div class="flex justify-center w-full space-x-6">
+                <button type="button" (click)="selectTab('phys')" class="font-semibold text-white bg-gray-500 px-6 py-2 rounded-t-lg hover:bg-gray-700 active:bg-gray-800" [class.bg-gray-700]="selectedTab === 'phys'">Physical Examinations</button>
+                <button type="button" (click)="selectTab('lab')" class="font-semibold text-white bg-gray-500 px-6 py-2 rounded-t-lg hover:bg-gray-700 active:bg-gray-800" [class.bg-gray-700]="selectedTab === 'lab'">Laboratory Examinations</button>
+            </div>
+            <!-- Selected tab contents -->
+            <ng-container [ngSwitch]="selectedTab">
+                <!-- phys tab contents -->
+                <div *ngSwitchCase="'phys'" class="grow w-full flex flex-col">
+                    <div class="grow w-full relative z-0">
+
+                        <div class="absolute top-0 left-0 w-full">
+                            <div class="w-full flex justify-center">
+                                <button *ngIf="isModifiable" type="submit" (click)="addPhysOverlay()" class="font-semibold text-white bg-blue-600 my-2 px-6 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">+ Add physical examination</button>
+                            </div>
+                            <div *ngFor="let elem of physicalExams" class="my-3 divide-y">
+                                <span class="w-32 mr-10">{{ elem.examinationListDTO.name }}</span>
+                                <span>{{ elem.results }}</span>
+                                <button type="button" (click)="openPhysDetails(elem)" class="float-right font-semibold text-white bg-blue-600 px-3 rounded-lg hover:bg-blue-700 active:bg-blue-800">Details</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- lab tab contents -->
+                <div *ngSwitchCase="'lab'" class="grow w-full flex flex-col">
+                    <div class="grow w-full overflow-y-auto relative">
+                        <div class="absolute top-0 left-0 w-full">
+                            <div class="w-full flex justify-center">
+                                <button type="button" (click)="addLabOverlay()" class="font-semibold text-white bg-blue-600 my-2 px-6 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">+ Add laboratory examination</button>
+                            </div>
+                            <div *ngFor="let elem of laboratoryExams" class="my-3 divide-y w-full">
+                                <span class="w-32 mr-10">{{ elem.examination.name }}</span>
+                                <span>{{ elem.doctorNotes }}</span>
+                                <button type="button" (click)="openLabDetails(elem)" class="float-right font-semibold text-white bg-blue-600 px-3 rounded-lg hover:bg-blue-700 active:bg-blue-800">Details</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex justify-between">
+            <button type="button" (click)="goBack()" class="font-semibold text-white bg-gray-500 px-6 py-2 rounded-lg hover:bg-gray-700 active:bg-gray-800">Back</button>
+            <div class="flex space-x-6 ml-16">
+                <button *ngIf="isModifiable" type="submit" (click)="finalizeVisit()" class="font-semibold text-white bg-blue-600 px-6 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">Finish</button>
+                <button *ngIf="isModifiable" type="button" (click)="cancelVisit()" class="font-semibold text-white bg-red-600 px-6 py-2 rounded-lg hover:bg-red-700 active:bg-red-800">Cancel</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<app-lab-details *ngIf="labOverlayActive" [(active)]="labOverlayActive" [exam]="selectedLabExamination" [editable]="false"></app-lab-details>
+<app-phys-details *ngIf="physOverlayActive" [(active)]="physOverlayActive" [exam]="selectedPhysExamination"></app-phys-details>
+<app-lab-create *ngIf="addLabOverlayActive" [(active)]="addLabOverlayActive" [visitID]="visit.id" (stateChanged)="getExaminations()"></app-lab-create>
+<app-phys-create *ngIf="addPhysOverlayActive" [(active)]="addPhysOverlayActive" [visitID]="visit.id" (stateChanged)="getExaminations()"></app-phys-create>

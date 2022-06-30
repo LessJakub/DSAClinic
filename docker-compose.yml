@@ -17,6 +17,7 @@ services:
     image: clinic-client
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - NODE_ENV=development
     build:
       context: ./Client
       dockerfile: ./Dockerfile

@@ -1,0 +1,11 @@
+<div class="h-full flex flex-col">
+    <input #searchBox id="search-box" (keyup.enter)="search(searchBox.value)" placeholder="Search..." class="p-1 placeholder-gray-500 bg-gray-200 w-full"/>
+
+    <ul class="divide-y divide-gray-200 max-h-full overflow-y-auto">
+        <li *ngFor="let patient of patientsSearched">
+            <button type="button" [class.bg-blue-200]="patient === selectedPatient" (click)="onSelect(patient)" class="hover:bg-gray-200 active:bg-gray-300 w-full text-left p-1">
+                <span>{{patient.name}} {{patient.surname}}</span>
+            </button>
+        </li>
+    </ul>
+</div>

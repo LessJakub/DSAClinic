@@ -1,0 +1,50 @@
+<app-navbar [title]="'admin panel'"></app-navbar>
+
+<div class="grow flex items-center justify-center">
+    
+    <!-- User creation form -->
+    <div class="basis-2/5">
+        <h2 class="text-lg font-semibold mb-4">Add new user</h2>
+        <form [formGroup]="form">
+            <table>
+                <tr>
+                    <td><label for="type" class="float-right">Role: </label></td>
+                    <td>
+                        <select name="type" id="type" formControlName="role">
+                        <option value="1">Registrant</option>
+                        <option value="2">Doctor</option>
+                        <option value="3">Lab Supervisor</option>
+                        <option value="4">Lab Technician</option>
+                        <option value="5">Admin</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="type" class="float-right">Name: </label></td>
+                    <td><input id="type" type="text" formControlName="name"></td>
+                </tr>
+                <tr>
+                    <td><label for="type" class="float-right">Surname: </label></td>
+                    <td><input id="type" type="text" formControlName="surname"></td>
+                </tr>
+                <tr>
+                    <td><label for="type" class="float-right">Username: </label></td>
+                    <td><input id="type" type="text" formControlName="username"></td>
+                </tr>
+                <tr>
+                    <td><label for="type" class="float-right">Password: </label></td>
+                    <td><input id="type" type="text" formControlName="password"></td>
+                </tr>
+            </table>
+        </form>
+        <button type="submit" (click)="sendUser()" class="mt-5 font-semibold text-white bg-blue-600 px-3 py-1 rounded-lg hover:bg-blue-700 active:bg-blue-800">Add User</button>
+    </div>
+
+    <div class="bg-slate-500 w-0.5 h-60 rounded-xl"></div>
+    
+    <!-- Button -->
+    <div class="basis-2/5 flex items-center justify-center">
+        <button type="button" (click)="goToDBPanel()" class="font-semibold text-white bg-blue-600 px-4 py-3 rounded-lg hover:bg-blue-700 active:bg-blue-800">Open Azure Panel</button>
+    </div>
+
+</div>
