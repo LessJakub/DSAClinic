@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import jwt_decode, { JwtPayload } from "jwt-decode";
 import { AccountService } from 'src/app/services/account.service';
+import { UtilityService } from 'src/app/services/utility.service';
 
 import { Status } from 'src/app/shared/interfaces/status';
 import { VisitGeneral } from 'src/app/shared/interfaces/visit-general';
@@ -27,6 +28,7 @@ export class VisitsComponent implements OnInit {
 
   constructor(private vs: VisitsService,
               private as: AccountService,
+              public us: UtilityService,
               private router: Router,
               private route: ActivatedRoute) { }
 
@@ -40,7 +42,7 @@ export class VisitsComponent implements OnInit {
         this.list = list;
         this.list.forEach((visit, index, arr) => 
         {
-          arr[index].date = this.localizeDate(visit.date);
+          arr[index].date = this.us.localizeDate(visit.date);
         })
       },
       error => console.error(error));
@@ -52,49 +54,4 @@ export class VisitsComponent implements OnInit {
   selectVisit(visit: VisitGeneral) {
     this.router.navigate([`visit/${visit.id}`], {relativeTo: this.route.parent});
   }
-
-  statusToText(status: Status): string {
-    switch(status) {
-      case Status.CANCELLED: return "Cancelled";
-      case Status.FINISHED: return "Finished";
-      case Status.IN_PROGRESS: return "In Progress";
-      case Status.NEW: return "New";
-    }
-  }
-
-  prettyDateFromDate(time: Date): string {
-    if(typeof(time) === 'string'){
-      time = new Date(time);
-    }
-
-    return time.toLocaleDateString(navigator.language, {
-      year: 'numeric',
-      month:'2-digit',
-      day: '2-digit',
-    });
-  }
-
-  prettyTimeFromDate(time: Date): string {
-    if(typeof(time) === 'string'){
-      time = new Date(time);
-    }
-
-    return time.toLocaleTimeString(navigator.language, {
-      hour: '2-digit',
-      minute:'2-digit'
-    });
-  }
-
-  localizeDate(date: Date): Date {
-    if (date == null) {
-      return null;
-    }
-    let local = new Date(date);
-    local.setHours(local.getHours() + local.getTimezoneOffset() / -60);
-
-    //console.log(`Before: ${date} after: ${local}`);
-
-    return local;
-  }
-
 }

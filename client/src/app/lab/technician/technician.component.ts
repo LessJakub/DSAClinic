@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { ExaminationService } from 'src/app/services/examination.service';
+import { UtilityService } from 'src/app/services/utility.service';
 import { ExamLaboratory } from 'src/app/shared/interfaces/exam-laboratory';
-//import { LabDetailsComponent } from 'src/app/shared/lab-details/lab-details.component';
 
 @Component({
   selector: 'app-technician',
@@ -13,7 +13,8 @@ import { ExamLaboratory } from 'src/app/shared/interfaces/exam-laboratory';
 })
 export class TechnicianComponent implements OnInit {
 
-  constructor(private es: ExaminationService) { }
+  constructor(private es: ExaminationService,
+              public us: UtilityService) { }
 
   examinations: ExamLaboratory[];
   overlayActive = false;
@@ -41,34 +42,6 @@ export class TechnicianComponent implements OnInit {
   selectExamination(exam: ExamLaboratory) {
     this.selectedExamination = exam;
     this.overlayActive = true;
-  }
-
-  labStatusToText(status: number): string {
-    const statuses = ['New', 'In Progress', 'Awaiting Confirmation', 'Cancelled', 'Finished'];
-    return statuses[status];
-  }
-
-  prettyDateFromDate(time: Date): string {
-    if(typeof(time) === 'string'){
-      time = new Date(time);
-    }
-
-    return time.toLocaleDateString(navigator.language, {
-      year: 'numeric',
-      month:'2-digit',
-      day: '2-digit',
-    });
-  }
-
-  prettyTimeFromDate(time: Date): string {
-    if(typeof(time) === 'string'){
-      time = new Date(time);
-    }
-
-    return time.toLocaleTimeString(navigator.language, {
-      hour: '2-digit',
-      minute:'2-digit'
-    });
   }
 
 }

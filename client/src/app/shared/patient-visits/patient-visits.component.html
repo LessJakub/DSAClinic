@@ -4,10 +4,10 @@
     <ul class="absolute top-0 left-0 w-full divide-y">
         <!-- <li *ngFor="let patient of patients$ | async" > -->
         <il *ngFor="let visit of visits" class="flex w-full items-center py-2">
-            <div class="w-1/6 min-w-fit px-1">{{ prettyDateFromDate(visit.date) }}</div>
-            <div class="w-1/6 min-w-fit px-1">{{ prettyTimeFromDate(visit.date) }}</div>
+            <div class="w-1/6 min-w-fit px-1">{{ us.prettyDateFromDate(visit.date) }}</div>
+            <div class="w-1/6 min-w-fit px-1">{{ us.prettyTimeFromDate(visit.date) }}</div>
             <div class="w-1/6 min-w-fit px-1">{{visit.doctorName}}</div>
-            <div class="w-1/6 min-w-fit px-1">{{ statusToText(visit?.status) }} </div>
+            <div class="w-1/6 min-w-fit px-1">{{ us.statusToText(visit?.status) }} </div>
             <div class="w-1/6 min-w-fit px-1">{{visit?.diagnosis}} </div>
             <div class="w-1/6 min-w-fit px-1"><button type="button" (click)="openDetails(visit)" class="float-right font-semibold text-white bg-blue-600 px-3 rounded-lg hover:bg-blue-700 active:bg-blue-800">Details</button></div>
         </il>
@@ -24,16 +24,16 @@
             <table>
                 <tr>
                     <td><span class="mr-3">Scheduled for:</span></td>
-                    <td>{{ prettyDateFromDate(chosenVisitDetail?.visitTime) }} {{ prettyTimeFromDate(chosenVisitDetail?.visitTime) }}</td>
+                    <td>{{ us.prettyDateFromDate(chosenVisitDetail?.visitTime) }} {{ us.prettyTimeFromDate(chosenVisitDetail?.visitTime) }}</td>
                 </tr>
                 <tr>
                     <td><span class="mr-3">Registered on:</span></td>
-                    <td>{{ prettyDateFromDate(chosenVisitDetail?.registrationTime) }} {{ prettyTimeFromDate(chosenVisitDetail?.registrationTime) }}</td>
+                    <td>{{ us.prettyDateFromDate(chosenVisitDetail?.registrationTime) }} {{ us.prettyTimeFromDate(chosenVisitDetail?.registrationTime) }}</td>
                 </tr>
                 <tr>
                     <td><span class="mr-3">Finalized on:</span></td>
-                    <td>{{ chosenVisitDetail.finalizationTime? prettyDateFromDate(chosenVisitDetail.finalizationTime) : "N/A" }} 
-                        {{ chosenVisitDetail.finalizationTime? prettyTimeFromDate(chosenVisitDetail.finalizationTime) : ""}}</td>
+                    <td>{{ chosenVisitDetail.finalizationTime? us.prettyDateFromDate(chosenVisitDetail.finalizationTime) : "N/A" }} 
+                        {{ chosenVisitDetail.finalizationTime? us.prettyTimeFromDate(chosenVisitDetail.finalizationTime) : ""}}</td>
                 </tr>
             </table>
 
@@ -48,7 +48,7 @@
                 </tr>
                 <tr>
                     <td><span class="mr-3">Status:</span></td>
-                    <td>{{ statusToText(chosenVisitGeneral.status) }}</td>
+                    <td>{{ us.statusToText(chosenVisitGeneral.status) }}</td>
                 </tr>
             </table>
         </div>

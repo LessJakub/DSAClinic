@@ -1,8 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
-import { map, tap } from 'rxjs/operators';
 
 import { PatientData } from '../shared/interfaces/patient-data';
 import { AccountService } from './account.service';

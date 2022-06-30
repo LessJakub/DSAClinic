@@ -18,22 +18,23 @@ export class AccountService {
     loginUrl: string = this.baseUrl + "v1/Auth/login";
     createUserURL: string = this.baseUrl + "v1/Auth/register";
 
+    private currentUserSource = new ReplaySubject<User>()
+    currentUser$ = this.currentUserSource.asObservable();
+
+    private role: string;
+    private isLoggedIn: boolean = false;
+
     constructor(private http: HttpClient) {
         const localUserString = localStorage.getItem("user");
         if (localUserString != null) {
             const localUser = JSON.parse(localUserString);
             if (localUser != null) {
                 this.currentUserSource.next(localUser);
+                this.role = jwt_decode<customJwtPayload>(localUser.token).role;
+                this.isLoggedIn = true;
             }
         }
     }
-
-    private currentUserSource = new ReplaySubject<User>()
-
-    currentUser$ = this.currentUserSource.asObservable();
-
-    private role: string;
-    private isLoggedIn: boolean = false;
 
     loginRequest(model: any) {
         return this.http.post(this.loginUrl, model).pipe (

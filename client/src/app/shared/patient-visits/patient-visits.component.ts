@@ -4,6 +4,7 @@ import { VisitGeneral } from '../interfaces/visit-general';
 import { VisitsService } from 'src/app/services/visits.service';
 import { VisitDetail } from '../interfaces/visit-detail';
 import { Status } from '../interfaces/status';
+import { UtilityService } from 'src/app/services/utility.service';
 
 @Component({
   selector: 'app-patient-visits',
@@ -13,7 +14,8 @@ import { Status } from '../interfaces/status';
 })
 export class PatientVisitsComponent implements OnInit {
 
-  constructor(private vs: VisitsService) { }
+  constructor(private vs: VisitsService,
+              public us: UtilityService) { }
 
   @Input() visits: VisitGeneral[];
   @Input() mode: string;
@@ -31,51 +33,15 @@ export class PatientVisitsComponent implements OnInit {
 
     this.vs.getVisit(visit.id).subscribe(result => {
       this.chosenVisitDetail = result;
-      this.chosenVisitDetail.finalizationTime = this.localizeDate(this.chosenVisitDetail.finalizationTime);
-      this.chosenVisitDetail.registrationTime = this.localizeDate(this.chosenVisitDetail.registrationTime);
-      this.chosenVisitDetail.visitTime = this.localizeDate(this.chosenVisitDetail.visitTime);
+      this.chosenVisitDetail.finalizationTime = this.us.localizeDate(this.chosenVisitDetail.finalizationTime);
+      this.chosenVisitDetail.registrationTime = this.us.localizeDate(this.chosenVisitDetail.registrationTime);
+      this.chosenVisitDetail.visitTime = this.us.localizeDate(this.chosenVisitDetail.visitTime);
     });
     this.chosenVisitGeneral = visit;
   }
 
   cancelVisit(visit: VisitDetail): void {
     this.vs.cancelVisit(visit);
-  }
-
-  statusToText(status: Status): string {
-    switch(status) {
-      case Status.CANCELLED: return "Cancelled";
-      case Status.FINISHED: return "Finished";
-      case Status.IN_PROGRESS: return "In Progress";
-      case Status.NEW: return "New";
-    }
-  }
-
-  prettyDateFromDate(time: Date): string {
-    return time.toLocaleDateString(navigator.language, {
-      year: 'numeric',
-      month:'2-digit',
-      day: '2-digit',
-    });
-  }
-
-  prettyTimeFromDate(time: Date): string {
-    return time.toLocaleTimeString(navigator.language, {
-      hour: '2-digit',
-      minute:'2-digit'
-    });
-  }
-
-  localizeDate(date: Date): Date {
-    if (date == null) {
-      return null;
-    }
-    let local = new Date(date);
-    local.setHours(local.getHours() + local.getTimezoneOffset() / -60);
-
-    //console.log(`Before: ${date} after: ${local}`);
-
-    return local;
   }
 
 }

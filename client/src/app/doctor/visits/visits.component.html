@@ -39,14 +39,14 @@
         </div>
         <ng-template #listNotNull>
             <div #listNotNull *ngIf="list.length == 0">
-                No such visits for {{ prettyDateFromDate( form.get("date")?.value ) }}
+                No such visits for {{ us.prettyDateFromDate( form.get("date")?.value ) }}
             </div>
         </ng-template>
         <ul class="absolute top-0 left-0 w-full divide-y">
             <li *ngFor="let item of list" class="flex items-baseline py-2 w-full">
-                <div class="w-1/4 min-w-fit px-1">{{ prettyTimeFromDate(item.date) }}</div>
+                <div class="w-1/4 min-w-fit px-1">{{ us.prettyTimeFromDate(item.date) }}</div>
                 <div class="w-1/4 min-w-fit px-1">{{ item.patientName }}</div>
-                <div class="w-1/4 min-w-fit px-1">{{ statusToText(item.status) }}</div>
+                <div class="w-1/4 min-w-fit px-1">{{ us.statusToText(item.status) }}</div>
                 <div class="w-1/4 min-w-fit px-1"><button type="button" (click)="selectVisit(item)" class="float-right font-semibold text-white bg-blue-600 px-3 rounded-lg hover:bg-blue-700 active:bg-blue-800">{{ item.status == 0? 'Begin' : 'Details'}}</button></div>
             </li>
         </ul>

@@ -8,12 +8,12 @@
             <table>
                 <tr>
                     <td><span class="mr-3">Requested on:</span></td>
-                    <td>{{ prettyDateFromDate(exam.orderDate) }} {{ prettyTimeFromDate(exam.orderDate) }}</td>
+                    <td>{{ us.prettyDateFromDate(exam.orderDate) }} {{ us.prettyTimeFromDate(exam.orderDate) }}</td>
                 </tr>
                 <tr>
                     <td><span class="mr-3">Finalized on:</span></td>
-                    <td>{{ exam.executionDate? prettyDateFromDate(exam.executionDate) : "N/A" }} 
-                        {{ exam.executionDate? prettyTimeFromDate(exam.executionDate) : ""}}</td>
+                    <td>{{ exam.executionDate? us.prettyDateFromDate(exam.executionDate) : "N/A" }} 
+                        {{ exam.executionDate? us.prettyTimeFromDate(exam.executionDate) : ""}}</td>
                 </tr>
                 <tr>
                     <td><span class="mr-3">Type:</span></td>
@@ -24,7 +24,7 @@
             <table>
                 <tr>
                     <td><span class="mr-3">Status:</span></td>
-                    <td>{{ labStatusToText(exam.status) }}</td>
+                    <td>{{ us.labStatusToText(exam.status) }}</td>
                 </tr>
                 <tr>
                     <td><span class="mr-3">Technician:</span></td>

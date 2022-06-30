@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NgModel } from '@angular/forms';
 import { ExaminationService } from 'src/app/services/examination.service';
+import { UtilityService } from 'src/app/services/utility.service';
 
 import { ExamLaboratory } from '../interfaces/exam-laboratory';
 
@@ -12,7 +12,8 @@ import { ExamLaboratory } from '../interfaces/exam-laboratory';
 })
 export class LabDetailsComponent implements OnInit {
 
-  constructor(private es: ExaminationService) { }
+  constructor(private es: ExaminationService,
+              public us: UtilityService) { }
 
   @Input()  active!: boolean;
   @Output() activeChange = new EventEmitter<boolean>();
@@ -35,34 +36,6 @@ export class LabDetailsComponent implements OnInit {
   closeOverlay(): void {
     this.active = false;
     this.activeChange.emit(this.active);
-  }
-
-  labStatusToText(status: number): string {
-    const statuses = ['New', 'In Progress', 'Awaiting Confirmation', 'Cancelled', 'Finished'];
-    return statuses[status];
-  }
-
-  prettyDateFromDate(time: Date): string {
-    if(typeof(time) === 'string'){
-      time = new Date(time);
-    }
-
-    return time.toLocaleDateString(navigator.language, {
-      year: 'numeric',
-      month:'2-digit',
-      day: '2-digit',
-    });
-  }
-
-  prettyTimeFromDate(time: Date): string {
-    if(typeof(time) === 'string'){
-      time = new Date(time);
-    }
-
-    return time.toLocaleTimeString(navigator.language, {
-      hour: '2-digit',
-      minute:'2-digit'
-    });
   }
 
 }

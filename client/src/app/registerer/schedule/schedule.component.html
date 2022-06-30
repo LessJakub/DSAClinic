@@ -29,12 +29,12 @@
                     <div class="w-28">Date</div>
                 </th>
                 <th *ngFor="let timeSlot of timeSlots">
-                    <div class="w-24">{{prettyTimeFromDate(timeSlot)}}</div>
+                    <div class="w-24">{{ us.prettyTimeFromDate(timeSlot)}}</div>
                 </th>
             </thead>
             <tbody>
                 <tr *ngFor="let dateSlot of dateSlots; let i = index">
-                    <td class="bg-gray-200 sticky left-0"><div class="font-medium flex items-center justify-center">{{prettyDateFromDate(dateSlot)}}</div></td>
+                    <td class="bg-gray-200 sticky left-0"><div class="font-medium flex items-center justify-center">{{ us.prettyDateFromDate(dateSlot)}}</div></td>
                     <td *ngFor="let slot of scheduledVisits[i]; let n = index">
                         <button *ngIf="slot == null; else NA" type="button" (click)="selectSlot({x: i, y: n})" [ngClass]="(this.chosenSlotID.x == i && this.chosenSlotID.y == n)? 'bg-sky-500' : 'bg-sky-300'" class="h-16 w-full border border-gray-200  hover:bg-sky-700">
                             Free
@@ -46,10 +46,6 @@
                         </ng-template>
                     </td>
                 </tr>
-                <!-- <tr *ngFor="let _ of [].constructor(7); let i = index" class="h-[100px]">asdasdasd
-                    <td>{{i}}</td>
-                    <td *ngFor="let _ of [].constructor(16); let n = index"><div class="w-24 border border-gray-200">{{n}}</div></td>
-                </tr> -->
             </tbody>
         </table>
     </div>

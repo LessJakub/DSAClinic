@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UtilityService } from '../services/utility.service';
 import { VisitsService } from '../services/visits.service';
 
 import { PatientData } from '../shared/interfaces/patient-data';
@@ -17,7 +18,8 @@ export class RegistererComponent implements OnInit {
 
   patientOverlayOn: boolean;
 
-  constructor(private vs: VisitsService) { }
+  constructor(private vs: VisitsService,
+              private us: UtilityService) { }
 
   ngOnInit(): void {
 
@@ -30,22 +32,10 @@ export class RegistererComponent implements OnInit {
       {
         this.patientsVisits = result;
         this.patientsVisits.forEach((visit, index, arr) => {
-          arr[index].date = this.localizeDate(visit.date);
+          arr[index].date = this.us.localizeDate(visit.date);
         })
         //console.log(this.patientsVisits[0]?.date.getTimezoneOffset());
       });
-  }
-
-  localizeDate(date: Date): Date {
-    if (date == null) {
-      return null;
-    }
-    let local = new Date(date);
-    local.setHours(local.getHours() + local.getTimezoneOffset() / -60);
-
-    //console.log(`Before: ${date} after: ${local}`);
-
-    return local;
   }
 
 }

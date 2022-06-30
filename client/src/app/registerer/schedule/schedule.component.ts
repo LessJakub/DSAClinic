@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 import { SchedulingService } from 'src/app/services/scheduling.service';
+import { UtilityService } from 'src/app/services/utility.service';
 import { VisitsService } from 'src/app/services/visits.service';
 
 import { Doctor } from 'src/app/shared/interfaces/doctor';
@@ -16,7 +16,8 @@ import { VisitGeneral } from 'src/app/shared/interfaces/visit-general';
 export class ScheduleComponent implements OnInit {
 
   constructor(private ss: SchedulingService,
-              private vs: VisitsService) { }
+              private vs: VisitsService,
+              public us: UtilityService) { }
 
   @Input() chosenPatient: PatientData;
   @Output() stateChanged = new EventEmitter<boolean>();
@@ -56,7 +57,7 @@ export class ScheduleComponent implements OnInit {
       this.chosenSlot.setMinutes(this.timeSlots[id.y].getMinutes());
     }
 
-    console.log(`Chosen slot: ${this.prettyDateFromDate(this.chosenSlot)} ${this.prettyTimeFromDate(this.chosenSlot)} and id ${this.chosenSlotID.x} ${this.chosenSlotID.y}`)
+    console.log(`Chosen slot: ${this.us.prettyDateFromDate(this.chosenSlot)} ${this.us.prettyTimeFromDate(this.chosenSlot)} and id ${this.chosenSlotID.x} ${this.chosenSlotID.y}`)
   }
 
   registerVisit(): void {
@@ -104,12 +105,12 @@ export class ScheduleComponent implements OnInit {
         this.vs.getDoctorVisitsList(this.chosenDoctor?.id, this.dateSlots[i], 0).subscribe(visits => {
           this.scheduledVisits[i] = visits;
           this.scheduledVisits[i].forEach((visit, index, arr) => {
-            arr[index].date = this.localizeDate(visit.date);
+            arr[index].date = this.us.localizeDate(visit.date);
           });
 
           for(let n = 0; n < this.timeSlots.length; n++){
             if(this.scheduledVisits[i][n] && 
-              this.prettyTimeFromDate(this.scheduledVisits[i][n].date) == this.prettyTimeFromDate(this.timeSlots[n])){
+              this.us.prettyTimeFromDate(this.scheduledVisits[i][n].date) == this.us.prettyTimeFromDate(this.timeSlots[n])){
               // the element is in the correct slot
             }
             else {
@@ -139,35 +140,7 @@ export class ScheduleComponent implements OnInit {
     return times;
   }
 
-  prettyDateFromDate(time: Date): string {
-    return time?.toLocaleDateString(navigator.language, {
-      year: 'numeric',
-      month:'2-digit',
-      day: '2-digit',
-    });
-  }
-
-  prettyTimeFromDate(time: Date): string {
-    return time?.toLocaleTimeString(navigator.language, {
-      hour: '2-digit',
-      minute:'2-digit'
-    });
-  }
-
-  localizeDate(date: Date): Date {
-    if (date == null) {
-      return null;
-    }
-    let local = new Date(date);
-    local.setHours(local.getHours() + local.getTimezoneOffset() / -60);
-
-    //console.log(`Before: ${date} after: ${local}`);
-
-    return local;
-  }
 }
-
-
 
 interface slotID {
   x: number,

@@ -10,6 +10,7 @@ import { ExaminationService } from 'src/app/services/examination.service';
 import { PatientData } from 'src/app/shared/interfaces/patient-data';
 import { PatientsService } from 'src/app/services/patients.service';
 import { VisitGeneral } from 'src/app/shared/interfaces/visit-general';
+import { UtilityService } from 'src/app/services/utility.service';
 
 @Component({
   selector: 'app-visit-detail',
@@ -38,6 +39,7 @@ export class VisitDetailComponent implements OnInit {
   constructor(private vs: VisitsService,
               private es: ExaminationService,
               private ps: PatientsService,
+              private us: UtilityService,
               private route: ActivatedRoute,
               private location: Location) { }
 
@@ -47,16 +49,16 @@ export class VisitDetailComponent implements OnInit {
     this.vs.getVisit(visitId).subscribe((visit) =>{
       this.visit = visit;
       this.isModifiable = this.visit.status == 0;
-      this.visit.finalizationTime = this.localizeDate(this.visit.finalizationTime);
-      this.visit.registrationTime = this.localizeDate(this.visit.registrationTime);
-      this.visit.visitTime = this.localizeDate(this.visit.visitTime);
+      this.visit.finalizationTime = this.us.localizeDate(this.visit.finalizationTime);
+      this.visit.registrationTime = this.us.localizeDate(this.visit.registrationTime);
+      this.visit.visitTime = this.us.localizeDate(this.visit.visitTime);
       // Get the details of the patient whose visit this is
       this.ps.getPatientDetails(visit?.patientId).subscribe(patient => this.patient = patient);
       // Get this patients visit list
       this.vs.getPatientVisitsList(visit?.patientId).subscribe(visits => {
         this.patientVisits = visits;
         this.patientVisits.forEach((visit, index, arr) => {
-          arr[index].date = this.localizeDate(visit.date);
+          arr[index].date = this.us.localizeDate(visit.date);
         })
       });
 
@@ -73,8 +75,8 @@ export class VisitDetailComponent implements OnInit {
     this.es.getVisitLaboratory(this.visit.id).subscribe(lab => {
       this.laboratoryExams = lab;
       this.laboratoryExams.forEach((exam, index, arr) => {
-        arr[index].executionDate = arr[index].executionDate? this.localizeDate(exam.executionDate) : null;
-        arr[index].orderDate = this.localizeDate(exam.orderDate);
+        arr[index].executionDate = arr[index].executionDate? this.us.localizeDate(exam.executionDate) : null;
+        arr[index].orderDate = this.us.localizeDate(exam.orderDate);
       })
     });
   }
@@ -113,18 +115,6 @@ export class VisitDetailComponent implements OnInit {
   finalizeVisit(): void {
     this.vs.finishVisit(this.visit);
     this.goBack();
-  }
-
-  localizeDate(date: Date): Date {
-    if (date == null) {
-      return null;
-    }
-    let local = new Date(date);
-    local.setHours(local.getHours() + local.getTimezoneOffset() / -60);
-
-    //console.log(`Before: ${date} after: ${local}`);
-
-    return local;
   }
 
 }
