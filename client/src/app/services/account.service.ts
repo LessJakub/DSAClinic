@@ -14,9 +14,10 @@ type customJwtPayload = JwtPayload & { nameid: string, UserId: number, role: str
 })
 export class AccountService {
 
-    baseUrl: string = "http://localhost:8080/";
-    loginUrl: string = this.baseUrl + "v1/Auth/login";
-    createUserURL: string = this.baseUrl + "v1/Auth/register";
+
+    private baseURL: string = "http://" + location.hostname;
+    loginUrl: string = this.baseURL + ":8080/v1/Auth/login";
+    createUserURL: string = this.baseURL + ":8080/v1/Auth/register";
 
     private currentUserSource = new ReplaySubject<User>()
     currentUser$ = this.currentUserSource.asObservable();
