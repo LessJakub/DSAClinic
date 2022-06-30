@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseRouteReuseStrategy } from '@angular/router';
-import { ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { newUser } from '../shared/interfaces/newUser';
 import { User } from '../models/User';
 import { map } from 'rxjs/operators';
 import jwt_decode, { JwtPayload } from "jwt-decode";
@@ -13,8 +14,9 @@ type customJwtPayload = JwtPayload & { nameid: string, UserId: number, role: str
 })
 export class AccountService {
 
-    baseUrl: string = "http://localhost:8080/"
-    loginUrl: string = this.baseUrl + "v1/Auth/login"
+    baseUrl: string = "http://localhost:8080/";
+    loginUrl: string = this.baseUrl + "v1/Auth/login";
+    createUserURL: string = this.baseUrl + "v1/Auth/register";
 
     constructor(private http: HttpClient) {
         const localUserString = localStorage.getItem("user");
@@ -31,7 +33,6 @@ export class AccountService {
     currentUser$ = this.currentUserSource.asObservable();
 
     private role: string;
-    private id: number;
 
     loginRequest(model: any) {
         return this.http.post(this.loginUrl, model).pipe (
@@ -44,7 +45,6 @@ export class AccountService {
 
                     this.role = jwt_decode<customJwtPayload>(user.token).role;
                     //console.log(jwt_decode<customJwtPayload>(user.token));
-                    this.id = Number(jwt_decode<customJwtPayload>(user.token).UserId);
                 }
                 //console.log(user);
             })
@@ -56,10 +56,43 @@ export class AccountService {
         this.currentUserSource.next(null);
 
         this.role = null;
-        this.id = null;
     }
 
     getUserRole(): string {
         return this.role;
+    }
+
+    createUser(newUser: newUser): Observable<boolean> {
+        let token: string;
+        this.currentUser$.subscribe(user => token = user?.token);
+
+        const body = {
+            "username": newUser.username,
+            "password": newUser.password,
+            "name": newUser.name,
+            "surname": newUser.surname,
+            "role": newUser.role
+        }
+
+        console.log(body);
+
+        var subject = new Subject<boolean>();
+
+        this.http.post<any>(this.createUserURL,
+            body,
+            {headers: new HttpHeaders({'Content-Type': 'application/json-patch+json', 'Authorization': "Bearer " + token})}
+        ).subscribe({
+            next: data => {
+                console.log('User registered');
+                subject.next(true);
+                //window.alert('User registered');
+            },
+            error: error => {
+                console.error('There was an error registering the user!', error);
+                subject.next(false);
+                window.alert('Error: User registration failed');
+            }
+        });
+        return subject.asObservable();
     }
 }

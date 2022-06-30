@@ -24,54 +24,23 @@ export class LoginComponent implements OnInit {
     model: any = {};
     error: string = null;
 
-    private redirects = {'Doctor': 'doctor/visits', 'Registrant': 'registrant', 'LabTechnician': 'lab/technician', 'LabSupervisor': 'lab/supervisor'};
+    private redirects = {'Doctor': 'doctor/visits', 'Registrant': 'registrant', 'LabTechnician': 'lab/technician', 'LabSupervisor': 'lab/supervisor', 'Admin': 'admin'};
     
     loginAction() {
-        this.service.loginRequest(this.model).subscribe(Response => {
-            console.log("Login action used.");
+        this.service.loginRequest(this.model).subscribe(
+            Response => {
+                console.log("Login action used.");
 
-            let tokenRole = this.service.getUserRole();
-            console.log(tokenRole);
-
-
-            if(tokenRole == "Admin")
-            {
-                //var url: any = "https://localhost:8081/admin";
-
-                var tokenUser;
-                this.service.currentUser$.subscribe((user: User) => {
-                if(user != null)
-                {
-                    tokenUser = user.token;
-                }})
-
+                let tokenRole = this.service.getUserRole();
+                console.log(tokenRole);
                 
-
-                var params = {
-                    Authorization: 'Bearer ' + tokenUser
-                };
-
-                //var url = ["https://localhost:8081/admin", $.param(params)].join('?');
-
-                window.open("https://localhost:8081/admin");
-
-                
-                
-
-                //this.router.navigate(url);
-                //window.location.href="https://localhost:8081/admin";
-                
-            }
-            else
-            {
                 this.router.navigate([this.redirects[tokenRole]]);
+            },
+            error => {
+                this.error = error.error;
+                console.log(error);
             }
-           
-
-        }, error => {
-            this.error = error.error;
-            console.log(error);
-        })
+        )
     }
 
 }
