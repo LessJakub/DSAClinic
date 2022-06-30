@@ -33,6 +33,7 @@ export class AccountService {
     currentUser$ = this.currentUserSource.asObservable();
 
     private role: string;
+    private isLoggedIn: boolean = false;
 
     loginRequest(model: any) {
         return this.http.post(this.loginUrl, model).pipe (
@@ -44,6 +45,7 @@ export class AccountService {
                     this.currentUserSource.next(user);
 
                     this.role = jwt_decode<customJwtPayload>(user.token).role;
+                    this.isLoggedIn = true;
                     //console.log(jwt_decode<customJwtPayload>(user.token));
                 }
                 //console.log(user);
@@ -56,10 +58,15 @@ export class AccountService {
         this.currentUserSource.next(null);
 
         this.role = null;
+        this.isLoggedIn = false;
     }
 
     getUserRole(): string {
         return this.role;
+    }
+
+    getLoggedInState(): boolean {
+        return this.isLoggedIn;
     }
 
     createUser(newUser: newUser): Observable<boolean> {
