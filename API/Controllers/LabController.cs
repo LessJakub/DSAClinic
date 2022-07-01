@@ -177,11 +177,11 @@ namespace API.Controllers
         {
             var tmp = new List<ExaminationList>();
 
-            if(name is not null) tmp = await context.ExaminationLists.Where(e => e.Name == name).ToListAsync();
-            else if(icd is not null) tmp = await context.ExaminationLists.Where(e => e.Icd == icd).ToListAsync();
+            if(name is not null) tmp = await context.ExaminationLists.Where(e => e.Name.ToLower().Contains(name.ToLower())).ToListAsync();
+            else if(icd is not null) tmp = await context.ExaminationLists.Where(e => e.Icd.ToLower().Contains(icd.ToLower())).ToListAsync();
             else if(type is not null) tmp = await context.ExaminationLists.Where(e => e.Type == type).ToListAsync();
             
-            if(icd is not null) tmp = tmp.Where(e => e.Icd == icd).ToList();
+            if(icd is not null) tmp = tmp.Where(e => e.Icd.ToLower().Contains(icd.ToLower())).ToList();
             if(type is not null) tmp = tmp.Where(e => e.Type == type).ToList();
 
 
