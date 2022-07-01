@@ -5,6 +5,7 @@ import { Observable, Subject } from 'rxjs';
 
 import { ExamLaboratory } from '../shared/interfaces/exam-laboratory';
 import { ExamPhysical } from '../shared/interfaces/exam-physical';
+import { ExamType } from '../shared/interfaces/exam-type';
 import { Status } from '../shared/interfaces/status';
 import { AccountService } from './account.service';
 
@@ -18,6 +19,7 @@ export class ExaminationService {
   private baseURL: string = "http://" + location.hostname;
   private queryAllLabExamsURL: string = this.baseURL + ":8080/v1/Lab/status";
   private updateLabExamURL: string = this.baseURL + ":8080/v1/Lab/";
+  private queryExaminationTypesURL: string = this.baseURL + ":8080/v1/Lab/examination-types/q";
 
   //Doctor's visit detail endpoints
   private getVisitLabExamsURL: string = this.baseURL + ":8080/v1/Visits/lab-examinations/";
@@ -156,5 +158,53 @@ export class ExaminationService {
         }
     });
     return subject.asObservable();
+  }
+
+  physTypeSearch(query: string) : Observable<ExamType[]> {
+
+    let queryParams = new HttpParams();
+    const regex : RegExp = /([\dEV]\d{2,4})|([A-Za-z]\d{2}[a-zA-Z0-9]{0,4})/gm;
+    if(query.search(regex) == -1) {
+      queryParams = queryParams.append("name", query);
+    }
+    else {
+      queryParams = queryParams.append("icd", query);
+    }
+
+    queryParams.append('type', 0);
+
+    let token: string;
+    this.as.currentUser$.subscribe(user => token = user?.token);
+
+    console.log(`Querying for ${queryParams}`);
+
+    return this.http.get<ExamType[]>(this.queryExaminationTypesURL,
+      { headers: new HttpHeaders({'Content-Type': 'text/plain', 'Authorization': "Bearer " + token}),
+        params: queryParams
+      });
+  }
+
+  labTypeSearch(query: string) : Observable<ExamType[]> {
+
+    let queryParams = new HttpParams();
+    const regex : RegExp = /([\dEV]\d{2,4})|([A-Za-z]\d{2}[a-zA-Z0-9]{0,4})/gm;
+    if(query.search(regex) == -1) {
+      queryParams = queryParams.append("name", query);
+    }
+    else {
+      queryParams = queryParams.append("icd", query);
+    }
+
+    queryParams.append('type', 1);
+
+    let token: string;
+    this.as.currentUser$.subscribe(user => token = user?.token);
+
+    console.log(`Querying for ${queryParams}`);
+
+    return this.http.get<ExamType[]>(this.queryExaminationTypesURL,
+      { headers: new HttpHeaders({'Content-Type': 'text/plain', 'Authorization': "Bearer " + token}),
+        params: queryParams
+      });
   }
 }
