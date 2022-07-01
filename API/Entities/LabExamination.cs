@@ -25,7 +25,9 @@ namespace API.Entities
 
         public string? DoctorNotes { get; set; }
 
-        public string? LabNotes { get; set; }    
+        public string? LabNotes { get; set; } 
+
+        public string? CancelationReason { get; set; }
 
         public virtual ExaminationList ExaminationList { get; set; }
 

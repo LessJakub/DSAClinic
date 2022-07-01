@@ -20,6 +20,5 @@ namespace API.Data
         public DbSet<ExaminationList> ExaminationLists { get; set; }
         public DbSet<PhysicalExamination> PhysicalExaminations { get; set; }
         public DbSet<LabExamination> LabExaminations { get; set; }
-        public DbSet<Whitelist> IPWhitelist {get; set;}
     }
 }

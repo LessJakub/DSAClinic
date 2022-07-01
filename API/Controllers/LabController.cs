@@ -122,6 +122,60 @@ namespace API.Controllers
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks> Not sorted.
+        ///</remarks>
+        /// <returns></returns>
+        /// <response code="200">  </response>
+        /// <response code="400">  </response>
+        [Authorize(Roles="LabTechnician,LabSupervisor")]
+        [HttpGet("examination-types")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<List<ExaminationDTO>>> GetExaminationTypes(ExaminationType examinationType)
+        {
+            
+            var examinationTypes = await context.ExaminationLists.Where(e => e.Type == examinationType).ToListAsync();
+            if(examinationTypes is null) return NoContent();
+
+            var listToRet = new List<ExaminationDTO>();
+            foreach(var t in examinationTypes) listToRet.Add(new ExaminationDTO(t));
+
+            return listToRet;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks> Not sorted.
+        ///</remarks>
+        /// <returns></returns>
+        /// <response code="200">  </response>
+        /// <response code="400">  </response>
+        [Authorize(Roles="LabTechnician,LabSupervisor")]
+        [HttpGet("examination-types/q")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<List<ExaminationDTO>>> SearchExaminationTypes([FromQuery] string? name,[FromQuery] string? icd, [FromQuery] ExaminationType? type )
+        {
+            var tmp = new List<ExaminationList>();
+
+            if(name is not null) tmp = await context.ExaminationLists.Where(e => e.Name == name).ToListAsync();
+            else if(icd is not null) tmp = await context.ExaminationLists.Where(e => e.Icd == icd).ToListAsync();
+            else if(type is not null) tmp = await context.ExaminationLists.Where(e => e.Type == type).ToListAsync();
+            
+            if(icd is not null) tmp = tmp.Where(e => e.Icd == icd).ToList();
+            if(type is not null) tmp = tmp.Where(e => e.Type == type).ToList();
+
+
+            var listToRet = new List<ExaminationDTO>();
+            foreach(var t in tmp) listToRet.Add(new ExaminationDTO(t));
+
+            return listToRet;
+        }
+
+        /// <summary>
         /// Updates laboratory test with new given values.
         /// Lab technician can update status only to AWAITING_FOR_CONFIRMATION
         /// Lab supervisor can update status to any available values.
@@ -146,23 +200,25 @@ namespace API.Controllers
             if(test is null) return BadRequest($"There is no test with id {id}");
             if(requesterUser.LabTechnician==null && requesterUser.LabSupervisor==null) return BadRequest($"Only laboratory employees can update laboratory test");
 
-            if(testDTO.Status == LabStatus.AWAITING_FOR_CONFIRMATION && requesterUser.LabTechnician is not null){
-                test.Status=testDTO.Status;
-                if(testDTO.LabTestStatus is not null) test.LabTestStatus=testDTO.LabTestStatus;
-                if(testDTO.LabNotes is not null) test.LabNotes=testDTO.LabNotes;
+            if(requesterUser.LabTechnician is not null){
+
                 test.LabTechnician=requesterUser.LabTechnician;
                 test.LabTechnicianId=requesterUser.LabTechnician.Id;
-            }else if(requesterUser.LabSupervisor is not null){
-                if(test.LabSupervisorId is null) {
-                    test.LabSupervisorId=requesterID;
+            }
+            if(requesterUser.LabSupervisor is not null){
                 test.LabSupervisor=requesterUser.LabSupervisor;
                 test.LabSupervisorId=requesterUser.LabSupervisor.Id;
-                    }
-                test.Status=testDTO.Status;
-                if(testDTO.LabTestStatus is not null) test.LabTestStatus=testDTO.LabTestStatus;
-                if(testDTO.LabNotes is not null) test.LabNotes=testDTO.LabNotes;
-                if(testDTO.Status==LabStatus.FINISHED || testDTO.Status==LabStatus.CANCELLED) test.ExecutionDate=DateTime.Now;
             }
+
+            if(testDTO.Status == LabStatus.CANCELLED && testDTO.CancelationReason is null) return BadRequest("You must provide cancelation reason");
+            else if(testDTO.Status == LabStatus.CANCELLED) test.CancelationReason = testDTO.CancelationReason;
+            
+            test.Status=testDTO.Status;
+            if(testDTO.LabTestStatus is not null) test.LabTestStatus=testDTO.LabTestStatus;
+            if(testDTO.LabNotes is not null) test.LabNotes=testDTO.LabNotes;
+            if(testDTO.Status==LabStatus.FINISHED || testDTO.Status==LabStatus.CANCELLED) test.ExecutionDate=DateTime.Now;
+
+
             await context.SaveChangesAsync();
             return new LabTestDTO(test);
         }

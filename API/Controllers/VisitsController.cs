@@ -26,7 +26,9 @@ namespace API.Controllers
         /// Creates new visit and adds it to the database.
         /// </summary>
         /// <param name="newVisitDTO">DTO containing information of new visit</param>
-        /// <remarks>DateTime should be in format "DD.MM.YYYY HH:MM"</remarks>
+        /// <remarks>DateTime should be in format "DD.MM.YYYY HH:MM".
+        /// Status from newVisitDTO is no longer used, visit created is always with Status.NEW
+        ///</remarks>
         /// <returns>VisitDTO from created visit</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
@@ -51,13 +53,30 @@ namespace API.Controllers
 
             var patient = await context.Patients.FindAsync(newVisitDTO.PatientId);
             if(patient == null) return BadRequest($"Patient with id {newVisitDTO.PatientId} does not exist");
+
+
+            var visitTime = Convert.ToDateTime(newVisitDTO.VisitTime);
+            var sameTimeVisit = await context.Visits.Where(v => v.DoctorId == doctorUser.Id && 
+                                                            v.VisitTime == visitTime && 
+                                                            v.Status != Status.CANCELLED &&
+                                                            v.Status != Status.FINISHED).
+                                                            ToListAsync();
+            if(sameTimeVisit.Count() != 0) return BadRequest($"Doctor with id {doctorUser.Id} already has visit planned on {visitTime}");
+
+            sameTimeVisit = await context.Visits.Where(v => v.PatientId == patient.Id && 
+                                                            v.VisitTime == visitTime &&
+                                                            v.Status != Status.CANCELLED &&
+                                                            v.Status != Status.FINISHED).
+                                                            ToListAsync();
+            if(sameTimeVisit.Count() != 0) return BadRequest($"Patient with id {patient.Id} already has visit planned on {visitTime}");
             
+            if(visitTime < DateTime.Now) return BadRequest($"Visit time is not valid");
             
             var visit = new Visits{
                 Description = newVisitDTO.Description,
                 RegistrationTime = DateTime.Now,
-                VisitTime = Convert.ToDateTime(newVisitDTO.VisitTime),
-                Status = newVisitDTO.Status,
+                VisitTime = visitTime,
+                Status = Status.NEW,
                 Doctor = doctor,
                 DoctorId = newVisitDTO.DoctorId,
                 Patient = patient,
@@ -174,11 +193,17 @@ namespace API.Controllers
             var visit = await context.Visits.FirstOrDefaultAsync(v => v.Id == id);
             if(visit is null) return BadRequest($"There is no visit with id {id}");
 
-            visit.FinalizationTime = DateTime.Now;
-            if(visitDTO.Description is not null) visit.Description = visitDTO.Description;
-            if(visitDTO.Diagnosis is not null) visit.Diagnosis = visitDTO.Diagnosis;
-            if(visitDTO.VisitTime != default) visit.VisitTime = (DateTime)visitDTO.VisitTime;
-            if(visitDTO.Status is not null) visit.Status = (Status)visitDTO.Status;
+            var requesterID = GetRequesterId();
+            var requester = await context.Users.FindAsync(requesterID);
+
+            
+            if(requester.Doctor is not null && requester.Id == visit.DoctorId)
+            {
+                if(visitDTO.Description is not null) visit.Description = visitDTO.Description;
+                if(visitDTO.Diagnosis is not null) visit.Diagnosis = visitDTO.Diagnosis;
+            }
+            
+            
             if(visitDTO.DoctorId != 0)
             {
                 var doctorUser = await context.Users.FindAsync(visitDTO.DoctorId);
@@ -191,6 +216,39 @@ namespace API.Controllers
                 var patient = await context.Patients.FindAsync(visitDTO.PatientId);
                 if(patient is null) return BadRequest($"There is no patient with id {visitDTO.PatientId}");
                 visit.Patient = patient;
+            }
+
+            if(visitDTO.Status is not null)
+            {
+                if(visit.Status != Status.CANCELLED && visit.Status != Status.FINISHED)
+                {
+                    visit.Status = (Status)visitDTO.Status;
+                    if((Status)visitDTO.Status == Status.FINISHED)visit.FinalizationTime = DateTime.Now;
+                }
+
+            }
+
+            if(visitDTO.VisitTime is not null)
+            {
+                var visitTime = (DateTime)visitDTO.VisitTime;
+                if(visitTime < DateTime.Now) return BadRequest($"Visit time is not valid");
+
+                //Could be merged together although this allows for better error message.
+                var sameTimeVisit = context.Visits.FirstOrDefault(v => v.DoctorId == visit.DoctorId && 
+                                                            v.VisitTime == visitTime && 
+                                                            v.Status != Status.CANCELLED &&
+                                                            v.Status != Status.FINISHED);
+                                                            
+                if(sameTimeVisit is not null) return BadRequest($"Doctor with id {visit.DoctorId} already has visit planned on {visitTime}");
+
+                sameTimeVisit = context.Visits.FirstOrDefault(v => v.PatientId == visit.PatientId && 
+                                                            v.VisitTime == visitTime &&
+                                                            v.Status != Status.CANCELLED &&
+                                                            v.Status != Status.FINISHED);
+
+                if(sameTimeVisit is not null) return BadRequest($"Patient with id {visit.PatientId} already has visit planned on {visitTime}");
+
+                visit.VisitTime = visitTime;
             }
 
             await context.SaveChangesAsync();
