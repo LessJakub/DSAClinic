@@ -23,11 +23,9 @@ namespace API.Controllers
         /// <summary>
         /// Creates new Patient and adds it to the database.
         /// </summary>
-        /// <param name="newPatientDto"></param>
-        /// <remarks></remarks>
+        /// <param name="newPatientDto">New patient information</param>
+        /// <remarks>Can be accessed only by Registrant.</remarks>
         /// <returns>PatientDTO with detailed information.</returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
         [Authorize(Roles="Registrant")]
         [HttpPost]
         public async Task<ActionResult<PatientDTO>> Create(NewPatientDTO newPatientDto)
@@ -51,7 +49,7 @@ namespace API.Controllers
         /// <summary>
         /// Reads all patients.
         /// </summary>
-        /// <remarks></remarks>
+        /// <remarks>Can be accessed by any role</remarks>
         /// <returns>All patients with detailed information.</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
@@ -70,14 +68,10 @@ namespace API.Controllers
         /// <summary>
         /// Reads patient with specified id.
         /// </summary>
-        /// <remarks></remarks>
+        /// <remarks>Can be accessed by any role</remarks>
         /// <returns>Detailed information about given user.</returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
         [Authorize]
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<PatientDTO>> Read(int id)
         {
             var patient = await context.Patients.FirstOrDefaultAsync(p => p.Id == id);
@@ -87,26 +81,29 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Searches for patient with given name or surname
         /// </summary>
-        /// <remarks></remarks>
-        /// <returns></returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
+        /// <remarks>Can be accessed by any role</remarks>
+        /// <returns>List of Patients</returns>
         [Authorize]
         [HttpGet("q")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<IEnumerable<PatientDTO>>> ReadWithNameSurname([FromQuery] string name, [FromQuery]string surname)
         {
-            //var patient = await context.Patients.FirstOrDefaultAsync(p => p.Id == id);
-            //if(patient is null) return BadRequest($"There is no patient with id {id}");
             
             List<Patient> tmp = new List<Patient>();
             if(name is not null) tmp = await context.Patients.
-                                            Where(p => p.Name.ToLower().Contains(name.ToLower()) || p.Surname.ToLower().Contains(name.ToLower())).
+                                            Where(p => $"{p.Name} {p.Surname}".Contains(name.ToLower())).
+                                            ToListAsync();
+            else if (surname is not null) tmp = await context.Patients.
+                                            Where(p => $"{p.Name} {p.Surname}".Contains(surname.ToLower())).
                                             ToListAsync();
             
+            if (surname is not null) tmp = tmp.
+                                            Where(p => $"{p.Name} {p.Surname}".Contains(surname.ToLower())).
+                                            ToList();
+
             var listToRet = new List<PatientDTO>();
             foreach(var p in tmp) listToRet.Add(new PatientDTO(p));
 
@@ -116,12 +113,10 @@ namespace API.Controllers
         /// <summary>
         /// Updates patient with given id.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="patientDTO"></param>
-        /// <remarks></remarks>
+        /// <param name="id">Id of the patient</param>
+        /// <param name="patientDTO">New patient information</param>
+        /// <remarks>Can be accessed only by Registrant</remarks>
         /// <returns>PatientDTO with detailed information.</returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
         [Authorize(Roles="Registrant")]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -140,11 +135,9 @@ namespace API.Controllers
         /// <summary>
         /// Deletes patient with given id.
         /// </summary>
-        /// <param name="id"></param>
-        /// <remarks></remarks>
+        /// <param name="id">Id of the patient to be deleted</param>
+        /// <remarks>Can be accessed only by Admin</remarks>
         /// <returns>Task resault.</returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
         [Authorize(Roles="Admin")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]

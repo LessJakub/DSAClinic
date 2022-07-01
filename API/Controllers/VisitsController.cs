@@ -28,10 +28,9 @@ namespace API.Controllers
         /// <param name="newVisitDTO">DTO containing information of new visit</param>
         /// <remarks>DateTime should be in format "DD.MM.YYYY HH:MM".
         /// Status from newVisitDTO is no longer used, visit created is always with Status.NEW
+        /// Can be accessed only by Registrant.
         ///</remarks>
         /// <returns>VisitDTO from created visit</returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
         [Authorize(Roles="Registrant")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -97,10 +96,10 @@ namespace API.Controllers
         /// <summary>
         ///  Reads all visits and returns general info about it.
         /// </summary>
-        /// <remarks>Returns only partial information.</remarks>
+        /// <param name="startIndex">From which index list should start</param>
+        /// <param name="endIndex">Number of returned elements</param>
+        /// <remarks>Returns only partial information. Can be accessed by any role.</remarks>
         /// <returns>List of GeneralVisitDTO.</returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
         [Authorize]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -120,14 +119,11 @@ namespace API.Controllers
         /// <summary>
         /// Returns detaild information about visit with given id.
         /// </summary>
-        /// <remarks></remarks>
-        /// <returns></returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
+        /// <param name="id">Id of the visit</param>
+        /// <remarks>Can be accessed by any role</remarks>
+        /// <returns>Detailed information about the visit</returns>
         [Authorize]
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<VisitDTO>> Read(int id)
         {
             
@@ -140,10 +136,12 @@ namespace API.Controllers
         /// <summary>
         /// Searches for visits with specified filters.
         /// </summary>
-        /// <remarks>Values can be null. Sorting not yet implemented.</remarks>
+        /// <param name="patientId">Id of the patient</param>
+        /// <param name="doctorId">Id of the docotor</param>
+        /// <param name="dateString">Date of the visit</param>
+        /// <param name="status">Status of the visit</param>
+        /// <remarks>Params can be null. Can be accessed by any role.</remarks>
         /// <returns>List of GeneralVisitDTOs</returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
         [Authorize]
         [HttpGet("q")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -178,12 +176,10 @@ namespace API.Controllers
         /// <summary>
         /// Updates visit with new given values.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="visitDTO"></param>
-        /// <remarks>Values can be null.</remarks>
+        /// <param name="id">Id of the visit</param>
+        /// <param name="visitDTO">New visit information</param>
+        /// <remarks>Can be accessed by Registrant or Doctor</remarks>
         /// <returns></returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
         [Authorize(Roles="Registrant,Doctor")]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -259,11 +255,9 @@ namespace API.Controllers
         /// <summary>
         /// Deletes visit with given id.
         /// </summary>
-        /// <param name="id"></param>
-        /// <remarks></remarks>
-        /// <returns></returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
+        /// <param name="id">Id of the visit</param>
+        /// <remarks>Can be only accessed by admin</remarks>
+        /// <returns>Status code</returns>
         [Authorize(Roles="Admin")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -281,12 +275,11 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Searches physical examinations for given visit
         /// </summary>
-        /// <remarks></remarks>
-        /// <returns></returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
+        /// <param name="visitId">Id of the visit</param>
+        /// <remarks>Can be accessed only by doctor.</remarks>
+        /// <returns>List of physical examinations</returns>
         [Authorize(Roles ="Doctor")]
         [HttpGet("physical-examinations/{visitId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -301,12 +294,11 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Searches lab examinations for given visit
         /// </summary>
-        /// <remarks></remarks>
-        /// <returns></returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
+        /// <param name="visitId">Id of the visit</param>
+        /// <remarks>Can be accessed only by doctor.</remarks>
+        /// <returns>List of lab examinations</returns>
         [Authorize(Roles ="Doctor")]
         [HttpGet("lab-examinations/{visitId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]

@@ -23,7 +23,7 @@ namespace API.Controllers
         /// Returns all visits and their details from a doctor with given id.
         /// </summary>
         /// <param name="id">id of the doctor</param>
-        /// <remarks></remarks>
+        /// <remarks>Can be accessed by any role</remarks>
         /// <returns></returns>
         [Authorize]
         [HttpGet("{id}/visits")]
@@ -41,7 +41,7 @@ namespace API.Controllers
         /// <summary>
         /// Get list of general information about doctors
         /// </summary>
-        /// <remarks></remarks>
+        /// <remarks>Can be accessed only by Registrant</remarks>
         /// <returns>GeneralDoctorDTO with ID, name and surname</returns>
         [Authorize(Roles = "Registrant")]
         [HttpGet]
@@ -64,8 +64,8 @@ namespace API.Controllers
         /// <param name="id">id of the doctor</param>
         /// <param name="visit_id">id of the visit</param>
         /// <param name="visitDTO">DTO containing information about the visit</param>
-        /// <remarks>Values can be null.</remarks>
-        /// <returns></returns>
+        /// <remarks>Can be accessed only by Doctor.</remarks>
+        /// <returns>Selected visit with updated information</returns>
         [Authorize(Roles="Doctor")]
         [HttpPut("{id}/visits/{visit_id}")]
         public async Task<ActionResult<VisitDTO>> Update(int id, int visit_id, UpdateVisitDTO visitDTO)
@@ -106,6 +106,7 @@ namespace API.Controllers
         /// Creates new lab test and adds it to database.
         /// </summary>
         /// <param name="id">Id of the doctor</param>
+        /// <remarks>Can be accessed only by Doctor.</remarks>
         /// <param name="newLabTestDto">DTO containing information of new lab test</param>
         /// <returns>LabTestDTO from created labTest</returns>
         [Authorize(Roles="Doctor")]
@@ -147,16 +148,14 @@ namespace API.Controllers
 
         
         /// <summary>
-        /// Returns information about a lab test with given id.
+        /// Returns information about a lab test with test_id.
         /// </summary>
-        /// <remarks></remarks>
-        /// <returns></returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
+        /// <param name="id">Id of the doctor</param>
+        /// <param name="test_id">Id of the labolatory test</param>
+        /// <remarks>id of the doctor does not matter</remarks>
+        /// <returns>Lab test information</returns>
         [Authorize]
         [HttpGet("{id}/visits/lab-tests/{test_id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<LabTestDTO>> ReadLabTest(int id, int test_id)
         {
             var doctor = await context.Users.FindAsync(id);
@@ -170,21 +169,18 @@ namespace API.Controllers
         /// <summary>
         /// Cancel a lab test with given test_id.
         /// </summary>
-        /// <remarks></remarks>
-        /// <returns></returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
-        [Authorize]
+        /// <param name="test_id">Id of the lab test</param>
+        /// <remarks>Can be accessed only by doctor</remarks>
+        /// <returns>Lab test information</returns>
+        [Authorize(Roles = "Doctor")]
         [HttpPut("/visits/lab-tests/{test_id}/cancel")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<LabTestDTO>> CancelLabTest(int test_id)
         {
             var requesterId = GetRequesterId();
             var requesterUser = await context.Users.FindAsync(requesterId);
-            if(requesterUser == null) return BadRequest($"User with id {requesterId} does not exist");
+            if(requesterUser is null) return BadRequest($"User with id {requesterId} does not exist");
             var doctorUser = requesterUser.Doctor;
-            if(doctorUser == null) return BadRequest($"User with id {requesterId} is not a doctor");
+            if(doctorUser is null) return BadRequest($"User with id {requesterId} is not a doctor");
 
             var labTest = await context.LabExaminations.FirstOrDefaultAsync(test => test.Id == test_id);
             if(labTest is null) return BadRequest($"There is no lab test with id {test_id}");
@@ -201,13 +197,10 @@ namespace API.Controllers
         /// </summary>
         /// <param name="id">Id of the doctor</param>
         /// <param name="newPhyTestDto">DTO containing information of new physical test</param>
+        /// <remarks>Can be accessed only by Doctor role.</remarks>
         /// <returns>PhyTestDTO from created phyTest</returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
         [Authorize(Roles="Doctor")]
         [HttpPost("{id}/visits/phy-tests")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<PhyTestDTO>> CreatePhysicalTest(int id, NewPhyTestDTO newPhyTestDto)
         {
              //Check if requester is doctor, this function returns -1 if not.
@@ -245,14 +238,12 @@ namespace API.Controllers
         /// <summary>
         /// Returns information about a physical test with given id.
         /// </summary>
-        /// <remarks></remarks>
-        /// <returns></returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
+        /// <param name="id">Id of the doctor</param>
+        /// <param name="test_id">Id of requested physical test</param>
+        /// <remarks>Can be accessed by any role</remarks>
+        /// <returns>Information about requested physicla test</returns>
         [Authorize]
         [HttpGet("{id}/visits/phy-tests/{test_id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<PhyTestDTO>> ReadPhysicalTest(int id, int test_id)
         {
             var doctor = await context.Users.FindAsync(id);

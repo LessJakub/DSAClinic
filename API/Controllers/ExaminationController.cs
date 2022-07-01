@@ -23,14 +23,16 @@ namespace API.Controllers
         /// <summary>
         /// Returns all examinations from given type
         /// </summary>
-        /// <remarks></remarks>
+        /// <param name="type">Type of examination:
+        ///public enum ExaminationType{
+        /// PHYSICAL,
+        /// LABORATORY
+        ///}
+        ///</param>
+        /// <remarks>Can be accessed by any role</remarks>
         /// <returns></returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
         [Authorize]
         [HttpGet("{type}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<List<ExaminationDTO>>> ReadExaminationsByType(ExaminationType type)
         {
             List<ExaminationList> tmp = new List<ExaminationList>();
@@ -42,16 +44,13 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Creates new examination
+        /// Creates new examination type
         /// </summary>
         /// <param name="newExamination">DTO containing information of new examination</param>
+        /// <remarks>Can be accessed only by admin</remarks>
         /// <returns>ExaminationDTO from created examination</returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ExaminationDTO>> Create(NewExaminationDTO newExamination)
         {
             var registrantId = GetRequesterId();
@@ -72,12 +71,12 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Updates examination with new given values.
+        /// Updates examination type with new given values.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="examinationDTO"></param>
-        /// <remarks>Values can be null.</remarks>
-        /// <returns></returns>
+        /// <param name="id">Id of examination type</param>
+        /// <param name="examinationDTO">New details of examination type</param>
+        /// <remarks>Can be accessed only by admin</remarks>
+        /// <returns>Updated Examination type</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
         [Authorize(Roles = "Admin")]
@@ -102,9 +101,9 @@ namespace API.Controllers
         /// <summary>
         /// Deletes examination with given id.
         /// </summary>
-        /// <param name="id"></param>
-        /// <remarks></remarks>
-        /// <returns></returns>
+        /// <param name="id">Id of examination type</param>
+        /// <remarks>Can be accessed only by admin</remarks>
+        /// <returns>Status code</returns>
         /// <response code="200">  </response>
         /// <response code="400">  </response>
         [Authorize(Roles = "Admin")]
