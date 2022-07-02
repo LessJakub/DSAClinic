@@ -33,6 +33,12 @@ export class SupervisorComponent implements OnInit {
     if(this.form.valid){
       this.es.getLabExams(this.form.get("filter")?.value).subscribe(list => {
         this.examinations = list.reverse();
+        this.examinations.forEach((elem, index, arr) => {
+          arr[index].orderDate = this.us.localizeDate(elem.orderDate);
+          if(elem.executionDate) {
+            arr[index].executionDate = this.us.localizeDate(elem.orderDate);
+          }
+        })
       });
       
       console.log(`Getting elements for date ${this.form.get("date")?.value} and filter ${this.form.get("filter")?.value}`);

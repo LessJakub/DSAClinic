@@ -17,20 +17,26 @@ export class LabDetailsComponent implements OnInit {
 
   @Input()  active!: boolean;
   @Output() activeChange = new EventEmitter<boolean>();
+  @Output() statusChange = new EventEmitter<boolean>();
 
   @Input() exam!: ExamLaboratory;
   @Input() editable!: boolean;
 
-  labNotes: string;
+  cancellationNotes: string;
 
   ngOnInit(): void {
-    console.log(this.exam);
-    this.labNotes = this.exam.labNotes;
+    this.cancellationNotes = this.exam.cancelationReason;
   }
 
   saveChanges(targetStatus: number): void {
-    this.es.postLabExam(this.exam.id, this.labNotes, targetStatus);
-    this.closeOverlay();
+    if(targetStatus == 4 || (targetStatus == 3 && this.cancellationNotes.length > 0)){
+      this.es.postLabExam(this.exam.id, this.exam.labNotes, this.cancellationNotes, targetStatus).subscribe(result => {
+        if(result){
+          this.statusChange.emit(true);
+          this.closeOverlay();
+        }
+      });
+    }
   }
 
   closeOverlay(): void {

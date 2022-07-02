@@ -8,6 +8,7 @@ export interface ExamLaboratory {
     executionDate?: Date,
     doctorNotes?: string,
     labNotes?: string,
+    cancelationReason: string,
     examinationListId: number,
     visitsId: number,
     labSupervisorId?: number,

@@ -43,15 +43,30 @@ export class ExaminationService {
       });
   }
 
-  postLabExam(id: number, labNotes: string, status: number): void {
+  postLabExam(id: number, labNotes: string, cancellationNotes: string, status: number): Observable<boolean> {
     let token: string;
     this.as.currentUser$.subscribe(user => token = user?.token);
 
-    const body = {
-      'status': status,
-      'labTestStatus': 0,
-      'labNotes': labNotes? labNotes : null,
-    };
+    var subject = new Subject<boolean>(); 
+
+    let body;
+    if(status == 3) {
+      body = {
+        'status': status,
+        'labTestStatus': 0,
+        'labNotes': labNotes? labNotes : null,
+        'cancelationReason': cancellationNotes
+      };
+    }
+    else {
+      body = {
+        'status': status,
+        'labTestStatus': 0,
+        'labNotes': labNotes,
+        'cancelationReason': null
+      };
+    }
+    
 
     this.http.put<any>(
       this.updateLabExamURL + id.toString(),
@@ -60,11 +75,14 @@ export class ExaminationService {
     ).subscribe({
         next: data => {
           console.log('Lab Examination updated');
+          subject.next(true);
         },
         error: error => {
             console.error('There was an error!', error);
+            subject.next(false);
         }
     });
+    return subject.asObservable();
   }
 
   getVisitPhysicals(visitId: number) : Observable<ExamPhysical[]> {
@@ -171,7 +189,7 @@ export class ExaminationService {
       queryParams = queryParams.append("icd", query);
     }
 
-    queryParams.append('type', 0);
+    queryParams = queryParams.append("type", 0);
 
     let token: string;
     this.as.currentUser$.subscribe(user => token = user?.token);
@@ -195,7 +213,7 @@ export class ExaminationService {
       queryParams = queryParams.append("icd", query);
     }
 
-    queryParams.append('type', 1);
+    queryParams = queryParams.append("type", 1);
 
     let token: string;
     this.as.currentUser$.subscribe(user => token = user?.token);

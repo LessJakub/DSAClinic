@@ -38,29 +38,18 @@
         </div>
 
         <!-- Lower Half -->
-        <div class="w-full grow flex flex-col items-center justify-center">
+        <div class="w-full grow flex items-end justify-center">
+            <!-- Description and diagnosis -->
+            <div class="basis-2/3">
+                <label for="description">Doctor's Notes:</label>
+                <textarea readonly id="description" rows="5" placeholder="Description" class="w-full resize-none mb-2 bg-gray-200" [value]="exam.doctorNotes"></textarea>
 
-            <div class="w-2/3">
-                <label for="docNotes" class="w-full">Doctor's Notes:</label>
-                <textarea readonly id="docNotes" rows="5" placeholder="Doctor's notes" class="w-full resize-none mb-2 bg-gray-200" [value]="exam.doctorNotes"></textarea>
+                <label for="result">{{ exam.status == 3? 'Cancellation notes:' : exam.status == 0? 'Result / Cancellation notes:' : 'Result:' }}</label>
+                <textarea [readonly]="!this.editable || this.exam.status > 2" id="result" rows="5" placeholder="Result or reason of cancellation" class="w-full resize-none bg-gray-200" [(ngModel)]="labNotes"></textarea>
             </div>
 
-            <div class="flex w-full items-center justify-center">
-                <div [ngClass]="exam.status == 4? 'w-2/3' : 'w-1/2 pr-1'">
-                    <label for="result">Result:</label>
-                    <textarea readonly id="result" rows="5" placeholder="Result" class="w-full resize-none bg-gray-200" [value]="exam.labNotes"></textarea>
-                </div>
-
-                <div *ngIf="exam.status < 4" class="w-1/2 pl-1">
-                    <label for="cancelNotes">Cancellation notes:</label>
-                    <textarea [readonly]="!this.editable || this.exam.status > 2" id="cancelNotes" rows="5" placeholder="Cancellation notes" class="w-full resize-none bg-gray-200" [(ngModel)]="cancellationNotes"></textarea>
-                </div>
-            </div>
-
-            <div class="space-x-4">
-                <button *ngIf="editable && exam.status < 3" type="button" (click)="saveChanges(4)" class="mb-2 font-semibold text-white bg-blue-600 px-6 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">Accept</button>
-                <button *ngIf="editable && exam.status < 3" type="button" (click)="saveChanges(3)" class="mb-2 font-semibold text-white bg-red-600 px-6 py-2 rounded-lg hover:bg-red-700 active:bg-red-800">Cancel</button>
-            </div>
+            <button *ngIf="editable && exam.status < 2" type="button" (click)="saveChanges(2)" class="ml-8 mb-2 font-semibold text-white bg-blue-600 px-6 py-2 rounded-lg hover:bg-blue-700 active:bg-blue-800">Submit</button>
+            <button *ngIf="editable && exam.status < 2" type="button" (click)="saveChanges(3)" class="ml-8 mb-2 font-semibold text-white bg-red-600 px-6 py-2 rounded-lg hover:bg-red-700 active:bg-red-800">Cancel</button>
         </div>
     </div>
 </div>

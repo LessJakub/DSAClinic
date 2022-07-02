@@ -7,13 +7,14 @@ import { LabComponent } from './lab.component';
 import { SharedModule } from '../shared/shared.module';
 import { SupervisorComponent } from './supervisor/supervisor.component';
 import { TechnicianComponent } from './technician/technician.component';
-
+import { LabTechDetailsComponent } from './lab-tech-details/lab-tech-details.component';
 
 @NgModule({
   declarations: [
     LabComponent,
     SupervisorComponent,
-    TechnicianComponent
+    TechnicianComponent,
+    LabTechDetailsComponent
   ],
   imports: [
     CommonModule,
