@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ExaminationService } from 'src/app/services/examination.service';
+import { ExamType } from 'src/app/shared/interfaces/exam-type';
 
 @Component({
   selector: 'app-lab-create',
@@ -17,8 +18,12 @@ export class LabCreateComponent implements OnInit {
 
   @Input() visitID!: number;
 
+  dropdownVisibility: boolean = false;
+  types: ExamType[] = null;
+  chosenType: ExamType = null;
+
   form = new FormGroup({
-    type: new FormControl(0, Validators.required),
+    type: new FormControl(null, Validators.required),
     notes: new FormControl(null, Validators.required)
   });
 
@@ -26,8 +31,8 @@ export class LabCreateComponent implements OnInit {
   }
 
   sendExamination(): void {
-    if(this.form.valid) {
-      this.es.addVisitLaboratory(this.visitID, this.form.controls['notes'].value, this.form.controls['type'].value).subscribe(result => {
+    if(this.form.valid && this.chosenType != null) {
+      this.es.addVisitLaboratory(this.visitID, this.form.controls['notes'].value, this.chosenType.id).subscribe(result => {
         if(result) {
           this.stateChanged.emit(true);
           this.closeOverlay();
@@ -39,6 +44,19 @@ export class LabCreateComponent implements OnInit {
   closeOverlay(): void {
     this.active = false;
     this.activeChange.emit(this.active);
+  }
+
+  onSelect(type: ExamType): void {
+    this.chosenType = type;
+    this.form.controls['type'].setValue(this.chosenType.name);
+    this.dropdownVisibility = false;
+  }
+
+  search(query: string | number): void {
+    query = query.toString();
+    this.es.labTypeSearch(query).subscribe(types => {
+      this.types = types;
+    });
   }
 
 }

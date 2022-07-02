@@ -12,7 +12,17 @@
                 <form [formGroup]="form">
                     <div class="mb-5">
                         <label for="type">Type: </label>
-                        <input id="type" type="number" formControlName="type">
+                        <div class="inline relative">
+                            <input #searchBox id="type" (keyup.enter)="search(searchBox.value)" placeholder="Search..." formControlName="type" (click)="dropdownVisibility = !dropdownVisibility"  class="bg-gray-200 p-1 w-52 text-left placeholder-gray-500">
+                            <ul *ngIf="dropdownVisibility" class="absolute origin-top-left left-0 z-20 bg-white p-1 divide-y w-72 max-h-44 overflow-y-auto">
+                                <li *ngFor="let type of types">
+                                    <button type="button" (click)="onSelect(type)" class="hover:bg-gray-200 active:bg-gray-300 w-full text-left p-1">
+                                        {{type.icd}} {{type.name}}
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+
                     </div>
                     
                     <div>
