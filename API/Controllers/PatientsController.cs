@@ -89,20 +89,17 @@ namespace API.Controllers
         [HttpGet("q")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<PatientDTO>>> ReadWithNameSurname([FromQuery] string name, [FromQuery]string surname)
+        public async Task<ActionResult<IEnumerable<PatientDTO>>> ReadWithNameSurname([FromQuery] string name)
         {
             
             List<Patient> tmp = new List<Patient>();
-            if(name is not null) tmp = await context.Patients.
-                                            Where(p => $"{p.Name} {p.Surname}".Contains(name.ToLower())).
-                                            ToListAsync();
-            else if (surname is not null) tmp = await context.Patients.
-                                            Where(p => $"{p.Name} {p.Surname}".Contains(surname.ToLower())).
-                                            ToListAsync();
+
             
-            if (surname is not null) tmp = tmp.
-                                            Where(p => $"{p.Name} {p.Surname}".Contains(surname.ToLower())).
-                                            ToList();
+
+            if(name is not null) tmp = await context.Patients.
+                                            Where(p => String.Concat(p.Name," ", p.Surname).Contains(name) || 
+                                                        String.Concat(p.Surname," ", p.Name).Contains(name)).
+                                            ToListAsync();
 
             var listToRet = new List<PatientDTO>();
             foreach(var p in tmp) listToRet.Add(new PatientDTO(p));
