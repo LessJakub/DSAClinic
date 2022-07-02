@@ -1,6 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BaseRouteReuseStrategy } from '@angular/router';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { newUser } from '../shared/interfaces/newUser';
 import { User } from '../models/User';
@@ -16,8 +15,9 @@ export class AccountService {
 
 
     private baseURL: string = "http://" + location.hostname;
-    loginUrl: string = this.baseURL + ":8080/v1/Auth/login";
-    createUserURL: string = this.baseURL + ":8080/v1/Auth/register";
+    private loginUrl: string = this.baseURL + ":8080/v1/Auth/login";
+    private createUserURL: string = this.baseURL + ":8080/v1/Auth/register";
+    private updateUserURL: string = this.baseURL + ":8080/v1/Auth/";
 
     private currentUserSource = new ReplaySubject<User>()
     currentUser$ = this.currentUserSource.asObservable();
@@ -100,6 +100,29 @@ export class AccountService {
                 console.error('There was an error registering the user!', error);
                 subject.next(false);
                 window.alert('Error: User registration failed');
+            }
+        });
+        return subject.asObservable();
+    }
+
+    updateUser(id: number, user: {'username': string, 'password': string}): Observable<boolean> {
+        let token: string;
+        this.currentUser$.subscribe(user => token = user?.token);
+
+        var subject = new Subject<boolean>(); 
+
+        this.http.put<any>(
+            this.updateUserURL + id.toString(),
+            user,
+            {headers: new HttpHeaders({'Content-Type': 'application/json-patch+json', 'Authorization': "Bearer " + token})}
+        ).subscribe({
+            next: data => {
+                console.log('User updated');
+                subject.next(true);
+            },
+            error: error => {
+                console.error('There was an error updating user!', error);
+                subject.next(false);
             }
         });
         return subject.asObservable();

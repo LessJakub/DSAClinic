@@ -20,6 +20,7 @@ export class ExaminationService {
   private queryAllLabExamsURL: string = this.baseURL + ":8080/v1/Lab/status";
   private updateLabExamURL: string = this.baseURL + ":8080/v1/Lab/";
   private queryExaminationTypesURL: string = this.baseURL + ":8080/v1/Lab/examination-types/q";
+  private createExaminationTypeURL: string = this.baseURL + ":8080/v1/Examination"; // POST
 
   //Doctor's visit detail endpoints
   private getVisitLabExamsURL: string = this.baseURL + ":8080/v1/Visits/lab-examinations/";
@@ -225,4 +226,28 @@ export class ExaminationService {
         params: queryParams
       });
   }
+
+  createType(newType: {'name': string, 'type': number, 'icd': string}): Observable<boolean> {
+    let token: string;
+    this.as.currentUser$.subscribe(user => token = user?.token);
+
+    var subject = new Subject<boolean>();
+
+    this.http.post<any>(this.createExaminationTypeURL,
+        newType,
+        {headers: new HttpHeaders({'Content-Type': 'application/json-patch+json', 'Authorization': "Bearer " + token})}
+    ).subscribe({
+        next: data => {
+            console.log('Type created');
+            subject.next(true);
+            //window.alert('User registered');
+        },
+        error: error => {
+            console.error('There was an error creating type!', error);
+            subject.next(false);
+            window.alert('Error: Type creation failed');
+        }
+    });
+    return subject.asObservable();
+}
 }
