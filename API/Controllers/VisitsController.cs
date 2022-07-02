@@ -230,7 +230,7 @@ namespace API.Controllers
             if(visitDTO.VisitTime is not null)
             {
                 var visitTime = (DateTime)visitDTO.VisitTime;
-                //if(visitTime < DateTime.Now) return BadRequest($"Visit time is not valid");
+                if(visitTime < DateTime.Now) return BadRequest($"Visit time is not valid");
 
                 //Could be merged together although this allows for better error message.
                 var sameTimeVisit = context.Visits.FirstOrDefault(v => v.DoctorId == visit.DoctorId && 
