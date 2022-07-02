@@ -195,8 +195,11 @@ namespace API.Controllers
             
             if(requester.Doctor is not null && requester.Id == visit.DoctorId)
             {
-                if(visitDTO.Description is not null) visit.Description = visitDTO.Description;
-                if(visitDTO.Diagnosis is not null) visit.Diagnosis = visitDTO.Diagnosis;
+                if(visitDTO.Description is not null && visit.Status != Status.CANCELLED && visit.Status != Status.FINISHED) 
+                    visit.Description = visitDTO.Description;
+                
+                if(visitDTO.Diagnosis is not null && visit.Status != Status.CANCELLED && visit.Status != Status.FINISHED) 
+                    visit.Diagnosis = visitDTO.Diagnosis;
             }
             
             
