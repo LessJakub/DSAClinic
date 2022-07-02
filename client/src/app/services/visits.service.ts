@@ -108,21 +108,17 @@ export class VisitsService {
     return response;
   }
 
-  cancelVisit(visit: VisitDetail) {
+  cancelVisit(visit: VisitDetail): Observable<boolean> {
     let token: string;
     this.as.currentUser$.subscribe(user => token = user?.token);
 
     const body = {
       'description': visit.description,
       'diagnosis': visit.diagnosis,
-      'finalizationTime': visit.finalizationTime? visit.finalizationTime.toJSON() : null,
-      'visitTime': visit.visitTime.toJSON(),
-      'status': Status.CANCELLED,
-      'doctorId': visit.doctorId,
-      'patientId': visit.patientId
+      'status': Status.CANCELLED
     };
 
-    console.log(body);
+    var subject = new Subject<boolean>();
 
     this.http.put<any>(
       this.visitDetailURL + visit.id.toString(),
@@ -131,11 +127,14 @@ export class VisitsService {
     ).subscribe({
         next: data => {
           console.log('Visit cancelled');
+          subject.next(true);
         },
         error: error => {
-            console.error('There was an error!', error);
+          console.error('There was an error!', error);
+          subject.next(false);
         }
     });
+    return subject.asObservable();
   }
 
   finishVisit(visit: VisitDetail): void {
@@ -145,11 +144,7 @@ export class VisitsService {
     const body = {
       'description': visit.description,
       'diagnosis': visit.diagnosis,
-      'finalizationTime': new Date().toJSON(),
-      'visitTime': visit.visitTime.toJSON(),
       'status': Status.FINISHED,
-      'doctorId': visit.doctorId,
-      'patientId': visit.patientId
     };
 
     console.log(body);
