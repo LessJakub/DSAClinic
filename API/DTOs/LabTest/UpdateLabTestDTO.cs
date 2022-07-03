@@ -10,6 +10,8 @@ namespace API.DTOs
     {
         public LabStatus Status { get; set; }
         public string? LabTestStatus { get; set; }
-        public string? LabNotes { get; set; }    
+        public string? LabNotes { get; set; }
+
+        public string? CancelationReason { get; set; }
     }
 }

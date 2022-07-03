@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ExaminationService } from 'src/app/services/examination.service';
 import { ExamPhysical } from 'src/app/shared/interfaces/exam-physical';
+import { ExamType } from 'src/app/shared/interfaces/exam-type';
 
 @Component({
   selector: 'app-phys-create',
@@ -18,8 +19,12 @@ export class PhysCreateComponent implements OnInit {
 
   @Input() visitID!: number;
 
+  dropdownVisibility: boolean = false;
+  types: ExamType[] = null;
+  chosenType: ExamType = null;
+
   form = new FormGroup({
-    type: new FormControl(0, Validators.required),
+    type: new FormControl(null, Validators.required),
     desc: new FormControl(null, Validators.required)
   });
 
@@ -27,8 +32,8 @@ export class PhysCreateComponent implements OnInit {
   }
 
   sendExamination(): void {
-    if(this.form.valid) {
-      this.es.addVisitPhysical(this.visitID, this.form.controls['desc'].value, this.form.controls['type'].value).subscribe(result => {
+    if(this.form.valid && this.chosenType != null) {
+      this.es.addVisitPhysical(this.visitID, this.form.controls['desc'].value, this.chosenType.id).subscribe(result => {
         if(result) {
           this.stateChanged.emit(true);
           this.closeOverlay();
@@ -40,6 +45,19 @@ export class PhysCreateComponent implements OnInit {
   closeOverlay(): void {
     this.active = false;
     this.activeChange.emit(this.active);
+  }
+
+  onSelect(type: ExamType): void {
+    this.chosenType = type;
+    this.form.controls['type'].setValue(this.chosenType.name);
+    this.dropdownVisibility = false;
+  }
+
+  search(query: string | number): void {
+    query = query.toString();
+    this.es.physTypeSearch(query).subscribe(types => {
+      this.types = types;
+    });
   }
 
 }

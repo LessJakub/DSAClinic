@@ -10,7 +10,6 @@ namespace API.DTOs
     {
         public string? Description { get; set; }
         public string? Diagnosis { get; set; }
-        public DateTime? FinalizationTime { get; set; }
         public DateTime? VisitTime { get; set; }
         public Status? Status { get; set; }
         public int DoctorId { get; set; }

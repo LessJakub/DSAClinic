@@ -30,7 +30,7 @@
 
         <!--Bottom area-->
         <div class="flex basis-2/6 min-h-0 border-t border-gray-200">
-            <app-patient-visits [visits]="patientsVisits"></app-patient-visits>
+            <app-patient-visits [visits]="patientsVisits" (statusChange)="selectPatient(selectedPatient)"></app-patient-visits>
         </div>
     </div>
 </div>

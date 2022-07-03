@@ -12,6 +12,8 @@ namespace API.DTOs
         public string Description { get; set; }
         
         public string VisitTime { get; set; }
+
+        ///Depracated
         public Status Status { get; set; }
 
         public int DoctorId { get; set; }

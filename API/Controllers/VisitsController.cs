@@ -26,10 +26,11 @@ namespace API.Controllers
         /// Creates new visit and adds it to the database.
         /// </summary>
         /// <param name="newVisitDTO">DTO containing information of new visit</param>
-        /// <remarks>DateTime should be in format "DD.MM.YYYY HH:MM"</remarks>
+        /// <remarks>DateTime should be in format "DD.MM.YYYY HH:MM".
+        /// Status from newVisitDTO is no longer used, visit created is always with Status.NEW
+        /// Can be accessed only by Registrant.
+        ///</remarks>
         /// <returns>VisitDTO from created visit</returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
         [Authorize(Roles="Registrant")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -51,13 +52,30 @@ namespace API.Controllers
 
             var patient = await context.Patients.FindAsync(newVisitDTO.PatientId);
             if(patient == null) return BadRequest($"Patient with id {newVisitDTO.PatientId} does not exist");
+
+
+            var visitTime = Convert.ToDateTime(newVisitDTO.VisitTime);
+            var sameTimeVisit = await context.Visits.Where(v => v.DoctorId == doctorUser.Id && 
+                                                            v.VisitTime == visitTime && 
+                                                            v.Status != Status.CANCELLED &&
+                                                            v.Status != Status.FINISHED).
+                                                            ToListAsync();
+            if(sameTimeVisit.Count() != 0) return BadRequest($"Doctor with id {doctorUser.Id} already has visit planned on {visitTime}");
+
+            sameTimeVisit = await context.Visits.Where(v => v.PatientId == patient.Id && 
+                                                            v.VisitTime == visitTime &&
+                                                            v.Status != Status.CANCELLED &&
+                                                            v.Status != Status.FINISHED).
+                                                            ToListAsync();
+            if(sameTimeVisit.Count() != 0) return BadRequest($"Patient with id {patient.Id} already has visit planned on {visitTime}");
             
+            if(visitTime < DateTime.Now) return BadRequest($"Visit time is not valid");
             
             var visit = new Visits{
                 Description = newVisitDTO.Description,
                 RegistrationTime = DateTime.Now,
-                VisitTime = Convert.ToDateTime(newVisitDTO.VisitTime),
-                Status = newVisitDTO.Status,
+                VisitTime = visitTime,
+                Status = Status.NEW,
                 Doctor = doctor,
                 DoctorId = newVisitDTO.DoctorId,
                 Patient = patient,
@@ -78,10 +96,10 @@ namespace API.Controllers
         /// <summary>
         ///  Reads all visits and returns general info about it.
         /// </summary>
-        /// <remarks>Returns only partial information.</remarks>
+        /// <param name="startIndex">From which index list should start</param>
+        /// <param name="endIndex">Number of returned elements</param>
+        /// <remarks>Returns only partial information. Can be accessed by any role.</remarks>
         /// <returns>List of GeneralVisitDTO.</returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
         [Authorize]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -101,14 +119,11 @@ namespace API.Controllers
         /// <summary>
         /// Returns detaild information about visit with given id.
         /// </summary>
-        /// <remarks></remarks>
-        /// <returns></returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
+        /// <param name="id">Id of the visit</param>
+        /// <remarks>Can be accessed by any role</remarks>
+        /// <returns>Detailed information about the visit</returns>
         [Authorize]
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<VisitDTO>> Read(int id)
         {
             
@@ -121,10 +136,12 @@ namespace API.Controllers
         /// <summary>
         /// Searches for visits with specified filters.
         /// </summary>
-        /// <remarks>Values can be null. Sorting not yet implemented.</remarks>
+        /// <param name="patientId">Id of the patient</param>
+        /// <param name="doctorId">Id of the docotor</param>
+        /// <param name="dateString">Date of the visit</param>
+        /// <param name="status">Status of the visit</param>
+        /// <remarks>Params can be null. Can be accessed by any role.</remarks>
         /// <returns>List of GeneralVisitDTOs</returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
         [Authorize]
         [HttpGet("q")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -159,12 +176,10 @@ namespace API.Controllers
         /// <summary>
         /// Updates visit with new given values.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="visitDTO"></param>
-        /// <remarks>Values can be null.</remarks>
+        /// <param name="id">Id of the visit</param>
+        /// <param name="visitDTO">New visit information</param>
+        /// <remarks>Can be accessed by Registrant or Doctor</remarks>
         /// <returns></returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
         [Authorize(Roles="Registrant,Doctor")]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -174,11 +189,20 @@ namespace API.Controllers
             var visit = await context.Visits.FirstOrDefaultAsync(v => v.Id == id);
             if(visit is null) return BadRequest($"There is no visit with id {id}");
 
-            visit.FinalizationTime = DateTime.Now;
-            if(visitDTO.Description is not null) visit.Description = visitDTO.Description;
-            if(visitDTO.Diagnosis is not null) visit.Diagnosis = visitDTO.Diagnosis;
-            if(visitDTO.VisitTime != default) visit.VisitTime = (DateTime)visitDTO.VisitTime;
-            if(visitDTO.Status is not null) visit.Status = (Status)visitDTO.Status;
+            var requesterID = GetRequesterId();
+            var requester = await context.Users.FindAsync(requesterID);
+
+            
+            if(requester.Doctor is not null && requester.Id == visit.DoctorId)
+            {
+                if(visitDTO.Description is not null && visit.Status != Status.CANCELLED && visit.Status != Status.FINISHED) 
+                    visit.Description = visitDTO.Description;
+                
+                if(visitDTO.Diagnosis is not null && visit.Status != Status.CANCELLED && visit.Status != Status.FINISHED) 
+                    visit.Diagnosis = visitDTO.Diagnosis;
+            }
+            
+            
             if(visitDTO.DoctorId != 0)
             {
                 var doctorUser = await context.Users.FindAsync(visitDTO.DoctorId);
@@ -193,6 +217,39 @@ namespace API.Controllers
                 visit.Patient = patient;
             }
 
+            if(visitDTO.Status is not null)
+            {
+                if(visit.Status != Status.CANCELLED && visit.Status != Status.FINISHED)
+                {
+                    visit.Status = (Status)visitDTO.Status;
+                    if((Status)visitDTO.Status == Status.FINISHED)visit.FinalizationTime = DateTime.Now;
+                }
+
+            }
+
+            if(visitDTO.VisitTime is not null)
+            {
+                var visitTime = (DateTime)visitDTO.VisitTime;
+                if(visitTime < DateTime.Now) return BadRequest($"Visit time is not valid");
+
+                //Could be merged together although this allows for better error message.
+                var sameTimeVisit = context.Visits.FirstOrDefault(v => v.DoctorId == visit.DoctorId && 
+                                                            v.VisitTime == visitTime && 
+                                                            v.Status != Status.CANCELLED &&
+                                                            v.Status != Status.FINISHED);
+                                                            
+                if(sameTimeVisit is not null) return BadRequest($"Doctor with id {visit.DoctorId} already has visit planned on {visitTime}");
+
+                sameTimeVisit = context.Visits.FirstOrDefault(v => v.PatientId == visit.PatientId && 
+                                                            v.VisitTime == visitTime &&
+                                                            v.Status != Status.CANCELLED &&
+                                                            v.Status != Status.FINISHED);
+
+                if(sameTimeVisit is not null) return BadRequest($"Patient with id {visit.PatientId} already has visit planned on {visitTime}");
+
+                visit.VisitTime = visitTime;
+            }
+
             await context.SaveChangesAsync();
 
             return new VisitDTO(visit);
@@ -201,11 +258,9 @@ namespace API.Controllers
         /// <summary>
         /// Deletes visit with given id.
         /// </summary>
-        /// <param name="id"></param>
-        /// <remarks></remarks>
-        /// <returns></returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
+        /// <param name="id">Id of the visit</param>
+        /// <remarks>Can be only accessed by admin</remarks>
+        /// <returns>Status code</returns>
         [Authorize(Roles="Admin")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -223,12 +278,11 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Searches physical examinations for given visit
         /// </summary>
-        /// <remarks></remarks>
-        /// <returns></returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
+        /// <param name="visitId">Id of the visit</param>
+        /// <remarks>Can be accessed only by doctor.</remarks>
+        /// <returns>List of physical examinations</returns>
         [Authorize(Roles ="Doctor")]
         [HttpGet("physical-examinations/{visitId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -243,12 +297,11 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Searches lab examinations for given visit
         /// </summary>
-        /// <remarks></remarks>
-        /// <returns></returns>
-        /// <response code="200">  </response>
-        /// <response code="400">  </response>
+        /// <param name="visitId">Id of the visit</param>
+        /// <remarks>Can be accessed only by doctor.</remarks>
+        /// <returns>List of lab examinations</returns>
         [Authorize(Roles ="Doctor")]
         [HttpGet("lab-examinations/{visitId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]

@@ -1,9 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 
 import { VisitGeneral } from '../interfaces/visit-general';
 import { VisitsService } from 'src/app/services/visits.service';
 import { VisitDetail } from '../interfaces/visit-detail';
-import { Status } from '../interfaces/status';
 import { UtilityService } from 'src/app/services/utility.service';
 
 @Component({
@@ -19,6 +18,8 @@ export class PatientVisitsComponent implements OnInit {
 
   @Input() visits: VisitGeneral[];
   @Input() mode: string;
+
+  @Output() statusChange = new EventEmitter<boolean>();
 
   overlayActive = false;
   chosenVisitDetail: VisitDetail;
@@ -41,7 +42,12 @@ export class PatientVisitsComponent implements OnInit {
   }
 
   cancelVisit(visit: VisitDetail): void {
-    this.vs.cancelVisit(visit);
+    this.vs.cancelVisit(visit).subscribe(result => {
+      if(result) {
+        this.statusChange.emit(true);
+        this.overlayActive = false;
+      }
+    });
   }
 
 }

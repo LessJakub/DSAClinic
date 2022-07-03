@@ -26,31 +26,18 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Enumarete all users. Requires Admin claim
-        /// </summary>
-        /// <remarks>Test method</remarks>
-        /// <returns>List of all users</returns>
-        [Authorize(Roles = "Admin")]
-        [HttpGet("users")]
-        public ActionResult<IEnumerable<AppUser>> GetUsers()
-        {
-            return this.context.Users.ToList();
-        }
-
-        /// <summary>
-        /// Registers
+        /// Registers new user, requires Admin role
         /// </summary>
         /// <param name="registerDTO">DTO with users inormation</param>
         /// <remarks>Can be requested only by admin</remarks>
-        /// <returns>Authorization information of created user</returns>
+        /// <returns>Username and password of created user</returns>
         /// <response code="200"> Ok, new user is created. </response>
         /// <response code="400"> Bad request, invalid input. </response>
         [Authorize(Roles = "Admin")]
         [HttpPost("register")]
-        public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO)
+        public async Task<ActionResult<NewUserDTO>> Register(RegisterDTO registerDTO)
         {
             if(await UserExists(registerDTO.Username)) return BadRequest("Username is taken");
-
 
             //Used for encoding
             using var hmac = new HMACSHA512();
@@ -110,9 +97,9 @@ namespace API.Controllers
             //Actually add user to the DB.
             await context.SaveChangesAsync();
 
-            return new UserDTO{
-                Username = user.UserName,
-                Token = tokenService.CreateToken(user)
+            return new NewUserDTO{
+                Username = registerDTO.Name,
+                Password = registerDTO.Password
             };
         }
 
@@ -121,7 +108,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="loginDTO">Login information</param>
         /// <remarks>Anyone can access this endpoint</remarks>
-        /// <returns>Authorization information of user</returns>
+        /// <returns>Authorization information of user (Username and token)</returns>
         /// <response code="200"> Ok,user is loged in </response>
         /// <response code="400"> Bard request, invalid input </response>
         /// <response code="401"> Unauthorized, wrong credentials </response>

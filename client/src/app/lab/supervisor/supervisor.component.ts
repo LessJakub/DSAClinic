@@ -27,12 +27,20 @@ export class SupervisorComponent implements OnInit {
   ngOnInit(): void {
     this.form.controls['filter'].setValue(2, {onlySelf: true});
     this.form.controls['filter'].updateValueAndValidity();
+
+    this.getList();
   }
 
   getList(): void{
     if(this.form.valid){
       this.es.getLabExams(this.form.get("filter")?.value).subscribe(list => {
         this.examinations = list.reverse();
+        this.examinations.forEach((elem, index, arr) => {
+          arr[index].orderDate = this.us.localizeDate(elem.orderDate);
+          if(elem.executionDate) {
+            arr[index].executionDate = this.us.localizeDate(elem.orderDate);
+          }
+        })
       });
       
       console.log(`Getting elements for date ${this.form.get("date")?.value} and filter ${this.form.get("filter")?.value}`);
