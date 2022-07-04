@@ -9,7 +9,6 @@ dotnet run
 # Running Angular frontend
 cd Client/
 ng serve
-# Requires .NET 6.0, Angular@12, Node 16.12, Entity Framework and maybe something else.
 ```
 
 ## Using Docker
