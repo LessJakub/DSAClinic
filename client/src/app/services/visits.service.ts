@@ -15,9 +15,9 @@ import { AccountService } from './account.service';
 export class VisitsService {
 
   private baseURL: string = "http://" + location.hostname;
-  private visitsQueryURL: string = this.baseURL + ":8080/v1/Visits/q";
-  private visitDetailURL: string = this.baseURL + ":8080/v1/Visits/";
-  private addVisitURL: string = this.baseURL + ":8080/v1/Visits";
+  private visitsQueryURL: string = this.baseURL + "/v1/Visits/q";
+  private visitDetailURL: string = this.baseURL + "/v1/Visits/";
+  private addVisitURL: string = this.baseURL + "/v1/Visits";
 
   constructor(private http: HttpClient,
               private as: AccountService) { }

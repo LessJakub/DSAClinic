@@ -103,7 +103,7 @@ export class AdminComponent implements OnInit {
 
   goToDBPanel() {
     const baseURL: string = "http://" + location.hostname;
-    window.open(baseURL + ":8080/admin");
+    window.open(baseURL + "/admin");
   }
 
 }

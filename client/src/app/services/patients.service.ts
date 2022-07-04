@@ -11,9 +11,9 @@ import { AccountService } from './account.service';
 export class PatientsService {
 
   private baseURL: string = "http://" + location.hostname;
-  private queryPatientsURL: string = this.baseURL + ":8080/v1/Patients/q";
-  private patientDetailURL: string = this.baseURL + ":8080/v1/Patients/";
-  private addPatientURL: string = this.baseURL + ":8080/v1/Patients";
+  private queryPatientsURL: string = this.baseURL + "/v1/Patients/q";
+  private patientDetailURL: string = this.baseURL + "/v1/Patients/";
+  private addPatientURL: string = this.baseURL + "/v1/Patients";
 
   constructor(private http: HttpClient,
               private as: AccountService) { }

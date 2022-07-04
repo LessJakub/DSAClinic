@@ -17,16 +17,16 @@ type customJwtPayload = JwtPayload & { nameid: string, UserId: number, role: str
 export class ExaminationService {
 
   private baseURL: string = "http://" + location.hostname;
-  private queryAllLabExamsURL: string = this.baseURL + ":8080/v1/Lab/status";
-  private updateLabExamURL: string = this.baseURL + ":8080/v1/Lab/";
-  private queryExaminationTypesURL: string = this.baseURL + ":8080/v1/Lab/examination-types/q";
-  private createExaminationTypeURL: string = this.baseURL + ":8080/v1/Examination"; // POST
+  private queryAllLabExamsURL: string = this.baseURL + "/v1/Lab/status";
+  private updateLabExamURL: string = this.baseURL + "/v1/Lab/";
+  private queryExaminationTypesURL: string = this.baseURL + "/v1/Lab/examination-types/q";
+  private createExaminationTypeURL: string = this.baseURL + "/v1/Examination"; // POST
 
   //Doctor's visit detail endpoints
-  private getVisitLabExamsURL: string = this.baseURL + ":8080/v1/Visits/lab-examinations/";
-  private getVisitPhysExamsURL: string = this.baseURL + ":8080/v1/Visits/physical-examinations/";
-  private createVisitPhysExamURL: string = this.baseURL + ":8080/v1/Doctors/{id}/visits/phy-tests"; //POST
-  private createVisitLabExamURL: string = this.baseURL + ":8080/v1/Doctors/{id}/visits/lab-tests"; //POST
+  private getVisitLabExamsURL: string = this.baseURL + "/v1/Visits/lab-examinations/";
+  private getVisitPhysExamsURL: string = this.baseURL + "/v1/Visits/physical-examinations/";
+  private createVisitPhysExamURL: string = this.baseURL + "/v1/Doctors/{id}/visits/phy-tests"; //POST
+  private createVisitLabExamURL: string = this.baseURL + "/v1/Doctors/{id}/visits/lab-tests"; //POST
 
   constructor(private http: HttpClient,
               private as: AccountService) { }

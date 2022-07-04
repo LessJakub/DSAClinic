@@ -132,6 +132,9 @@ app.UseCoreAdminCustomTitle("Admin");
 app.UseCoreAdminCustomUrl("admin");
 app.UseCoreAdminCustomAuth((serviceProvider) => Task.FromResult(true));
 
-app.MapDefaultControllerRoute();
+app.UseEndpoints(endpoints => {
+    endpoints.MapControllers();
+    endpoints.MapFallbackToController("Index", "Fallback");
+});
 
 app.Run();

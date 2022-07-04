@@ -11,7 +11,7 @@ import { AccountService } from './account.service';
 export class SchedulingService {
 
   private baseURL: string = "http://" + location.hostname;
-  private queryDoctorsURL: string = this.baseURL + ":8080/v1/Doctors";
+  private queryDoctorsURL: string = this.baseURL + "/v1/Doctors";
 
   constructor(private http: HttpClient,
               private as: AccountService) { }

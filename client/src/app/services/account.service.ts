@@ -15,9 +15,9 @@ export class AccountService {
 
 
     private baseURL: string = "http://" + location.hostname;
-    private loginUrl: string = this.baseURL + ":8080/v1/Auth/login";
-    private createUserURL: string = this.baseURL + ":8080/v1/Auth/register";
-    private updateUserURL: string = this.baseURL + ":8080/v1/Auth/";
+    private loginUrl: string = this.baseURL + "/v1/Auth/login";
+    private createUserURL: string = this.baseURL + "/v1/Auth/register";
+    private updateUserURL: string = this.baseURL + "/v1/Auth/";
 
     private currentUserSource = new ReplaySubject<User>()
     currentUser$ = this.currentUserSource.asObservable();
