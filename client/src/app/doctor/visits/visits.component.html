@@ -4,7 +4,7 @@
 
     <!--The inputs-->
     <div class="w-full">
-            <form [formGroup]="form" class="flex items-baseline" (change)="getList()">
+            <form [formGroup]="form" class="flex items-baseline" (change)="formChanged()">
                 <label class="mr-10 space-x-2">
                     <span>Date:</span>
                     <input required type="date" min="01-01-2021" placeholder=today class="bg-gray-200 p-1" formControlName="date">

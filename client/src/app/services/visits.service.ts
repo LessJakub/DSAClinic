@@ -25,7 +25,9 @@ export class VisitsService {
   getDoctorVisitsList(doctorId: number, date: Date, status: number): Observable<VisitGeneral[]> {
     let queryParams = new HttpParams();
     queryParams = queryParams.append("doctorId", doctorId);
-    queryParams = queryParams.append("dateString", date.toJSON());
+    if (date != null) {
+        queryParams = queryParams.append("dateString", date.toJSON());
+    }
     if(status != -1){
       queryParams = queryParams.append("status", status);
     }
@@ -33,6 +35,7 @@ export class VisitsService {
     let token: string;
     this.as.currentUser$.subscribe(user => token = user?.token);
 
+    console.log("Some random log")
     let response = this.http.get<VisitGeneral[]>(
       this.visitsQueryURL,
       {headers: new HttpHeaders({'Content-Type': 'text/plain', 'Authorization': "Bearer " + token}), 

@@ -34,6 +34,18 @@ export class VisitsComponent implements OnInit {
 
   ngOnInit(): void {
     this.as.currentUser$.subscribe(user => this.doctorID = Number(jwt_decode<customJwtPayload>(user?.token).UserId))
+    this.getAllVisits();
+  }
+
+  formChanged() {
+    if (this.form.get("date")?.value != null) {
+        console.log("With date running")
+        this.getList()
+    }
+    else {
+        console.log("Without date")
+        this.getAllVisits()
+    }
   }
 
   getList(): void{
@@ -49,6 +61,19 @@ export class VisitsComponent implements OnInit {
       
       console.log(`Getting elements for date ${this.form.get("date")?.value} and filter ${this.form.get("filter")?.value}`);
     }
+  }
+
+  getAllVisits(): void{
+      this.vs.getDoctorVisitsList(this.doctorID, null, this.form.get("filter")?.value).subscribe(list => {
+        this.list = list;
+        this.list.forEach((visit, index, arr) => 
+        {
+          arr[index].date = this.us.localizeDate(visit.date);
+        })
+      },
+      error => console.error(error));
+      
+      console.log(`Getting all elements for filter ${this.form.get("filter")?.value}`);
   }
 
   selectVisit(visit: VisitGeneral) {
