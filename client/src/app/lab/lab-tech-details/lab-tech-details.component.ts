@@ -39,12 +39,14 @@ export class LabTechDetailsComponent implements OnInit {
       
       //if cancelling only cancellationNotes are needed
       if(targetStatus == 3) {
-        this.es.postLabExam(this.exam.id, null, this.labNotes, targetStatus).subscribe(result => {
-          if(result) {
-            this.statusChange.emit(true);
-            this.closeOverlay();
-          }
-        });
+        if (confirm("Please confirm this action.")) {
+            this.es.postLabExam(this.exam.id, null, this.labNotes, targetStatus).subscribe(result => {
+                if(result) {
+                  this.statusChange.emit(true);
+                  this.closeOverlay();
+                }
+              });
+        }
       }
       // otherwise only labNotes/ result
       else {
@@ -55,6 +57,9 @@ export class LabTechDetailsComponent implements OnInit {
           }
         });
       }
+    }
+    else {
+        alert("Please fill notes.")
     }
   }
 

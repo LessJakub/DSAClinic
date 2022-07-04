@@ -57,6 +57,9 @@ export class AdminComponent implements OnInit {
         }
       });
     }
+    else {
+        alert("Please fill all data.")
+    }
   }
 
   updateUser(): void {
@@ -72,6 +75,9 @@ export class AdminComponent implements OnInit {
           this.updateUserForm.reset();
         }
       });
+    }
+    else {
+        alert("Please fill all data.")
     }
   }
 
@@ -89,6 +95,9 @@ export class AdminComponent implements OnInit {
           this.addTypeForm.reset();
         }
       });
+    }
+    else {
+        alert("Please fill all data.")
     }
   }
 
