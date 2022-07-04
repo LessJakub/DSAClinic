@@ -2,7 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,visualstudio,angular,aspnetcore,macos
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,visualstudio,angular,aspnetcore,macos
-appsettings.Development.json
+# appsettings.Development.json
 appsettings.json
 notes.txt
 
