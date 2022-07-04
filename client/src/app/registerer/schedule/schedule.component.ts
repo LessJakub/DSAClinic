@@ -72,6 +72,9 @@ export class ScheduleComponent implements OnInit {
       this.chosenSlotID = {x: -1, y: -1};
       this.chosenSlot = null;
     }
+    else {
+        alert("Please select patient and a timeslot.")
+    }
   }
 
   setDate(stringDate: string): void {

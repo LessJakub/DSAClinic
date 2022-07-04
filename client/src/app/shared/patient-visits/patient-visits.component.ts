@@ -42,12 +42,14 @@ export class PatientVisitsComponent implements OnInit {
   }
 
   cancelVisit(visit: VisitDetail): void {
-    this.vs.cancelVisit(visit).subscribe(result => {
-      if(result) {
-        this.statusChange.emit(true);
-        this.overlayActive = false;
-      }
-    });
+    if(confirm("Confirm cancelling of visit?")) {
+        this.vs.cancelVisit(visit).subscribe(result => {
+            if(result) {
+              this.statusChange.emit(true);
+              this.overlayActive = false;
+            }
+          });
+    }
   }
 
 }

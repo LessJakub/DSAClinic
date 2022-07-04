@@ -15,7 +15,7 @@
 </div>
 
 <!-- Overlay elements -->
-<div *ngIf="overlayActive" (click)="overlayActive = false" class="absolute top-0 left-0 w-full h-full backdrop-blur-sm z-50"></div>
+<div *ngIf="overlayActive" (click)="overlayActive = false" class="absolute top-0 left-0 w-full h-full backdrop-blur-sm z-50 cursor-pointer"></div>
 
 <div *ngIf="overlayActive" class="absolute z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-1/2 w-1/2 min-w-[35rem] min-h-min rounded-md drop-shadow-lg bg-gradient-to-b from-slate-50 via-slate-100 to-blue-300"> 
     <div class="flex flex-col w-full h-full p-5">
