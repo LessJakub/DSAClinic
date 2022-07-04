@@ -29,16 +29,29 @@ export class LabDetailsComponent implements OnInit {
   }
 
   saveChanges(targetStatus: number): void {
-        if(targetStatus == 4 || (targetStatus == 3 && this.cancellationNotes != null && this.cancellationNotes.length > 0)){
+        if(targetStatus == 4){
+          this.es.postLabExam(this.exam.id, this.exam.labNotes, this.cancellationNotes, targetStatus).subscribe(result => {
+              if(result){
+                this.statusChange.emit(true);
+                this.closeOverlay();
+              }
+            });
+        }
+        else if(targetStatus == 3) {
+          if(this.cancellationNotes != null && this.cancellationNotes.length > 0) {
             if (confirm("Please confirm this operation.")) {
-                this.es.postLabExam(this.exam.id, this.exam.labNotes, this.cancellationNotes, targetStatus).subscribe(result => {
-                    if(result){
-                      this.statusChange.emit(true);
-                      this.closeOverlay();
-                    }
-                  });
+              this.es.postLabExam(this.exam.id, this.exam.labNotes, this.cancellationNotes, targetStatus).subscribe(result => {
+                if(result){
+                  this.statusChange.emit(true);
+                  this.closeOverlay();
+                }
+              });
             }
           }
+          else {
+            window.alert("Please provide reason for cancellation.");
+          }
+        }
   }
 
   closeOverlay(): void {
