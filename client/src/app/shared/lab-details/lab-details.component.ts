@@ -29,8 +29,7 @@ export class LabDetailsComponent implements OnInit {
   }
 
   saveChanges(targetStatus: number): void {
-    if (this.cancellationNotes != null && this.cancellationNotes.length > 0) {
-        if(targetStatus == 4 || (targetStatus == 3)){
+        if(targetStatus == 4 || (targetStatus == 3 && this.cancellationNotes != null && this.cancellationNotes.length > 0)){
             if (confirm("Please confirm this operation.")) {
                 this.es.postLabExam(this.exam.id, this.exam.labNotes, this.cancellationNotes, targetStatus).subscribe(result => {
                     if(result){
@@ -40,10 +39,6 @@ export class LabDetailsComponent implements OnInit {
                   });
             }
           }
-    }
-    else {
-        alert("Please fill all data.")
-    }
   }
 
   closeOverlay(): void {
